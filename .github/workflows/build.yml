@@ -1,0 +1,98 @@
+name: build
+
+# Pull request: tests, build and smoke test on Linux, Windows and macOS (the binaries are kept as run artifacts).
+# Merge to master: the same, then a GitHub release v<version>.<run number> with the three archives.
+on:
+  push:
+    branches: [master]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: write  # the release job creates the tag and uploads the binaries
+
+concurrency:  # a newer push to the same PR cancels the older run; master runs never cancel each other
+  group: build-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-22.04  # oldest glibc the bpy wheel (manylinux_2_28) accepts that GitHub still offers
+            artifact: moviva-fbx-to-vrm-linux-x64.tar.gz
+          - os: windows-latest
+            artifact: moviva-fbx-to-vrm-windows-x64.zip
+          - os: macos-14  # Apple Silicon; there is no Intel-mac bpy wheel
+            artifact: moviva-fbx-to-vrm-macos-arm64.zip
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: pip
+      - name: System libraries Blender and Qt need (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libxi6 libxxf86vm1 libxfixes3 libxrender1 libxkbcommon0 libsm6 libgl1 \
+            libegl1 libxcb-cursor0 libxkbcommon-x11-0 libdbus-1-3
+      - name: Install
+        run: python -m pip install -e ".[dev]"
+      - name: Fetch the VRM Add-on (pinned, checksum-verified)
+        run: python packaging/fetch_addon.py
+      - name: Tests
+        run: python -m pytest -q
+        env:
+          QT_QPA_PLATFORM: offscreen
+      - name: Build
+        run: pyinstaller packaging/moviva-fbx-to-vrm.spec --noconfirm --workpath .pyi-work --distpath dist
+
+      - name: Smoke test and package (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          "dist/Moviva FBX to VRM/Moviva FBX to VRM" doctor
+          tar -C dist -czf "${{ matrix.artifact }}" "Moviva FBX to VRM"
+      - name: Smoke test and package (macOS)
+        if: runner.os == 'macOS'
+        run: |
+          "dist/Moviva FBX to VRM.app/Contents/MacOS/Moviva FBX to VRM" doctor
+          ditto -c -k --keepParent "dist/Moviva FBX to VRM.app" "${{ matrix.artifact }}"
+      - name: Smoke test and package (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $p = Start-Process -FilePath "dist/Moviva FBX to VRM/Moviva FBX to VRM.exe" -ArgumentList "doctor" `
+            -Wait -PassThru -NoNewWindow -RedirectStandardOutput doctor.txt -RedirectStandardError doctor-err.txt
+          Get-Content doctor.txt, doctor-err.txt
+          if ($p.ExitCode -ne 0) { exit $p.ExitCode }
+          Compress-Archive -Path "dist/Moviva FBX to VRM" -DestinationPath "${{ matrix.artifact }}"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artifact }}
+          path: ${{ matrix.artifact }}
+          compression-level: 0  # already compressed
+          retention-days: 14
+
+  release:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+    needs: build  # all three systems must pass, or nothing is released
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          path: out
+          merge-multiple: true
+      - name: Publish the binaries
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          version=$(python3 -c "import tomllib; print(tomllib.load(open('pyproject.toml', 'rb'))['project']['version'])")
+          tag="v${version}.${{ github.run_number }}"
+          gh release create "$tag" out/* --target "${{ github.sha }}" --title "Moviva FBX to VRM $tag" \
+            --generate-notes --latest

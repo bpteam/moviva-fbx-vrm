@@ -1,0 +1,30 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "moviva-fbx-to-vrm"
+version = "0.1.0"
+description = "Drop an FBX / GLB / glTF character, get a VRM 1.0 avatar. Blender is built in."
+license = "GPL-3.0-or-later"
+requires-python = "==3.13.*"  # the bpy wheel is built for exactly one Python
+dependencies = [
+  "bpy==5.2.2",  # must match character_vrm/toolchain.json
+  "PySide6-Essentials>=6.8",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "pyinstaller>=6.10", "pillow"]
+
+[project.scripts]
+moviva-fbx-to-vrm = "moviva_fbx_to_vrm.__main__:main"
+
+[tool.setuptools.packages.find]
+include = ["moviva_fbx_to_vrm*", "character_vrm*"]
+exclude = ["character_vrm.tests*"]
+
+[tool.setuptools.package-data]
+character_vrm = ["toolchain.json"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests", "character_vrm/tests/unit", "character_vrm/tests/contract"]

@@ -1,0 +1,4295 @@
+{
+ "status": "success",
+ "toolchain": {
+  "blender": "5.2.2",
+  "vrmAddon": "4.7.2",
+  "target": "VRM 1.0"
+ },
+ "source": {
+  "path": "Amber.Fbx",
+  "format": "fbx",
+  "sha256": "7cd49f847de2738bdb4a3a1ec3581f24bdb00071b3abb8f5f3f5e7f88d142dec"
+ },
+ "geometry": {
+  "meshes": 17,
+  "skinnedMeshes": 17,
+  "triangles": 1588216,
+  "materials": 30,
+  "textures": 68,
+  "shapeKeys": 270,
+  "maxTexture": [
+   2048,
+   2048
+  ],
+  "skeletonHeightM": 1.55,
+  "excludedMeshes": [],
+  "armatures": [
+   {
+    "name": "Armature",
+    "score": 1.0,
+    "bones": 101,
+    "skinnedMeshes": 17,
+    "requiredMapped": 15,
+    "selected": true
+   }
+  ],
+  "profile": "video-call",
+  "semanticFrame": "waist-up",
+  "preserveFullArms": true,
+  "cutLandmark": "waist",
+  "cutSource": "detected",
+  "landmarkM": 1.014378481654106,
+  "safetyMarginM": 0.12,
+  "cutPlaneM": 0.8943784816541059,
+  "protectedObjects": [
+   "Bang",
+   "CC_Base_Eye",
+   "CC_Base_EyeOcclusion",
+   "CC_Base_TearLine",
+   "CC_Base_Teeth",
+   "CC_Base_Tongue",
+   "Camila_Brow",
+   "Hair_Base",
+   "Real_Hair",
+   "Underwear_Bottoms"
+  ],
+  "protectedArmVertices": 153133,
+  "protectedVertices": {
+   "Bang": 69400,
+   "Bra": 5744,
+   "Bun": 74645,
+   "Camila_Brow": 8551,
+   "CC_Base_Body": 158737,
+   "CC_Base_Eye": 10248,
+   "CC_Base_EyeOcclusion": 2450,
+   "CC_Base_TearLine": 2392,
+   "CC_Base_Teeth": 39518,
+   "CC_Base_Tongue": 4785,
+   "Crop_T_Shirt": 29050,
+   "Hair_Base": 74751,
+   "Punk_Leather_Jacket": 26913,
+   "Real_Hair": 73914,
+   "Underwear_Bottoms": 11267
+  },
+  "deleteObjects": [
+   "Boots"
+  ],
+  "cropObjects": [
+   "CC_Base_Body",
+   "Jeans"
+  ],
+  "preserveObjects": [
+   "Bang",
+   "Bra",
+   "Bun",
+   "Camila_Brow",
+   "CC_Base_Eye",
+   "CC_Base_EyeOcclusion",
+   "CC_Base_TearLine",
+   "CC_Base_Teeth",
+   "CC_Base_Tongue",
+   "Crop_T_Shirt",
+   "Hair_Base",
+   "Punk_Leather_Jacket",
+   "Real_Hair",
+   "Underwear_Bottoms"
+  ],
+  "removedPolygons": {
+   "Boots": 35664,
+   "CC_Base_Body": 46866,
+   "Jeans": 95223
+  }
+ },
+ "humanoid": {
+  "armature": "Armature",
+  "profile": "character-creator",
+  "requiredMapped": 15,
+  "requiredTotal": 15,
+  "optionalMapped": 40,
+  "meanConfidence": 0.99,
+  "mappings": [
+   {
+    "vrmBone": "hips",
+    "sourceBone": "CC_Base_Hip",
+    "confidence": 0.99,
+    "reason": "profile:character-creator"
+   },
+   {
+    "vrmBone": "spine",
+    "sourceBone": "CC_Base_Waist",
+    "confidence": 0.99,
+    "reason": "profile:character-creator"
+   },
+   {
+    "vrmBone": "head",
+    "sourceBone": "CC_Base_Head",
+    "confidence": 0.99,
+    "reason": "profile:character-creator"
+   },
+   {
+    "vrmBone": "leftUpperArm",
+    "sourceBone": "CC_Base_L_Upperarm",
+    "confidence": 0.99,
+    "reason": "profile:character-creator"
+   },
+   {
+    "vrmBone": "leftLowerArm",
+    "sourceBone": "CC_Base_L_Forearm",
+    "confidence": 0.99,
+    "reason": "profile:character-creator"
+   },
+   {
+    "vrmBone": "leftHand",
+    "sourceBone": "CC_Base_L_Hand",
+    "confidence": 0.99,
+    "reason": "profile:character-creator"
+   },
+   {
+    "vrmBone": "rightUpperArm",
+    "sourceBone": "CC_Base_R_Upperarm",
+    "confidence": 0.99,
+    "reason": "profile:character-creator"
+   },
+   {
+    "vrmBone": "rightLowerArm",
+    "sourceBone": "CC_Base_R_Forearm",
+    "confidence": 0.99,
+    "reason": "profile:character-creator"
+   },
+   {
+    "vrmBone": "rightHand",
+    "sourceBone": "CC_Base_R_Hand",
+    "confidence": 0.99,
+    "reason": "profile:character-creator"
+   },
+   {
+    "vrmBone": "leftUpperLeg",
+    "sourceBone": "CC_Base_L_Thigh",
+    "confidence": 0.99,
+    "reason": "profile:character-creator"
+   },
+   {
+    "vrmBone": "leftLowerLeg",
+    "sourceBone": "CC_Base_L_Calf",
+    "confidence": 0.99,
+    "reason": "profile:character-creator"
+   },
+   {
+    "vrmBone": "leftFoot",
+    "sourceBone": "CC_Base_L_Foot",
+    "confidence": 0.99,
+    "reason": "profile:character-creator"
+   },
+   {
+    "vrmBone": "rightUpperLeg",
+    "sourceBone": "CC_Base_R_Thigh",
+    "confidence": 0.99,
+    "reason": "profile:character-creator"
+   },
+   {
+    "vrmBone": "rightLowerLeg",
+    "sourceBone": "CC_Base_R_Calf",
+    "confidence": 0.99,
+    "reason": "profile:character-creator"
+   },
+   {
+    "vrmBone": "rightFoot",
+    "sourceBone": "CC_Base_R_Foot",
+    "confidence": 0.99,
+    "reason": "profile:character-creator"
+   },
+   {
+    "vrmBone": "chest",
+    "sourceBone": "CC_Base_Spine01",
+    "confidence": 0.99,
+    "reason": "profile:character-creator"
+   },
+   {
+    "vrmBone": "upperChest",
+    "sourceBone": "CC_Base_Spine02",
+    "confidence": 0.99,
+    "reason": "profile:character-creator"
+   },
+   {
+    "vrmBone": "neck",
+    "sourceBone": "CC_Base_NeckTwist01",
+    "confidence": 0.99,
+    "reason": "profile:character-creator"
+   },
+   {
+    "vrmBone": "leftShoulder",
+    "sourceBone": "CC_Base_L_Clavicle",
+    "confidence": 0.99,
+    "reason": "profile:character-creator"
+   },
+   {
+    "vrmBone": "rightShoulder",
+    "sourceBone": "CC_Base_R_Clavicle",
+    "confidence": 0.99,
+    "reason": "profile:character-creator"
+   },
+   {
+    "vrmBone": "leftToes",
+    "sourceBone": "CC_Base_L_ToeBase",
+    "confidence": 0.99,
+    "reason": "profile:character-creator"
+   },
+   {
+    "vrmBone": "rightToes",
+    "sourceBone": "CC_Base_R_ToeBase",
+    "confidence": 0.99,
+    "reason": "profile:character-creator"
+   },
+   {
+    "vrmBone": "leftEye",
+    "sourceBone": "CC_Base_L_Eye",
+    "confidence": 0.99,
+    "reason": "profile:character-creator"
+   },
+   {
+    "vrmBone": "rightEye",
+    "sourceBone": "CC_Base_R_Eye",
+    "confidence": 0.99,
+    "reason": "profile:character-creator"
+   },
+   {
+    "vrmBone": "jaw",
+    "sourceBone": "CC_Base_JawRoot",
+    "confidence": 0.99,
+    "reason": "profile:character-creator"
+   },
+   {
+    "vrmBone": "leftThumbMetacarpal",
+    "sourceBone": "CC_Base_L_Thumb1",
+    "confidence": 0.99,
+    "reason": "profile:character-creator"
+   },
+   {
+    "vrmBone": "leftThumbProximal",
+    "sourceBone": "CC_Base_L_Thumb2",
+    "confidence": 0.99,
+    "reason": "profile:character-creator"
+   },
+   {
+    "vrmBone": "leftThumbDistal",
+    "sourceBone": "CC_Base_L_Thumb3",
+    "confidence": 0.99,
+    "reason": "profile:character-creator"
+   },
+   {
+    "vrmBone": "leftIndexProximal",
+    "sourceBone": "CC_Base_L_Index1",
+    "confidence": 0.99,
+    "reason": "profile:character-creator"
+   },
+   {
+    "vrmBone": "leftIndexIntermediate",
+    "sourceBone": "CC_Base_L_Index2",
+    "confidence": 0.99,
+    "reason": "profile:character-creator"
+   },
+   {
+    "vrmBone": "leftIndexDistal",
+    "sourceBone": "CC_Base_L_Index3",
+    "confidence": 0.99,
+    "reason": "profile:character-creator"
+   },
+   {
+    "vrmBone": "leftMiddleProximal",
+    "sourceBone": "CC_Base_L_Mid1",
+    "confidence": 0.99,
+    "reason": "profile:character-creator"
+   },
+   {
+    "vrmBone": "leftMiddleIntermediate",
+    "sourceBone": "CC_Base_L_Mid2",
+    "confidence": 0.99,
+    "reason": "profile:character-creator"
+   },
+   {
+    "vrmBone": "leftMiddleDistal",
+    "sourceBone": "CC_Base_L_Mid3",
+    "confidence": 0.99,
+    "reason": "profile:character-creator"
+   },
+   {
+    "vrmBone": "leftRingProximal",
+    "sourceBone": "CC_Base_L_Ring1",
+    "confidence": 0.99,
+    "reason": "profile:character-creator"
+   },
+   {
+    "vrmBone": "leftRingIntermediate",
+    "sourceBone": "CC_Base_L_Ring2",
+    "confidence": 0.99,
+    "reason": "profile:character-creator"
+   },
+   {
+    "vrmBone": "leftRingDistal",
+    "sourceBone": "CC_Base_L_Ring3",
+    "confidence": 0.99,
+    "reason": "profile:character-creator"
+   },
+   {
+    "vrmBone": "leftLittleProximal",
+    "sourceBone": "CC_Base_L_Pinky1",
+    "confidence": 0.99,
+    "reason": "profile:character-creator"
+   },
+   {
+    "vrmBone": "leftLittleIntermediate",
+    "sourceBone": "CC_Base_L_Pinky2",
+    "confidence": 0.99,
+    "reason": "profile:character-creator"
+   },
+   {
+    "vrmBone": "leftLittleDistal",
+    "sourceBone": "CC_Base_L_Pinky3",
+    "confidence": 0.99,
+    "reason": "profile:character-creator"
+   },
+   {
+    "vrmBone": "rightThumbMetacarpal",
+    "sourceBone": "CC_Base_R_Thumb1",
+    "confidence": 0.99,
+    "reason": "profile:character-creator"
+   },
+   {
+    "vrmBone": "rightThumbProximal",
+    "sourceBone": "CC_Base_R_Thumb2",
+    "confidence": 0.99,
+    "reason": "profile:character-creator"
+   },
+   {
+    "vrmBone": "rightThumbDistal",
+    "sourceBone": "CC_Base_R_Thumb3",
+    "confidence": 0.99,
+    "reason": "profile:character-creator"
+   },
+   {
+    "vrmBone": "rightIndexProximal",
+    "sourceBone": "CC_Base_R_Index1",
+    "confidence": 0.99,
+    "reason": "profile:character-creator"
+   },
+   {
+    "vrmBone": "rightIndexIntermediate",
+    "sourceBone": "CC_Base_R_Index2",
+    "confidence": 0.99,
+    "reason": "profile:character-creator"
+   },
+   {
+    "vrmBone": "rightIndexDistal",
+    "sourceBone": "CC_Base_R_Index3",
+    "confidence": 0.99,
+    "reason": "profile:character-creator"
+   },
+   {
+    "vrmBone": "rightMiddleProximal",
+    "sourceBone": "CC_Base_R_Mid1",
+    "confidence": 0.99,
+    "reason": "profile:character-creator"
+   },
+   {
+    "vrmBone": "rightMiddleIntermediate",
+    "sourceBone": "CC_Base_R_Mid2",
+    "confidence": 0.99,
+    "reason": "profile:character-creator"
+   },
+   {
+    "vrmBone": "rightMiddleDistal",
+    "sourceBone": "CC_Base_R_Mid3",
+    "confidence": 0.99,
+    "reason": "profile:character-creator"
+   },
+   {
+    "vrmBone": "rightRingProximal",
+    "sourceBone": "CC_Base_R_Ring1",
+    "confidence": 0.99,
+    "reason": "profile:character-creator"
+   },
+   {
+    "vrmBone": "rightRingIntermediate",
+    "sourceBone": "CC_Base_R_Ring2",
+    "confidence": 0.99,
+    "reason": "profile:character-creator"
+   },
+   {
+    "vrmBone": "rightRingDistal",
+    "sourceBone": "CC_Base_R_Ring3",
+    "confidence": 0.99,
+    "reason": "profile:character-creator"
+   },
+   {
+    "vrmBone": "rightLittleProximal",
+    "sourceBone": "CC_Base_R_Pinky1",
+    "confidence": 0.99,
+    "reason": "profile:character-creator"
+   },
+   {
+    "vrmBone": "rightLittleIntermediate",
+    "sourceBone": "CC_Base_R_Pinky2",
+    "confidence": 0.99,
+    "reason": "profile:character-creator"
+   },
+   {
+    "vrmBone": "rightLittleDistal",
+    "sourceBone": "CC_Base_R_Pinky3",
+    "confidence": 0.99,
+    "reason": "profile:character-creator"
+   }
+  ],
+  "missingRequired": [],
+  "belowThreshold": [],
+  "preservedUnmappedBones": 46
+ },
+ "expressions": {
+  "capability": "full",
+  "arkit": "partial",
+  "arkitCoverage": 0.54,
+  "mapped": {
+   "blink": {
+    "status": "generated",
+    "kind": "compound",
+    "confidence": 0.9,
+    "reason": "profile:character-creator",
+    "binds": [
+     {
+      "mesh": "Camila_Brow",
+      "shapeKey": "Eye_Blink_L",
+      "weight": 1.0
+     },
+     {
+      "mesh": "CC_Base_Body",
+      "shapeKey": "Eye_Blink_L",
+      "weight": 1.0
+     },
+     {
+      "mesh": "CC_Base_EyeOcclusion",
+      "shapeKey": "Eye_Blink_L",
+      "weight": 1.0
+     },
+     {
+      "mesh": "CC_Base_TearLine",
+      "shapeKey": "Eye_Blink_L",
+      "weight": 1.0
+     },
+     {
+      "mesh": "Camila_Brow",
+      "shapeKey": "Eye_Blink_R",
+      "weight": 1.0
+     },
+     {
+      "mesh": "CC_Base_Body",
+      "shapeKey": "Eye_Blink_R",
+      "weight": 1.0
+     },
+     {
+      "mesh": "CC_Base_EyeOcclusion",
+      "shapeKey": "Eye_Blink_R",
+      "weight": 1.0
+     },
+     {
+      "mesh": "CC_Base_TearLine",
+      "shapeKey": "Eye_Blink_R",
+      "weight": 1.0
+     }
+    ]
+   },
+   "blinkLeft": {
+    "status": "available",
+    "kind": "direct",
+    "confidence": 0.9,
+    "reason": "profile:character-creator",
+    "binds": [
+     {
+      "mesh": "Camila_Brow",
+      "shapeKey": "Eye_Blink_L",
+      "weight": 1.0
+     },
+     {
+      "mesh": "CC_Base_Body",
+      "shapeKey": "Eye_Blink_L",
+      "weight": 1.0
+     },
+     {
+      "mesh": "CC_Base_EyeOcclusion",
+      "shapeKey": "Eye_Blink_L",
+      "weight": 1.0
+     },
+     {
+      "mesh": "CC_Base_TearLine",
+      "shapeKey": "Eye_Blink_L",
+      "weight": 1.0
+     }
+    ]
+   },
+   "blinkRight": {
+    "status": "available",
+    "kind": "direct",
+    "confidence": 0.9,
+    "reason": "profile:character-creator",
+    "binds": [
+     {
+      "mesh": "Camila_Brow",
+      "shapeKey": "Eye_Blink_R",
+      "weight": 1.0
+     },
+     {
+      "mesh": "CC_Base_Body",
+      "shapeKey": "Eye_Blink_R",
+      "weight": 1.0
+     },
+     {
+      "mesh": "CC_Base_EyeOcclusion",
+      "shapeKey": "Eye_Blink_R",
+      "weight": 1.0
+     },
+     {
+      "mesh": "CC_Base_TearLine",
+      "shapeKey": "Eye_Blink_R",
+      "weight": 1.0
+     }
+    ]
+   },
+   "aa": {
+    "status": "generated",
+    "kind": "compound",
+    "confidence": 0.85,
+    "reason": "profile:character-creator",
+    "binds": [
+     {
+      "mesh": "Camila_Brow",
+      "shapeKey": "V_Open",
+      "weight": 0.7
+     },
+     {
+      "mesh": "CC_Base_Body",
+      "shapeKey": "V_Open",
+      "weight": 0.7
+     },
+     {
+      "mesh": "CC_Base_EyeOcclusion",
+      "shapeKey": "V_Open",
+      "weight": 0.7
+     },
+     {
+      "mesh": "CC_Base_TearLine",
+      "shapeKey": "V_Open",
+      "weight": 0.7
+     },
+     {
+      "mesh": "CC_Base_Tongue",
+      "shapeKey": "V_Open",
+      "weight": 0.7
+     },
+     {
+      "mesh": "Camila_Brow",
+      "shapeKey": "Jaw_Open",
+      "weight": 0.5
+     },
+     {
+      "mesh": "CC_Base_Body",
+      "shapeKey": "Jaw_Open",
+      "weight": 0.5
+     },
+     {
+      "mesh": "CC_Base_Tongue",
+      "shapeKey": "Jaw_Open",
+      "weight": 0.5
+     }
+    ]
+   },
+   "ih": {
+    "status": "generated",
+    "kind": "compound",
+    "confidence": 0.85,
+    "reason": "profile:character-creator",
+    "binds": [
+     {
+      "mesh": "Camila_Brow",
+      "shapeKey": "V_Wide",
+      "weight": 0.7
+     },
+     {
+      "mesh": "CC_Base_Body",
+      "shapeKey": "V_Wide",
+      "weight": 0.7
+     },
+     {
+      "mesh": "CC_Base_EyeOcclusion",
+      "shapeKey": "V_Wide",
+      "weight": 0.7
+     },
+     {
+      "mesh": "CC_Base_TearLine",
+      "shapeKey": "V_Wide",
+      "weight": 0.7
+     },
+     {
+      "mesh": "Camila_Brow",
+      "shapeKey": "Jaw_Open",
+      "weight": 0.15
+     },
+     {
+      "mesh": "CC_Base_Body",
+      "shapeKey": "Jaw_Open",
+      "weight": 0.15
+     },
+     {
+      "mesh": "CC_Base_Tongue",
+      "shapeKey": "Jaw_Open",
+      "weight": 0.15
+     }
+    ]
+   },
+   "ou": {
+    "status": "generated",
+    "kind": "compound",
+    "confidence": 0.85,
+    "reason": "profile:character-creator",
+    "binds": [
+     {
+      "mesh": "Camila_Brow",
+      "shapeKey": "V_Tight_O",
+      "weight": 1.0
+     },
+     {
+      "mesh": "CC_Base_Body",
+      "shapeKey": "V_Tight_O",
+      "weight": 1.0
+     },
+     {
+      "mesh": "CC_Base_Tongue",
+      "shapeKey": "V_Tight_O",
+      "weight": 1.0
+     },
+     {
+      "mesh": "Camila_Brow",
+      "shapeKey": "Jaw_Open",
+      "weight": 0.1
+     },
+     {
+      "mesh": "CC_Base_Body",
+      "shapeKey": "Jaw_Open",
+      "weight": 0.1
+     },
+     {
+      "mesh": "CC_Base_Tongue",
+      "shapeKey": "Jaw_Open",
+      "weight": 0.1
+     }
+    ]
+   },
+   "ee": {
+    "status": "generated",
+    "kind": "compound",
+    "confidence": 0.85,
+    "reason": "profile:character-creator",
+    "binds": [
+     {
+      "mesh": "Camila_Brow",
+      "shapeKey": "V_Wide",
+      "weight": 1.0
+     },
+     {
+      "mesh": "CC_Base_Body",
+      "shapeKey": "V_Wide",
+      "weight": 1.0
+     },
+     {
+      "mesh": "CC_Base_EyeOcclusion",
+      "shapeKey": "V_Wide",
+      "weight": 1.0
+     },
+     {
+      "mesh": "CC_Base_TearLine",
+      "shapeKey": "V_Wide",
+      "weight": 1.0
+     },
+     {
+      "mesh": "Camila_Brow",
+      "shapeKey": "Jaw_Open",
+      "weight": 0.1
+     },
+     {
+      "mesh": "CC_Base_Body",
+      "shapeKey": "Jaw_Open",
+      "weight": 0.1
+     },
+     {
+      "mesh": "CC_Base_Tongue",
+      "shapeKey": "Jaw_Open",
+      "weight": 0.1
+     }
+    ]
+   },
+   "oh": {
+    "status": "generated",
+    "kind": "compound",
+    "confidence": 0.85,
+    "reason": "profile:character-creator",
+    "binds": [
+     {
+      "mesh": "Camila_Brow",
+      "shapeKey": "V_Tight_O",
+      "weight": 0.7
+     },
+     {
+      "mesh": "CC_Base_Body",
+      "shapeKey": "V_Tight_O",
+      "weight": 0.7
+     },
+     {
+      "mesh": "CC_Base_Tongue",
+      "shapeKey": "V_Tight_O",
+      "weight": 0.7
+     },
+     {
+      "mesh": "Camila_Brow",
+      "shapeKey": "Jaw_Open",
+      "weight": 0.3
+     },
+     {
+      "mesh": "CC_Base_Body",
+      "shapeKey": "Jaw_Open",
+      "weight": 0.3
+     },
+     {
+      "mesh": "CC_Base_Tongue",
+      "shapeKey": "Jaw_Open",
+      "weight": 0.3
+     },
+     {
+      "mesh": "Camila_Brow",
+      "shapeKey": "V_Open",
+      "weight": 0.3
+     },
+     {
+      "mesh": "CC_Base_Body",
+      "shapeKey": "V_Open",
+      "weight": 0.3
+     },
+     {
+      "mesh": "CC_Base_EyeOcclusion",
+      "shapeKey": "V_Open",
+      "weight": 0.3
+     },
+     {
+      "mesh": "CC_Base_TearLine",
+      "shapeKey": "V_Open",
+      "weight": 0.3
+     },
+     {
+      "mesh": "CC_Base_Tongue",
+      "shapeKey": "V_Open",
+      "weight": 0.3
+     }
+    ]
+   },
+   "happy": {
+    "status": "generated",
+    "kind": "compound",
+    "confidence": 0.75,
+    "reason": "profile:character-creator",
+    "binds": [
+     {
+      "mesh": "Camila_Brow",
+      "shapeKey": "Mouth_Smile_L",
+      "weight": 0.8
+     },
+     {
+      "mesh": "CC_Base_Body",
+      "shapeKey": "Mouth_Smile_L",
+      "weight": 0.8
+     },
+     {
+      "mesh": "CC_Base_EyeOcclusion",
+      "shapeKey": "Mouth_Smile_L",
+      "weight": 0.8
+     },
+     {
+      "mesh": "CC_Base_TearLine",
+      "shapeKey": "Mouth_Smile_L",
+      "weight": 0.8
+     },
+     {
+      "mesh": "CC_Base_Tongue",
+      "shapeKey": "Mouth_Smile_L",
+      "weight": 0.8
+     },
+     {
+      "mesh": "Camila_Brow",
+      "shapeKey": "Mouth_Smile_R",
+      "weight": 0.8
+     },
+     {
+      "mesh": "CC_Base_Body",
+      "shapeKey": "Mouth_Smile_R",
+      "weight": 0.8
+     },
+     {
+      "mesh": "CC_Base_EyeOcclusion",
+      "shapeKey": "Mouth_Smile_R",
+      "weight": 0.8
+     },
+     {
+      "mesh": "CC_Base_TearLine",
+      "shapeKey": "Mouth_Smile_R",
+      "weight": 0.8
+     },
+     {
+      "mesh": "Camila_Brow",
+      "shapeKey": "Cheek_Raise_L",
+      "weight": 0.4
+     },
+     {
+      "mesh": "CC_Base_Body",
+      "shapeKey": "Cheek_Raise_L",
+      "weight": 0.4
+     },
+     {
+      "mesh": "CC_Base_EyeOcclusion",
+      "shapeKey": "Cheek_Raise_L",
+      "weight": 0.4
+     },
+     {
+      "mesh": "CC_Base_TearLine",
+      "shapeKey": "Cheek_Raise_L",
+      "weight": 0.4
+     },
+     {
+      "mesh": "Camila_Brow",
+      "shapeKey": "Cheek_Raise_R",
+      "weight": 0.4
+     },
+     {
+      "mesh": "CC_Base_Body",
+      "shapeKey": "Cheek_Raise_R",
+      "weight": 0.4
+     },
+     {
+      "mesh": "CC_Base_EyeOcclusion",
+      "shapeKey": "Cheek_Raise_R",
+      "weight": 0.4
+     },
+     {
+      "mesh": "CC_Base_TearLine",
+      "shapeKey": "Cheek_Raise_R",
+      "weight": 0.4
+     }
+    ]
+   },
+   "angry": {
+    "status": "generated",
+    "kind": "compound",
+    "confidence": 0.75,
+    "reason": "profile:character-creator",
+    "binds": [
+     {
+      "mesh": "Camila_Brow",
+      "shapeKey": "Brow_Drop_L",
+      "weight": 0.9
+     },
+     {
+      "mesh": "CC_Base_Body",
+      "shapeKey": "Brow_Drop_L",
+      "weight": 0.9
+     },
+     {
+      "mesh": "CC_Base_EyeOcclusion",
+      "shapeKey": "Brow_Drop_L",
+      "weight": 0.9
+     },
+     {
+      "mesh": "CC_Base_TearLine",
+      "shapeKey": "Brow_Drop_L",
+      "weight": 0.9
+     },
+     {
+      "mesh": "Camila_Brow",
+      "shapeKey": "Brow_Drop_R",
+      "weight": 0.9
+     },
+     {
+      "mesh": "CC_Base_Body",
+      "shapeKey": "Brow_Drop_R",
+      "weight": 0.9
+     },
+     {
+      "mesh": "CC_Base_EyeOcclusion",
+      "shapeKey": "Brow_Drop_R",
+      "weight": 0.9
+     },
+     {
+      "mesh": "CC_Base_TearLine",
+      "shapeKey": "Brow_Drop_R",
+      "weight": 0.9
+     },
+     {
+      "mesh": "Camila_Brow",
+      "shapeKey": "Nose_Sneer_L",
+      "weight": 0.3
+     },
+     {
+      "mesh": "CC_Base_Body",
+      "shapeKey": "Nose_Sneer_L",
+      "weight": 0.3
+     },
+     {
+      "mesh": "CC_Base_EyeOcclusion",
+      "shapeKey": "Nose_Sneer_L",
+      "weight": 0.3
+     },
+     {
+      "mesh": "CC_Base_TearLine",
+      "shapeKey": "Nose_Sneer_L",
+      "weight": 0.3
+     },
+     {
+      "mesh": "Camila_Brow",
+      "shapeKey": "Nose_Sneer_R",
+      "weight": 0.3
+     },
+     {
+      "mesh": "CC_Base_Body",
+      "shapeKey": "Nose_Sneer_R",
+      "weight": 0.3
+     },
+     {
+      "mesh": "CC_Base_EyeOcclusion",
+      "shapeKey": "Nose_Sneer_R",
+      "weight": 0.3
+     },
+     {
+      "mesh": "CC_Base_TearLine",
+      "shapeKey": "Nose_Sneer_R",
+      "weight": 0.3
+     },
+     {
+      "mesh": "Camila_Brow",
+      "shapeKey": "Mouth_Frown_L",
+      "weight": 0.4
+     },
+     {
+      "mesh": "CC_Base_Body",
+      "shapeKey": "Mouth_Frown_L",
+      "weight": 0.4
+     },
+     {
+      "mesh": "Camila_Brow",
+      "shapeKey": "Mouth_Frown_R",
+      "weight": 0.4
+     },
+     {
+      "mesh": "CC_Base_Body",
+      "shapeKey": "Mouth_Frown_R",
+      "weight": 0.4
+     }
+    ]
+   },
+   "sad": {
+    "status": "generated",
+    "kind": "compound",
+    "confidence": 0.75,
+    "reason": "profile:character-creator",
+    "binds": [
+     {
+      "mesh": "Camila_Brow",
+      "shapeKey": "Brow_Raise_Inner_L",
+      "weight": 0.8
+     },
+     {
+      "mesh": "CC_Base_Body",
+      "shapeKey": "Brow_Raise_Inner_L",
+      "weight": 0.8
+     },
+     {
+      "mesh": "CC_Base_EyeOcclusion",
+      "shapeKey": "Brow_Raise_Inner_L",
+      "weight": 0.8
+     },
+     {
+      "mesh": "CC_Base_TearLine",
+      "shapeKey": "Brow_Raise_Inner_L",
+      "weight": 0.8
+     },
+     {
+      "mesh": "Camila_Brow",
+      "shapeKey": "Brow_Raise_Inner_R",
+      "weight": 0.8
+     },
+     {
+      "mesh": "CC_Base_Body",
+      "shapeKey": "Brow_Raise_Inner_R",
+      "weight": 0.8
+     },
+     {
+      "mesh": "CC_Base_EyeOcclusion",
+      "shapeKey": "Brow_Raise_Inner_R",
+      "weight": 0.8
+     },
+     {
+      "mesh": "CC_Base_TearLine",
+      "shapeKey": "Brow_Raise_Inner_R",
+      "weight": 0.8
+     },
+     {
+      "mesh": "Camila_Brow",
+      "shapeKey": "Mouth_Frown_L",
+      "weight": 0.6
+     },
+     {
+      "mesh": "CC_Base_Body",
+      "shapeKey": "Mouth_Frown_L",
+      "weight": 0.6
+     },
+     {
+      "mesh": "Camila_Brow",
+      "shapeKey": "Mouth_Frown_R",
+      "weight": 0.6
+     },
+     {
+      "mesh": "CC_Base_Body",
+      "shapeKey": "Mouth_Frown_R",
+      "weight": 0.6
+     }
+    ]
+   },
+   "surprised": {
+    "status": "generated",
+    "kind": "compound",
+    "confidence": 0.75,
+    "reason": "profile:character-creator",
+    "binds": [
+     {
+      "mesh": "Camila_Brow",
+      "shapeKey": "Brow_Raise_Inner_L",
+      "weight": 0.6
+     },
+     {
+      "mesh": "CC_Base_Body",
+      "shapeKey": "Brow_Raise_Inner_L",
+      "weight": 0.6
+     },
+     {
+      "mesh": "CC_Base_EyeOcclusion",
+      "shapeKey": "Brow_Raise_Inner_L",
+      "weight": 0.6
+     },
+     {
+      "mesh": "CC_Base_TearLine",
+      "shapeKey": "Brow_Raise_Inner_L",
+      "weight": 0.6
+     },
+     {
+      "mesh": "Camila_Brow",
+      "shapeKey": "Brow_Raise_Inner_R",
+      "weight": 0.6
+     },
+     {
+      "mesh": "CC_Base_Body",
+      "shapeKey": "Brow_Raise_Inner_R",
+      "weight": 0.6
+     },
+     {
+      "mesh": "CC_Base_EyeOcclusion",
+      "shapeKey": "Brow_Raise_Inner_R",
+      "weight": 0.6
+     },
+     {
+      "mesh": "CC_Base_TearLine",
+      "shapeKey": "Brow_Raise_Inner_R",
+      "weight": 0.6
+     },
+     {
+      "mesh": "Camila_Brow",
+      "shapeKey": "Eye_Wide_L",
+      "weight": 0.8
+     },
+     {
+      "mesh": "CC_Base_Body",
+      "shapeKey": "Eye_Wide_L",
+      "weight": 0.8
+     },
+     {
+      "mesh": "CC_Base_EyeOcclusion",
+      "shapeKey": "Eye_Wide_L",
+      "weight": 0.8
+     },
+     {
+      "mesh": "CC_Base_TearLine",
+      "shapeKey": "Eye_Wide_L",
+      "weight": 0.8
+     },
+     {
+      "mesh": "Camila_Brow",
+      "shapeKey": "Eye_Wide_R",
+      "weight": 0.8
+     },
+     {
+      "mesh": "CC_Base_Body",
+      "shapeKey": "Eye_Wide_R",
+      "weight": 0.8
+     },
+     {
+      "mesh": "CC_Base_EyeOcclusion",
+      "shapeKey": "Eye_Wide_R",
+      "weight": 0.8
+     },
+     {
+      "mesh": "CC_Base_TearLine",
+      "shapeKey": "Eye_Wide_R",
+      "weight": 0.8
+     },
+     {
+      "mesh": "Camila_Brow",
+      "shapeKey": "Brow_Raise_Outer_L",
+      "weight": 0.7
+     },
+     {
+      "mesh": "CC_Base_Body",
+      "shapeKey": "Brow_Raise_Outer_L",
+      "weight": 0.7
+     },
+     {
+      "mesh": "CC_Base_EyeOcclusion",
+      "shapeKey": "Brow_Raise_Outer_L",
+      "weight": 0.7
+     },
+     {
+      "mesh": "CC_Base_TearLine",
+      "shapeKey": "Brow_Raise_Outer_L",
+      "weight": 0.7
+     },
+     {
+      "mesh": "Camila_Brow",
+      "shapeKey": "Brow_Raise_Outer_R",
+      "weight": 0.7
+     },
+     {
+      "mesh": "CC_Base_Body",
+      "shapeKey": "Brow_Raise_Outer_R",
+      "weight": 0.7
+     },
+     {
+      "mesh": "CC_Base_EyeOcclusion",
+      "shapeKey": "Brow_Raise_Outer_R",
+      "weight": 0.7
+     },
+     {
+      "mesh": "CC_Base_TearLine",
+      "shapeKey": "Brow_Raise_Outer_R",
+      "weight": 0.7
+     },
+     {
+      "mesh": "Camila_Brow",
+      "shapeKey": "V_Open",
+      "weight": 0.3
+     },
+     {
+      "mesh": "CC_Base_Body",
+      "shapeKey": "V_Open",
+      "weight": 0.3
+     },
+     {
+      "mesh": "CC_Base_EyeOcclusion",
+      "shapeKey": "V_Open",
+      "weight": 0.3
+     },
+     {
+      "mesh": "CC_Base_TearLine",
+      "shapeKey": "V_Open",
+      "weight": 0.3
+     },
+     {
+      "mesh": "CC_Base_Tongue",
+      "shapeKey": "V_Open",
+      "weight": 0.3
+     }
+    ]
+   },
+   "lookUp": {
+    "status": "generated",
+    "kind": "compound",
+    "confidence": 0.85,
+    "reason": "profile:character-creator",
+    "binds": [
+     {
+      "mesh": "Camila_Brow",
+      "shapeKey": "Eye_L_Look_Up",
+      "weight": 1.0
+     },
+     {
+      "mesh": "CC_Base_Body",
+      "shapeKey": "Eye_L_Look_Up",
+      "weight": 1.0
+     },
+     {
+      "mesh": "CC_Base_EyeOcclusion",
+      "shapeKey": "Eye_L_Look_Up",
+      "weight": 1.0
+     },
+     {
+      "mesh": "CC_Base_TearLine",
+      "shapeKey": "Eye_L_Look_Up",
+      "weight": 1.0
+     },
+     {
+      "mesh": "Camila_Brow",
+      "shapeKey": "Eye_R_Look_Up",
+      "weight": 1.0
+     },
+     {
+      "mesh": "CC_Base_Body",
+      "shapeKey": "Eye_R_Look_Up",
+      "weight": 1.0
+     },
+     {
+      "mesh": "CC_Base_EyeOcclusion",
+      "shapeKey": "Eye_R_Look_Up",
+      "weight": 1.0
+     },
+     {
+      "mesh": "CC_Base_TearLine",
+      "shapeKey": "Eye_R_Look_Up",
+      "weight": 1.0
+     }
+    ]
+   },
+   "lookDown": {
+    "status": "generated",
+    "kind": "compound",
+    "confidence": 0.85,
+    "reason": "profile:character-creator",
+    "binds": [
+     {
+      "mesh": "Camila_Brow",
+      "shapeKey": "Eye_L_Look_Down",
+      "weight": 1.0
+     },
+     {
+      "mesh": "CC_Base_Body",
+      "shapeKey": "Eye_L_Look_Down",
+      "weight": 1.0
+     },
+     {
+      "mesh": "CC_Base_EyeOcclusion",
+      "shapeKey": "Eye_L_Look_Down",
+      "weight": 1.0
+     },
+     {
+      "mesh": "CC_Base_TearLine",
+      "shapeKey": "Eye_L_Look_Down",
+      "weight": 1.0
+     },
+     {
+      "mesh": "Camila_Brow",
+      "shapeKey": "Eye_R_Look_Down",
+      "weight": 1.0
+     },
+     {
+      "mesh": "CC_Base_Body",
+      "shapeKey": "Eye_R_Look_Down",
+      "weight": 1.0
+     },
+     {
+      "mesh": "CC_Base_EyeOcclusion",
+      "shapeKey": "Eye_R_Look_Down",
+      "weight": 1.0
+     },
+     {
+      "mesh": "CC_Base_TearLine",
+      "shapeKey": "Eye_R_Look_Down",
+      "weight": 1.0
+     }
+    ]
+   },
+   "lookLeft": {
+    "status": "generated",
+    "kind": "compound",
+    "confidence": 0.85,
+    "reason": "profile:character-creator",
+    "binds": [
+     {
+      "mesh": "Camila_Brow",
+      "shapeKey": "Eye_L_Look_L",
+      "weight": 1.0
+     },
+     {
+      "mesh": "CC_Base_Body",
+      "shapeKey": "Eye_L_Look_L",
+      "weight": 1.0
+     },
+     {
+      "mesh": "CC_Base_EyeOcclusion",
+      "shapeKey": "Eye_L_Look_L",
+      "weight": 1.0
+     },
+     {
+      "mesh": "CC_Base_TearLine",
+      "shapeKey": "Eye_L_Look_L",
+      "weight": 1.0
+     },
+     {
+      "mesh": "Camila_Brow",
+      "shapeKey": "Eye_R_Look_L",
+      "weight": 1.0
+     },
+     {
+      "mesh": "CC_Base_Body",
+      "shapeKey": "Eye_R_Look_L",
+      "weight": 1.0
+     },
+     {
+      "mesh": "CC_Base_EyeOcclusion",
+      "shapeKey": "Eye_R_Look_L",
+      "weight": 1.0
+     },
+     {
+      "mesh": "CC_Base_TearLine",
+      "shapeKey": "Eye_R_Look_L",
+      "weight": 1.0
+     }
+    ]
+   },
+   "lookRight": {
+    "status": "generated",
+    "kind": "compound",
+    "confidence": 0.85,
+    "reason": "profile:character-creator",
+    "binds": [
+     {
+      "mesh": "Camila_Brow",
+      "shapeKey": "Eye_L_Look_R",
+      "weight": 1.0
+     },
+     {
+      "mesh": "CC_Base_Body",
+      "shapeKey": "Eye_L_Look_R",
+      "weight": 1.0
+     },
+     {
+      "mesh": "CC_Base_EyeOcclusion",
+      "shapeKey": "Eye_L_Look_R",
+      "weight": 1.0
+     },
+     {
+      "mesh": "CC_Base_TearLine",
+      "shapeKey": "Eye_L_Look_R",
+      "weight": 1.0
+     },
+     {
+      "mesh": "Camila_Brow",
+      "shapeKey": "Eye_R_Look_R",
+      "weight": 1.0
+     },
+     {
+      "mesh": "CC_Base_Body",
+      "shapeKey": "Eye_R_Look_R",
+      "weight": 1.0
+     },
+     {
+      "mesh": "CC_Base_EyeOcclusion",
+      "shapeKey": "Eye_R_Look_R",
+      "weight": 1.0
+     },
+     {
+      "mesh": "CC_Base_TearLine",
+      "shapeKey": "Eye_R_Look_R",
+      "weight": 1.0
+     }
+    ]
+   }
+  },
+  "missing": [
+   "relaxed"
+  ],
+  "belowThreshold": []
+ },
+ "lookAt": {
+  "type": "bone",
+  "reason": "leftEye and rightEye are mapped",
+  "offsetFromHeadBone": null
+ },
+ "springBones": {
+  "enabled": true,
+  "chains": [],
+  "colliders": [],
+  "skipped": []
+ },
+ "materials": {
+  "total": 30,
+  "mtoonConverted": 0,
+  "pbrPreserved": 30,
+  "procedural": [],
+  "nonPrincipled": [],
+  "channels": {
+   "baseColor": 28,
+   "alpha": 16,
+   "normal": 17
+  },
+  "textures": 68
+ },
+ "output": {
+  "path": "amber.vrm",
+  "sizeBytes": 844013568,
+  "specVersion": "1.0",
+  "nodes": 117,
+  "meshes": 16,
+  "skins": 1,
+  "materials": 28,
+  "images": 51,
+  "humanBones": 55,
+  "expressions": [
+   "aa",
+   "angry",
+   "blink",
+   "blinkLeft",
+   "blinkRight",
+   "ee",
+   "happy",
+   "ih",
+   "lookDown",
+   "lookLeft",
+   "lookRight",
+   "lookUp",
+   "neutral",
+   "oh",
+   "ou",
+   "relaxed",
+   "sad",
+   "surprised"
+  ],
+  "springs": 0,
+  "lookAt": "bone"
+ },
+ "warnings": [
+  {
+   "code": "springs-none",
+   "message": "No identifiable hair bones: no spring bones generated."
+  },
+  {
+   "code": "geometry-heavy",
+   "message": "1,588,216 triangles. No limit is enforced; runtime cost is on you."
+  }
+ ],
+ "errors": [],
+ "anatomy": {
+  "version": 1,
+  "available": true,
+  "anatomy": {
+   "height": 1.6248,
+   "shoulderWidth": 0.3002,
+   "headWidth": 0.1542,
+   "measurements": {
+    "total_height": {
+     "value": 1.6248,
+     "normalized": 1.0,
+     "confidence": 0.9,
+     "source": "skeleton",
+     "method": "skeleton-extent"
+    },
+    "torso_length": {
+     "value": 0.4869,
+     "normalized": 0.2997,
+     "confidence": 0.85,
+     "source": "skeleton",
+     "method": "hips-neck"
+    },
+    "upper_arm_length": {
+     "value": 0.2606,
+     "normalized": 0.1604,
+     "confidence": 0.9,
+     "source": "skeleton",
+     "method": "bone-lengths"
+    },
+    "forearm_length": {
+     "value": 0.2275,
+     "normalized": 0.14,
+     "confidence": 0.9,
+     "source": "skeleton",
+     "method": "bone-lengths"
+    },
+    "hand_length": {
+     "value": 0.1667,
+     "normalized": 0.1026,
+     "confidence": 0.8,
+     "source": "skeleton",
+     "method": "hand-to-fingertip"
+    },
+    "thigh_length": {
+     "value": 0.415,
+     "normalized": 0.2554,
+     "confidence": 0.9,
+     "source": "skeleton",
+     "method": "bone-lengths"
+    },
+    "lower_leg_length": {
+     "value": 0.4296,
+     "normalized": 0.2644,
+     "confidence": 0.9,
+     "source": "skeleton",
+     "method": "bone-lengths"
+    },
+    "foot_length": {
+     "value": 0.153,
+     "normalized": 0.0942,
+     "confidence": 0.7,
+     "source": "skeleton",
+     "method": "foot-to-toe"
+    },
+    "shoulder_width": {
+     "value": 0.3002,
+     "normalized": 0.1848,
+     "confidence": 0.8,
+     "source": "skeleton",
+     "method": "upper-arm-joints"
+    },
+    "head_height": {
+     "value": 0.2058,
+     "normalized": 0.1267,
+     "confidence": 0.941,
+     "source": "geometry",
+     "method": "chin-to-skull-top"
+    },
+    "head_width": {
+     "value": 0.1542,
+     "normalized": 0.0949,
+     "confidence": 0.941,
+     "source": "geometry",
+     "method": "face-skin-extent"
+    },
+    "chest_width": {
+     "value": 0.3152,
+     "normalized": 0.194,
+     "confidence": 0.8,
+     "source": "geometry",
+     "method": "mesh-slice@chest"
+    },
+    "waist_width": {
+     "value": 0.3152,
+     "normalized": 0.194,
+     "confidence": 0.8,
+     "source": "geometry",
+     "method": "mesh-slice@spine"
+    },
+    "hip_width": {
+     "value": 0.3376,
+     "normalized": 0.2078,
+     "confidence": 0.8,
+     "source": "geometry",
+     "method": "mesh-slice@hips"
+    }
+   },
+   "frame": {
+    "origin": [
+     0.0,
+     0.0,
+     0.93005
+    ],
+    "up": [
+     0.00208,
+     0.0337,
+     0.99943
+    ],
+    "right": [
+     -0.99999,
+     0.00364,
+     0.00196
+    ],
+    "forward": [
+     -0.00357,
+     -0.99943,
+     0.0337
+    ],
+    "scale": 1.4545,
+    "confidence": 0.998,
+    "evidence": {
+     "lateral": 1.0,
+     "forward": 0.997
+    }
+   }
+  },
+  "landmarks": {
+   "head_center": {
+    "position": [
+     0.00132,
+     0.0214,
+     1.56463
+    ],
+    "confidence": 0.75,
+    "source": "skeleton",
+    "method": "head-bone-top-midpoint"
+   },
+   "head_top": {
+    "position": [
+     0.0015,
+     0.02427,
+     1.64978
+    ],
+    "confidence": 0.8,
+    "source": "skeleton",
+    "method": "top-of-head"
+   },
+   "neck": {
+    "position": [
+     0.0002,
+     0.04041,
+     1.41524
+    ],
+    "confidence": 0.9,
+    "source": "skeleton",
+    "method": "neck-bone"
+   },
+   "hips": {
+    "position": [
+     0.0,
+     0.0,
+     0.93005
+    ],
+    "confidence": 0.95,
+    "source": "skeleton",
+    "method": "hips-bone"
+   },
+   "waist": {
+    "position": [
+     0.00035,
+     -0.01828,
+     1.01557
+    ],
+    "confidence": 0.9,
+    "source": "skeleton",
+    "method": "detected"
+   },
+   "chest": {
+    "position": [
+     0.00045,
+     -0.02279,
+     1.03407
+    ],
+    "confidence": 0.85,
+    "source": "skeleton",
+    "method": "chest-bone"
+   },
+   "upper_chest": {
+    "position": [
+     0.00072,
+     -0.00787,
+     1.15865
+    ],
+    "confidence": 0.9,
+    "source": "skeleton",
+    "method": "detected"
+   },
+   "left_shoulder": {
+    "position": [
+     0.04729,
+     0.03134,
+     1.36299
+    ],
+    "confidence": 0.9,
+    "source": "skeleton",
+    "method": "shoulder-or-upper-arm"
+   },
+   "left_elbow": {
+    "position": [
+     0.37569,
+     0.0572,
+     1.22778
+    ],
+    "confidence": 0.9,
+    "source": "skeleton",
+    "method": "lower-arm-joint"
+   },
+   "left_wrist": {
+    "position": [
+     0.57239,
+     0.05002,
+     1.11392
+    ],
+    "confidence": 0.9,
+    "source": "skeleton",
+    "method": "hand-joint"
+   },
+   "left_hand_center": {
+    "position": [
+     0.64447,
+     0.04275,
+     1.07263
+    ],
+    "confidence": 0.8,
+    "source": "skeleton",
+    "method": "wrist-fingertips-midpoint"
+   },
+   "left_knee": {
+    "position": [
+     0.08075,
+     0.01198,
+     0.49677
+    ],
+    "confidence": 0.9,
+    "source": "skeleton",
+    "method": "lower-leg-joint"
+   },
+   "left_ankle": {
+    "position": [
+     0.07193,
+     0.02533,
+     0.06668
+    ],
+    "confidence": 0.9,
+    "source": "skeleton",
+    "method": "foot-joint"
+   },
+   "left_eye": {
+    "position": [
+     0.03032,
+     -0.04635,
+     1.54942
+    ],
+    "confidence": 0.974,
+    "source": "geometry",
+    "method": "eye-geometry"
+   },
+   "right_shoulder": {
+    "position": [
+     -0.04722,
+     0.03134,
+     1.36299
+    ],
+    "confidence": 0.9,
+    "source": "skeleton",
+    "method": "shoulder-or-upper-arm"
+   },
+   "right_elbow": {
+    "position": [
+     -0.37516,
+     0.05572,
+     1.2285
+    ],
+    "confidence": 0.9,
+    "source": "skeleton",
+    "method": "lower-arm-joint"
+   },
+   "right_wrist": {
+    "position": [
+     -0.57164,
+     0.0484,
+     1.11389
+    ],
+    "confidence": 0.9,
+    "source": "skeleton",
+    "method": "hand-joint"
+   },
+   "right_hand_center": {
+    "position": [
+     -0.64384,
+     0.0414,
+     1.07293
+    ],
+    "confidence": 0.8,
+    "source": "skeleton",
+    "method": "wrist-fingertips-midpoint"
+   },
+   "right_knee": {
+    "position": [
+     -0.0809,
+     0.01406,
+     0.49528
+    ],
+    "confidence": 0.9,
+    "source": "skeleton",
+    "method": "lower-leg-joint"
+   },
+   "right_ankle": {
+    "position": [
+     -0.07189,
+     0.02537,
+     0.06668
+    ],
+    "confidence": 0.9,
+    "source": "skeleton",
+    "method": "foot-joint"
+   },
+   "right_eye": {
+    "position": [
+     -0.02903,
+     -0.04633,
+     1.54912
+    ],
+    "confidence": 0.974,
+    "source": "geometry",
+    "method": "eye-geometry"
+   },
+   "chin": {
+    "position": [
+     0.00037,
+     -0.06674,
+     1.4469
+    ],
+    "confidence": 0.809,
+    "source": "geometry",
+    "method": "profile"
+   },
+   "lower_lip": {
+    "position": [
+     0.00041,
+     -0.07581,
+     1.48206
+    ],
+    "confidence": 0.942,
+    "source": "geometry",
+    "method": "mouth:jaw-skinning"
+   },
+   "mouth": {
+    "position": [
+     0.00041,
+     -0.07729,
+     1.48673
+    ],
+    "confidence": 0.942,
+    "source": "geometry",
+    "method": "mouth:jaw-skinning"
+   },
+   "upper_lip": {
+    "position": [
+     0.00042,
+     -0.07714,
+     1.49135
+    ],
+    "confidence": 0.942,
+    "source": "geometry",
+    "method": "mouth:jaw-skinning"
+   },
+   "mouth_left": {
+    "position": [
+     0.02687,
+     -0.06445,
+     1.48625
+    ],
+    "confidence": 0.942,
+    "source": "geometry",
+    "method": "mouth:jaw-skinning"
+   },
+   "mouth_right": {
+    "position": [
+     -0.02595,
+     -0.06435,
+     1.48635
+    ],
+    "confidence": 0.942,
+    "source": "geometry",
+    "method": "mouth:jaw-skinning"
+   },
+   "nose": {
+    "position": [
+     0.00043,
+     -0.08953,
+     1.51937
+    ],
+    "confidence": 0.938,
+    "source": "geometry",
+    "method": "template-fit+profile-refined"
+   },
+   "nose_bridge": {
+    "position": [
+     0.00048,
+     -0.07698,
+     1.54559
+    ],
+    "confidence": 0.767,
+    "source": "geometry",
+    "method": "template-fit"
+   },
+   "left_nostril": {
+    "position": [
+     0.00853,
+     -0.08927,
+     1.51348
+    ],
+    "confidence": 0.803,
+    "source": "geometry",
+    "method": "template-fit"
+   },
+   "right_nostril": {
+    "position": [
+     -0.0077,
+     -0.08899,
+     1.51349
+    ],
+    "confidence": 0.803,
+    "source": "geometry",
+    "method": "template-fit"
+   },
+   "left_upper_eyelid": {
+    "position": [
+     0.03121,
+     -0.05842,
+     1.55242
+    ],
+    "confidence": 0.974,
+    "source": "geometry",
+    "method": "blink-morph"
+   },
+   "right_upper_eyelid": {
+    "position": [
+     -0.03024,
+     -0.0585,
+     1.55218
+    ],
+    "confidence": 0.974,
+    "source": "geometry",
+    "method": "blink-morph"
+   },
+   "left_lower_eyelid": {
+    "position": [
+     0.03119,
+     -0.0597,
+     1.54727
+    ],
+    "confidence": 0.971,
+    "source": "geometry",
+    "method": "blink-morph"
+   },
+   "right_lower_eyelid": {
+    "position": [
+     -0.03025,
+     -0.05994,
+     1.54694
+    ],
+    "confidence": 0.971,
+    "source": "geometry",
+    "method": "blink-morph"
+   },
+   "left_eyebrow": {
+    "position": [
+     0.0312,
+     -0.06877,
+     1.56765
+    ],
+    "confidence": 0.926,
+    "source": "geometry",
+    "method": "brow-geometry"
+   },
+   "right_eyebrow": {
+    "position": [
+     -0.03025,
+     -0.06915,
+     1.56683
+    ],
+    "confidence": 0.926,
+    "source": "geometry",
+    "method": "brow-geometry"
+   },
+   "left_cheek": {
+    "position": [
+     0.04624,
+     -0.05787,
+     1.51141
+    ],
+    "confidence": 0.789,
+    "source": "geometry",
+    "method": "template-fit"
+   },
+   "right_cheek": {
+    "position": [
+     -0.0452,
+     -0.05903,
+     1.51153
+    ],
+    "confidence": 0.789,
+    "source": "geometry",
+    "method": "template-fit"
+   },
+   "left_jaw": {
+    "position": [
+     0.05221,
+     -0.02998,
+     1.46909
+    ],
+    "confidence": 0.645,
+    "source": "geometry",
+    "method": "template-fit"
+   },
+   "right_jaw": {
+    "position": [
+     -0.05103,
+     -0.03244,
+     1.46926
+    ],
+    "confidence": 0.649,
+    "source": "geometry",
+    "method": "template-fit"
+   }
+  },
+  "skeleton": {
+   "bones": {
+    "hips": {
+     "bone": "CC_Base_Hip",
+     "confidence": 0.875,
+     "source": "rig-profile",
+     "evidence": {
+      "name": 0.99,
+      "topology": 0.92,
+      "position": 1.0,
+      "skinning": 0.35
+     },
+     "method": "names"
+    },
+    "spine": {
+     "bone": "CC_Base_Waist",
+     "confidence": 0.967,
+     "source": "rig-profile",
+     "evidence": {
+      "name": 0.99,
+      "topology": 0.9,
+      "position": 1.0,
+      "skinning": 1.0
+     },
+     "method": "names"
+    },
+    "head": {
+     "bone": "CC_Base_Head",
+     "confidence": 0.952,
+     "source": "rig-profile",
+     "evidence": {
+      "name": 0.99,
+      "topology": 0.85,
+      "position": 1.0,
+      "skinning": 1.0
+     },
+     "method": "names"
+    },
+    "leftUpperArm": {
+     "bone": "CC_Base_L_Upperarm",
+     "confidence": 0.6,
+     "source": "rig-profile",
+     "evidence": {
+      "name": 0.99,
+      "topology": 0.0,
+      "position": 1.0,
+      "skinning": 0.35,
+      "symmetry": 0.99
+     },
+     "method": "names"
+    },
+    "leftLowerArm": {
+     "bone": "CC_Base_L_Forearm",
+     "confidence": 0.6,
+     "source": "rig-profile",
+     "evidence": {
+      "name": 0.99,
+      "topology": 0.0,
+      "position": 1.0,
+      "skinning": 0.35,
+      "symmetry": 0.994
+     },
+     "method": "names"
+    },
+    "leftHand": {
+     "bone": "CC_Base_L_Hand",
+     "confidence": 0.97,
+     "source": "rig-profile",
+     "evidence": {
+      "name": 0.99,
+      "topology": 0.9,
+      "position": 1.0,
+      "skinning": 1.0,
+      "symmetry": 0.982
+     },
+     "method": "names"
+    },
+    "rightUpperArm": {
+     "bone": "CC_Base_R_Upperarm",
+     "confidence": 0.6,
+     "source": "rig-profile",
+     "evidence": {
+      "name": 0.99,
+      "topology": 0.0,
+      "position": 1.0,
+      "skinning": 0.35,
+      "symmetry": 0.99
+     },
+     "method": "names"
+    },
+    "rightLowerArm": {
+     "bone": "CC_Base_R_Forearm",
+     "confidence": 0.6,
+     "source": "rig-profile",
+     "evidence": {
+      "name": 0.99,
+      "topology": 0.0,
+      "position": 1.0,
+      "skinning": 0.35,
+      "symmetry": 0.994
+     },
+     "method": "names"
+    },
+    "rightHand": {
+     "bone": "CC_Base_R_Hand",
+     "confidence": 0.97,
+     "source": "rig-profile",
+     "evidence": {
+      "name": 0.99,
+      "topology": 0.9,
+      "position": 1.0,
+      "skinning": 1.0,
+      "symmetry": 0.982
+     },
+     "method": "names"
+    },
+    "leftUpperLeg": {
+     "bone": "CC_Base_L_Thigh",
+     "confidence": 0.895,
+     "source": "rig-profile",
+     "evidence": {
+      "name": 0.99,
+      "topology": 0.92,
+      "position": 1.0,
+      "skinning": 0.35,
+      "symmetry": 0.994
+     },
+     "method": "names"
+    },
+    "leftLowerLeg": {
+     "bone": "CC_Base_L_Calf",
+     "confidence": 0.891,
+     "source": "rig-profile",
+     "evidence": {
+      "name": 0.99,
+      "topology": 0.92,
+      "position": 1.0,
+      "skinning": 0.35,
+      "symmetry": 0.97
+     },
+     "method": "names"
+    },
+    "leftFoot": {
+     "bone": "CC_Base_L_Foot",
+     "confidence": 0.967,
+     "source": "rig-profile",
+     "evidence": {
+      "name": 0.99,
+      "topology": 0.9,
+      "position": 1.0,
+      "skinning": 1.0,
+      "symmetry": 0.965
+     },
+     "method": "names"
+    },
+    "rightUpperLeg": {
+     "bone": "CC_Base_R_Thigh",
+     "confidence": 0.895,
+     "source": "rig-profile",
+     "evidence": {
+      "name": 0.99,
+      "topology": 0.92,
+      "position": 1.0,
+      "skinning": 0.35,
+      "symmetry": 0.994
+     },
+     "method": "names"
+    },
+    "rightLowerLeg": {
+     "bone": "CC_Base_R_Calf",
+     "confidence": 0.891,
+     "source": "rig-profile",
+     "evidence": {
+      "name": 0.99,
+      "topology": 0.92,
+      "position": 1.0,
+      "skinning": 0.35,
+      "symmetry": 0.97
+     },
+     "method": "names"
+    },
+    "rightFoot": {
+     "bone": "CC_Base_R_Foot",
+     "confidence": 0.967,
+     "source": "rig-profile",
+     "evidence": {
+      "name": 0.99,
+      "topology": 0.9,
+      "position": 1.0,
+      "skinning": 1.0,
+      "symmetry": 0.965
+     },
+     "method": "names"
+    },
+    "chest": {
+     "bone": "CC_Base_Spine01",
+     "confidence": 0.952,
+     "source": "rig-profile",
+     "evidence": {
+      "name": 0.99,
+      "topology": 0.85,
+      "position": 1.0,
+      "skinning": 1.0
+     },
+     "method": "names"
+    },
+    "upperChest": {
+     "bone": "CC_Base_Spine02",
+     "confidence": 0.952,
+     "source": "rig-profile",
+     "evidence": {
+      "name": 0.99,
+      "topology": 0.85,
+      "position": 1.0,
+      "skinning": 1.0
+     },
+     "method": "names"
+    },
+    "neck": {
+     "bone": "CC_Base_NeckTwist01",
+     "confidence": 0.952,
+     "source": "rig-profile",
+     "evidence": {
+      "name": 0.99,
+      "topology": 0.85,
+      "position": 1.0,
+      "skinning": 1.0
+     },
+     "method": "names"
+    },
+    "leftShoulder": {
+     "bone": "CC_Base_L_Clavicle",
+     "confidence": 0.996,
+     "source": "rig-profile",
+     "evidence": {
+      "name": 0.99,
+      "position": 1.0,
+      "skinning": 1.0,
+      "symmetry": 0.995
+     },
+     "method": "names"
+    },
+    "rightShoulder": {
+     "bone": "CC_Base_R_Clavicle",
+     "confidence": 0.996,
+     "source": "rig-profile",
+     "evidence": {
+      "name": 0.99,
+      "position": 1.0,
+      "skinning": 1.0,
+      "symmetry": 0.995
+     },
+     "method": "names"
+    },
+    "leftToes": {
+     "bone": "CC_Base_L_ToeBase",
+     "confidence": 0.863,
+     "source": "rig-profile",
+     "evidence": {
+      "name": 0.99,
+      "topology": 0.85,
+      "position": 1.0,
+      "skinning": 0.35,
+      "symmetry": 0.907
+     },
+     "method": "names"
+    },
+    "rightToes": {
+     "bone": "CC_Base_R_ToeBase",
+     "confidence": 0.863,
+     "source": "rig-profile",
+     "evidence": {
+      "name": 0.99,
+      "topology": 0.85,
+      "position": 1.0,
+      "skinning": 0.35,
+      "symmetry": 0.907
+     },
+     "method": "names"
+    },
+    "leftEye": {
+     "bone": "CC_Base_L_Eye",
+     "confidence": 0.981,
+     "source": "rig-profile",
+     "evidence": {
+      "name": 0.99,
+      "position": 0.943,
+      "skinning": 1.0,
+      "symmetry": 0.998
+     },
+     "method": "names"
+    },
+    "rightEye": {
+     "bone": "CC_Base_R_Eye",
+     "confidence": 0.981,
+     "source": "rig-profile",
+     "evidence": {
+      "name": 0.99,
+      "position": 0.945,
+      "skinning": 1.0,
+      "symmetry": 0.998
+     },
+     "method": "names"
+    },
+    "jaw": {
+     "bone": "CC_Base_JawRoot",
+     "confidence": 0.993,
+     "source": "rig-profile",
+     "evidence": {
+      "name": 0.99,
+      "skinning": 1.0
+     },
+     "method": "names"
+    },
+    "leftThumbMetacarpal": {
+     "bone": "CC_Base_L_Thumb1",
+     "confidence": 0.99,
+     "source": "rig-profile",
+     "evidence": {
+      "name": 0.99,
+      "skinning": 1.0,
+      "symmetry": 0.981
+     },
+     "method": "names"
+    },
+    "leftThumbProximal": {
+     "bone": "CC_Base_L_Thumb2",
+     "confidence": 0.99,
+     "source": "rig-profile",
+     "evidence": {
+      "name": 0.99,
+      "skinning": 1.0,
+      "symmetry": 0.983
+     },
+     "method": "names"
+    },
+    "leftThumbDistal": {
+     "bone": "CC_Base_L_Thumb3",
+     "confidence": 0.99,
+     "source": "rig-profile",
+     "evidence": {
+      "name": 0.99,
+      "skinning": 1.0,
+      "symmetry": 0.983
+     },
+     "method": "names"
+    },
+    "leftIndexProximal": {
+     "bone": "CC_Base_L_Index1",
+     "confidence": 0.988,
+     "source": "rig-profile",
+     "evidence": {
+      "name": 0.99,
+      "skinning": 1.0,
+      "symmetry": 0.976
+     },
+     "method": "names"
+    },
+    "leftIndexIntermediate": {
+     "bone": "CC_Base_L_Index2",
+     "confidence": 0.987,
+     "source": "rig-profile",
+     "evidence": {
+      "name": 0.99,
+      "skinning": 1.0,
+      "symmetry": 0.973
+     },
+     "method": "names"
+    },
+    "leftIndexDistal": {
+     "bone": "CC_Base_L_Index3",
+     "confidence": 0.985,
+     "source": "rig-profile",
+     "evidence": {
+      "name": 0.99,
+      "skinning": 1.0,
+      "symmetry": 0.967
+     },
+     "method": "names"
+    },
+    "leftMiddleProximal": {
+     "bone": "CC_Base_L_Mid1",
+     "confidence": 0.988,
+     "source": "rig-profile",
+     "evidence": {
+      "name": 0.99,
+      "skinning": 1.0,
+      "symmetry": 0.977
+     },
+     "method": "names"
+    },
+    "leftMiddleIntermediate": {
+     "bone": "CC_Base_L_Mid2",
+     "confidence": 0.99,
+     "source": "rig-profile",
+     "evidence": {
+      "name": 0.99,
+      "skinning": 1.0,
+      "symmetry": 0.982
+     },
+     "method": "names"
+    },
+    "leftMiddleDistal": {
+     "bone": "CC_Base_L_Mid3",
+     "confidence": 0.99,
+     "source": "rig-profile",
+     "evidence": {
+      "name": 0.99,
+      "skinning": 1.0,
+      "symmetry": 0.982
+     },
+     "method": "names"
+    },
+    "leftRingProximal": {
+     "bone": "CC_Base_L_Ring1",
+     "confidence": 0.988,
+     "source": "rig-profile",
+     "evidence": {
+      "name": 0.99,
+      "skinning": 1.0,
+      "symmetry": 0.977
+     },
+     "method": "names"
+    },
+    "leftRingIntermediate": {
+     "bone": "CC_Base_L_Ring2",
+     "confidence": 0.989,
+     "source": "rig-profile",
+     "evidence": {
+      "name": 0.99,
+      "skinning": 1.0,
+      "symmetry": 0.979
+     },
+     "method": "names"
+    },
+    "leftRingDistal": {
+     "bone": "CC_Base_L_Ring3",
+     "confidence": 0.989,
+     "source": "rig-profile",
+     "evidence": {
+      "name": 0.99,
+      "skinning": 1.0,
+      "symmetry": 0.978
+     },
+     "method": "names"
+    },
+    "leftLittleProximal": {
+     "bone": "CC_Base_L_Pinky1",
+     "confidence": 0.988,
+     "source": "rig-profile",
+     "evidence": {
+      "name": 0.99,
+      "skinning": 1.0,
+      "symmetry": 0.975
+     },
+     "method": "names"
+    },
+    "leftLittleIntermediate": {
+     "bone": "CC_Base_L_Pinky2",
+     "confidence": 0.989,
+     "source": "rig-profile",
+     "evidence": {
+      "name": 0.99,
+      "skinning": 1.0,
+      "symmetry": 0.979
+     },
+     "method": "names"
+    },
+    "leftLittleDistal": {
+     "bone": "CC_Base_L_Pinky3",
+     "confidence": 0.989,
+     "source": "rig-profile",
+     "evidence": {
+      "name": 0.99,
+      "skinning": 1.0,
+      "symmetry": 0.978
+     },
+     "method": "names"
+    },
+    "rightThumbMetacarpal": {
+     "bone": "CC_Base_R_Thumb1",
+     "confidence": 0.99,
+     "source": "rig-profile",
+     "evidence": {
+      "name": 0.99,
+      "skinning": 1.0,
+      "symmetry": 0.981
+     },
+     "method": "names"
+    },
+    "rightThumbProximal": {
+     "bone": "CC_Base_R_Thumb2",
+     "confidence": 0.99,
+     "source": "rig-profile",
+     "evidence": {
+      "name": 0.99,
+      "skinning": 1.0,
+      "symmetry": 0.983
+     },
+     "method": "names"
+    },
+    "rightThumbDistal": {
+     "bone": "CC_Base_R_Thumb3",
+     "confidence": 0.99,
+     "source": "rig-profile",
+     "evidence": {
+      "name": 0.99,
+      "skinning": 1.0,
+      "symmetry": 0.983
+     },
+     "method": "names"
+    },
+    "rightIndexProximal": {
+     "bone": "CC_Base_R_Index1",
+     "confidence": 0.988,
+     "source": "rig-profile",
+     "evidence": {
+      "name": 0.99,
+      "skinning": 1.0,
+      "symmetry": 0.976
+     },
+     "method": "names"
+    },
+    "rightIndexIntermediate": {
+     "bone": "CC_Base_R_Index2",
+     "confidence": 0.987,
+     "source": "rig-profile",
+     "evidence": {
+      "name": 0.99,
+      "skinning": 1.0,
+      "symmetry": 0.973
+     },
+     "method": "names"
+    },
+    "rightIndexDistal": {
+     "bone": "CC_Base_R_Index3",
+     "confidence": 0.985,
+     "source": "rig-profile",
+     "evidence": {
+      "name": 0.99,
+      "skinning": 1.0,
+      "symmetry": 0.967
+     },
+     "method": "names"
+    },
+    "rightMiddleProximal": {
+     "bone": "CC_Base_R_Mid1",
+     "confidence": 0.988,
+     "source": "rig-profile",
+     "evidence": {
+      "name": 0.99,
+      "skinning": 1.0,
+      "symmetry": 0.977
+     },
+     "method": "names"
+    },
+    "rightMiddleIntermediate": {
+     "bone": "CC_Base_R_Mid2",
+     "confidence": 0.99,
+     "source": "rig-profile",
+     "evidence": {
+      "name": 0.99,
+      "skinning": 1.0,
+      "symmetry": 0.982
+     },
+     "method": "names"
+    },
+    "rightMiddleDistal": {
+     "bone": "CC_Base_R_Mid3",
+     "confidence": 0.99,
+     "source": "rig-profile",
+     "evidence": {
+      "name": 0.99,
+      "skinning": 1.0,
+      "symmetry": 0.982
+     },
+     "method": "names"
+    },
+    "rightRingProximal": {
+     "bone": "CC_Base_R_Ring1",
+     "confidence": 0.988,
+     "source": "rig-profile",
+     "evidence": {
+      "name": 0.99,
+      "skinning": 1.0,
+      "symmetry": 0.977
+     },
+     "method": "names"
+    },
+    "rightRingIntermediate": {
+     "bone": "CC_Base_R_Ring2",
+     "confidence": 0.989,
+     "source": "rig-profile",
+     "evidence": {
+      "name": 0.99,
+      "skinning": 1.0,
+      "symmetry": 0.979
+     },
+     "method": "names"
+    },
+    "rightRingDistal": {
+     "bone": "CC_Base_R_Ring3",
+     "confidence": 0.989,
+     "source": "rig-profile",
+     "evidence": {
+      "name": 0.99,
+      "skinning": 1.0,
+      "symmetry": 0.978
+     },
+     "method": "names"
+    },
+    "rightLittleProximal": {
+     "bone": "CC_Base_R_Pinky1",
+     "confidence": 0.988,
+     "source": "rig-profile",
+     "evidence": {
+      "name": 0.99,
+      "skinning": 1.0,
+      "symmetry": 0.975
+     },
+     "method": "names"
+    },
+    "rightLittleIntermediate": {
+     "bone": "CC_Base_R_Pinky2",
+     "confidence": 0.989,
+     "source": "rig-profile",
+     "evidence": {
+      "name": 0.99,
+      "skinning": 1.0,
+      "symmetry": 0.979
+     },
+     "method": "names"
+    },
+    "rightLittleDistal": {
+     "bone": "CC_Base_R_Pinky3",
+     "confidence": 0.989,
+     "source": "rig-profile",
+     "evidence": {
+      "name": 0.99,
+      "skinning": 1.0,
+      "symmetry": 0.978
+     },
+     "method": "names"
+    }
+   },
+   "inferred": {},
+   "conflicts": [
+    "leftUpperArm: names say 'CC_Base_L_Upperarm', topology says 'CC_Base_L_Clavicle'",
+    "leftLowerArm: names say 'CC_Base_L_Forearm', topology says 'CC_Base_L_Upperarm'",
+    "rightUpperArm: names say 'CC_Base_R_Upperarm', topology says 'CC_Base_R_Clavicle'",
+    "rightLowerArm: names say 'CC_Base_R_Forearm', topology says 'CC_Base_R_Upperarm'"
+   ],
+   "sidesAssumed": false
+  },
+  "pose": {
+   "poseType": "A-pose",
+   "armAbductionDeg": {
+    "left": 59.94,
+    "right": 59.71
+   },
+   "targetAbductionDeg": 22.33,
+   "torsoLeanDeg": 6.44,
+   "headTiltDeg": 3.61,
+   "confidence": 0.6,
+   "space": "anatomical-frame (left, up, forward)",
+   "bones": {
+    "spine": {
+     "rest": [
+      -0.104714,
+      -0.000374,
+      0.002805,
+      0.994498
+     ],
+     "angleDeg": 12.03,
+     "confidence": 0.952
+    },
+    "chest": {
+     "rest": [
+      0.074186,
+      8.7e-05,
+      0.000836,
+      0.997244
+     ],
+     "angleDeg": 8.51,
+     "confidence": 0.952
+    },
+    "neck": {
+     "rest": [
+      -0.148925,
+      -0.000754,
+      0.007513,
+      0.98882
+     ],
+     "angleDeg": 17.15,
+     "confidence": 0.952
+    },
+    "head": {
+     "rest": [
+      0.031527,
+      -0.0,
+      0.000938,
+      0.999502
+     ],
+     "angleDeg": 3.61,
+     "confidence": 0.952
+    },
+    "leftUpperArm": {
+     "rest": [
+      -0.010743,
+      -0.004413,
+      -0.322293,
+      0.946569
+     ],
+     "angleDeg": 37.63,
+     "confidence": 0.6
+    },
+    "rightUpperArm": {
+     "rest": [
+      -0.005755,
+      0.002364,
+      0.320387,
+      0.947266
+     ],
+     "angleDeg": 37.38,
+     "confidence": 0.6
+    }
+   },
+   "mutatesScene": false,
+   "notes": []
+  },
+  "hands": {
+   "left": {
+    "state": "bones-present",
+    "confidence": 0.949,
+    "independentArticulation": true,
+    "fingers": {
+     "Thumb": {
+      "bones": [
+       "CC_Base_L_Thumb1",
+       "CC_Base_L_Thumb2",
+       "CC_Base_L_Thumb3"
+      ],
+      "vrm": {
+       "leftThumbMetacarpal": "CC_Base_L_Thumb1",
+       "leftThumbProximal": "CC_Base_L_Thumb2",
+       "leftThumbDistal": "CC_Base_L_Thumb3"
+      },
+      "confidence": 0.985,
+      "evidence": {
+       "topology": 0.95,
+       "direction": 1.0,
+       "skinning": 1.0,
+       "symmetry": 1.0
+      }
+     },
+     "Index": {
+      "bones": [
+       "CC_Base_L_Index1",
+       "CC_Base_L_Index2",
+       "CC_Base_L_Index3"
+      ],
+      "vrm": {
+       "leftIndexProximal": "CC_Base_L_Index1",
+       "leftIndexIntermediate": "CC_Base_L_Index2",
+       "leftIndexDistal": "CC_Base_L_Index3"
+      },
+      "confidence": 0.94,
+      "evidence": {
+       "topology": 0.95,
+       "direction": 0.85,
+       "skinning": 1.0,
+       "symmetry": 1.0
+      }
+     },
+     "Middle": {
+      "bones": [
+       "CC_Base_L_Mid1",
+       "CC_Base_L_Mid2",
+       "CC_Base_L_Mid3"
+      ],
+      "vrm": {
+       "leftMiddleProximal": "CC_Base_L_Mid1",
+       "leftMiddleIntermediate": "CC_Base_L_Mid2",
+       "leftMiddleDistal": "CC_Base_L_Mid3"
+      },
+      "confidence": 0.94,
+      "evidence": {
+       "topology": 0.95,
+       "direction": 0.85,
+       "skinning": 1.0,
+       "symmetry": 1.0
+      }
+     },
+     "Ring": {
+      "bones": [
+       "CC_Base_L_Ring1",
+       "CC_Base_L_Ring2",
+       "CC_Base_L_Ring3"
+      ],
+      "vrm": {
+       "leftRingProximal": "CC_Base_L_Ring1",
+       "leftRingIntermediate": "CC_Base_L_Ring2",
+       "leftRingDistal": "CC_Base_L_Ring3"
+      },
+      "confidence": 0.94,
+      "evidence": {
+       "topology": 0.95,
+       "direction": 0.85,
+       "skinning": 1.0,
+       "symmetry": 1.0
+      }
+     },
+     "Little": {
+      "bones": [
+       "CC_Base_L_Pinky1",
+       "CC_Base_L_Pinky2",
+       "CC_Base_L_Pinky3"
+      ],
+      "vrm": {
+       "leftLittleProximal": "CC_Base_L_Pinky1",
+       "leftLittleIntermediate": "CC_Base_L_Pinky2",
+       "leftLittleDistal": "CC_Base_L_Pinky3"
+      },
+      "confidence": 0.94,
+      "evidence": {
+       "topology": 0.95,
+       "direction": 0.85,
+       "skinning": 1.0,
+       "symmetry": 1.0
+      }
+     }
+    }
+   },
+   "right": {
+    "state": "bones-present",
+    "confidence": 0.949,
+    "independentArticulation": true,
+    "fingers": {
+     "Thumb": {
+      "bones": [
+       "CC_Base_R_Thumb1",
+       "CC_Base_R_Thumb2",
+       "CC_Base_R_Thumb3"
+      ],
+      "vrm": {
+       "rightThumbMetacarpal": "CC_Base_R_Thumb1",
+       "rightThumbProximal": "CC_Base_R_Thumb2",
+       "rightThumbDistal": "CC_Base_R_Thumb3"
+      },
+      "confidence": 0.985,
+      "evidence": {
+       "topology": 0.95,
+       "direction": 1.0,
+       "skinning": 1.0,
+       "symmetry": 1.0
+      }
+     },
+     "Index": {
+      "bones": [
+       "CC_Base_R_Index1",
+       "CC_Base_R_Index2",
+       "CC_Base_R_Index3"
+      ],
+      "vrm": {
+       "rightIndexProximal": "CC_Base_R_Index1",
+       "rightIndexIntermediate": "CC_Base_R_Index2",
+       "rightIndexDistal": "CC_Base_R_Index3"
+      },
+      "confidence": 0.94,
+      "evidence": {
+       "topology": 0.95,
+       "direction": 0.85,
+       "skinning": 1.0,
+       "symmetry": 1.0
+      }
+     },
+     "Middle": {
+      "bones": [
+       "CC_Base_R_Mid1",
+       "CC_Base_R_Mid2",
+       "CC_Base_R_Mid3"
+      ],
+      "vrm": {
+       "rightMiddleProximal": "CC_Base_R_Mid1",
+       "rightMiddleIntermediate": "CC_Base_R_Mid2",
+       "rightMiddleDistal": "CC_Base_R_Mid3"
+      },
+      "confidence": 0.94,
+      "evidence": {
+       "topology": 0.95,
+       "direction": 0.85,
+       "skinning": 1.0,
+       "symmetry": 1.0
+      }
+     },
+     "Ring": {
+      "bones": [
+       "CC_Base_R_Ring1",
+       "CC_Base_R_Ring2",
+       "CC_Base_R_Ring3"
+      ],
+      "vrm": {
+       "rightRingProximal": "CC_Base_R_Ring1",
+       "rightRingIntermediate": "CC_Base_R_Ring2",
+       "rightRingDistal": "CC_Base_R_Ring3"
+      },
+      "confidence": 0.94,
+      "evidence": {
+       "topology": 0.95,
+       "direction": 0.85,
+       "skinning": 1.0,
+       "symmetry": 1.0
+      }
+     },
+     "Little": {
+      "bones": [
+       "CC_Base_R_Pinky1",
+       "CC_Base_R_Pinky2",
+       "CC_Base_R_Pinky3"
+      ],
+      "vrm": {
+       "rightLittleProximal": "CC_Base_R_Pinky1",
+       "rightLittleIntermediate": "CC_Base_R_Pinky2",
+       "rightLittleDistal": "CC_Base_R_Pinky3"
+      },
+      "confidence": 0.94,
+      "evidence": {
+       "topology": 0.95,
+       "direction": 0.85,
+       "skinning": 1.0,
+       "symmetry": 1.0
+      }
+     }
+    }
+   }
+  },
+  "face": {
+   "quality": 0.941,
+   "generated": [
+    "Prosopon_JawOpen"
+   ],
+   "headWidth": 0.1542,
+   "headHeight": 0.2058,
+   "mouthWidth": 0.0528,
+   "eyeBones": true,
+   "jawBone": true,
+   "landmarks": [
+    "chin",
+    "left_cheek",
+    "left_eye",
+    "left_eyebrow",
+    "left_jaw",
+    "left_lower_eyelid",
+    "left_nostril",
+    "left_upper_eyelid",
+    "lower_lip",
+    "mouth_center",
+    "mouth_left",
+    "mouth_right",
+    "nose_bridge",
+    "nose_tip",
+    "right_cheek",
+    "right_eye",
+    "right_eyebrow",
+    "right_jaw",
+    "right_lower_eyelid",
+    "right_nostril",
+    "right_upper_eyelid",
+    "upper_lip"
+   ],
+   "landmarkMethods": {
+    "chin": {
+     "method": "profile",
+     "confidence": 0.809
+    },
+    "left_cheek": {
+     "method": "template-fit",
+     "confidence": 0.789
+    },
+    "left_eye": {
+     "method": "eye-geometry",
+     "confidence": 0.974
+    },
+    "left_eyebrow": {
+     "method": "brow-geometry",
+     "confidence": 0.926
+    },
+    "left_jaw": {
+     "method": "template-fit",
+     "confidence": 0.645
+    },
+    "left_lower_eyelid": {
+     "method": "blink-morph",
+     "confidence": 0.971
+    },
+    "left_nostril": {
+     "method": "template-fit",
+     "confidence": 0.803
+    },
+    "left_upper_eyelid": {
+     "method": "blink-morph",
+     "confidence": 0.974
+    },
+    "lower_lip": {
+     "method": "mouth:jaw-skinning",
+     "confidence": 0.942
+    },
+    "mouth_center": {
+     "method": "mouth:jaw-skinning",
+     "confidence": 0.942
+    },
+    "mouth_left": {
+     "method": "mouth:jaw-skinning",
+     "confidence": 0.942
+    },
+    "mouth_right": {
+     "method": "mouth:jaw-skinning",
+     "confidence": 0.942
+    },
+    "nose_bridge": {
+     "method": "template-fit",
+     "confidence": 0.767
+    },
+    "nose_tip": {
+     "method": "template-fit+profile-refined",
+     "confidence": 0.938
+    },
+    "right_cheek": {
+     "method": "template-fit",
+     "confidence": 0.789
+    },
+    "right_eye": {
+     "method": "eye-geometry",
+     "confidence": 0.974
+    },
+    "right_eyebrow": {
+     "method": "brow-geometry",
+     "confidence": 0.926
+    },
+    "right_jaw": {
+     "method": "template-fit",
+     "confidence": 0.649
+    },
+    "right_lower_eyelid": {
+     "method": "blink-morph",
+     "confidence": 0.971
+    },
+    "right_nostril": {
+     "method": "template-fit",
+     "confidence": 0.803
+    },
+    "right_upper_eyelid": {
+     "method": "blink-morph",
+     "confidence": 0.974
+    },
+    "upper_lip": {
+     "method": "mouth:jaw-skinning",
+     "confidence": 0.942
+    }
+   },
+   "eyeSource": "eye-geometry",
+   "mouthSource": "jaw-skinning",
+   "jawWeightedLips": true,
+   "aaOpening": -0.0035,
+   "mouthCandidates": [
+    {
+     "source": "jaw-skinning",
+     "seam": 0.5538,
+     "halfWidth": 0.0264,
+     "confidence": 0.776,
+     "detail": "jaw weight separation 0.97"
+    },
+    {
+     "source": "mouth-interior",
+     "seam": 0.5518,
+     "halfWidth": 0.0252,
+     "confidence": 0.72,
+     "detail": "44303 interior vertices"
+    },
+    {
+     "source": "profile",
+     "seam": 0.5535,
+     "halfWidth": null,
+     "confidence": 0.343,
+     "detail": "lip concavity 0.0022"
+    },
+    {
+     "source": "template",
+     "seam": 0.5512,
+     "halfWidth": null,
+     "confidence": 0.35,
+     "detail": ""
+    }
+   ],
+   "mouth": {
+    "approaches": [
+     "mouth-morphs",
+     "jaw-bone",
+     "geometry-deformation"
+    ],
+    "morphs": [
+     "aa",
+     "ih",
+     "ou",
+     "ee",
+     "oh"
+    ],
+    "innerMouthMeshes": [
+     "CC_Base_Teeth",
+     "CC_Base_Tongue"
+    ],
+    "geometry": {
+     "vertices": 14977,
+     "usable": true,
+     "score": 1.0,
+     "reason": ""
+    }
+   }
+  },
+  "hair": {
+   "classification": "short-hair",
+   "springChains": 0,
+   "meshes": [
+    {
+     "mesh": "Bang",
+     "material": null,
+     "classification": "HAIR_CONFIDENT",
+     "confidence": 0.994,
+     "type": "alpha-cards",
+     "components": 144,
+     "evidence": {
+      "object_name": 1.0,
+      "material_name": 1.0,
+      "texture_name": 1.0,
+      "head_proximity": 1.0,
+      "scalp": 1.0,
+      "alpha": 1.0
+     }
+    },
+    {
+     "mesh": "Boots",
+     "material": null,
+     "classification": "NOT_HAIR",
+     "confidence": 0.2,
+     "type": "unknown",
+     "components": 0,
+     "evidence": {
+      "head_proximity": 0.0,
+      "scalp": 0.0,
+      "alpha": 1.0
+     }
+    },
+    {
+     "mesh": "Bra",
+     "material": null,
+     "classification": "NOT_HAIR",
+     "confidence": 0.2,
+     "type": "unknown",
+     "components": 0,
+     "evidence": {
+      "head_proximity": 0.0,
+      "scalp": 0.0,
+      "alpha": 1.0
+     }
+    },
+    {
+     "mesh": "Bun",
+     "material": null,
+     "classification": "HAIR_CONFIDENT",
+     "confidence": 0.982,
+     "type": "alpha-cards",
+     "components": 121,
+     "evidence": {
+      "material_name": 1.0,
+      "texture_name": 1.0,
+      "head_proximity": 1.0,
+      "scalp": 0.0,
+      "alpha": 1.0,
+      "outer_shell": 1.0
+     }
+    },
+    {
+     "mesh": "Camila_Brow",
+     "material": "Female_Brow_Transparency",
+     "classification": "HAIR_POSSIBLE",
+     "confidence": 0.7,
+     "type": "alpha-cards",
+     "components": 197,
+     "evidence": {
+      "head_proximity": 1.0,
+      "scalp": 1.0,
+      "alpha": 1.0
+     }
+    },
+    {
+     "mesh": "Camila_Brow",
+     "material": "Female_Brow_Base_Transparency",
+     "classification": "HAIR_POSSIBLE",
+     "confidence": 0.7,
+     "type": "alpha-cards",
+     "components": 2,
+     "evidence": {
+      "head_proximity": 1.0,
+      "scalp": 1.0,
+      "alpha": 1.0
+     }
+    },
+    {
+     "mesh": "CC_Base_Body",
+     "material": "Std_Skin_Head",
+     "classification": "NOT_HAIR",
+     "confidence": 0.3,
+     "type": "unknown",
+     "components": 0,
+     "evidence": {
+      "head_proximity": 0.902,
+      "scalp": 1.0
+     }
+    },
+    {
+     "mesh": "CC_Base_Body",
+     "material": "Std_Skin_Body",
+     "classification": "NOT_HAIR",
+     "confidence": 0.0,
+     "type": "unknown",
+     "components": 0,
+     "evidence": {
+      "scalp": 0.0
+     }
+    },
+    {
+     "mesh": "CC_Base_Body",
+     "material": "Std_Skin_Arm",
+     "classification": "NOT_HAIR",
+     "confidence": 0.0,
+     "type": "unknown",
+     "components": 0,
+     "evidence": {
+      "head_proximity": 0.0,
+      "scalp": 0.0
+     }
+    },
+    {
+     "mesh": "CC_Base_Body",
+     "material": "Std_Skin_Leg",
+     "classification": "NOT_HAIR",
+     "confidence": 0.0,
+     "type": "unknown",
+     "components": 0,
+     "evidence": {
+      "scalp": 0.0
+     }
+    },
+    {
+     "mesh": "CC_Base_Body",
+     "material": "Std_Nails",
+     "classification": "NOT_HAIR",
+     "confidence": 0.0,
+     "type": "unknown",
+     "components": 0,
+     "evidence": {
+      "scalp": 0.0
+     }
+    },
+    {
+     "mesh": "CC_Base_Body",
+     "material": "Std_Eyelash",
+     "classification": "NOT_HAIR",
+     "confidence": 0.3,
+     "type": "unknown",
+     "components": 0,
+     "evidence": {
+      "head_proximity": 1.0,
+      "scalp": 1.0,
+      "alpha": 1.0
+     }
+    },
+    {
+     "mesh": "CC_Base_Eye",
+     "material": "Std_Eye_R",
+     "classification": "NOT_HAIR",
+     "confidence": 0.3,
+     "type": "unknown",
+     "components": 0,
+     "evidence": {
+      "head_proximity": 1.0,
+      "scalp": 1.0
+     }
+    },
+    {
+     "mesh": "CC_Base_Eye",
+     "material": "Std_Cornea_R",
+     "classification": "NOT_HAIR",
+     "confidence": 0.3,
+     "type": "unknown",
+     "components": 0,
+     "evidence": {
+      "head_proximity": 1.0,
+      "scalp": 1.0
+     }
+    },
+    {
+     "mesh": "CC_Base_Eye",
+     "material": "Std_Eye_L",
+     "classification": "NOT_HAIR",
+     "confidence": 0.3,
+     "type": "unknown",
+     "components": 0,
+     "evidence": {
+      "head_proximity": 1.0,
+      "scalp": 1.0
+     }
+    },
+    {
+     "mesh": "CC_Base_Eye",
+     "material": "Std_Cornea_L",
+     "classification": "NOT_HAIR",
+     "confidence": 0.3,
+     "type": "unknown",
+     "components": 0,
+     "evidence": {
+      "head_proximity": 1.0,
+      "scalp": 1.0
+     }
+    },
+    {
+     "mesh": "CC_Base_EyeOcclusion",
+     "material": "Std_Eye_Occlusion_R",
+     "classification": "NOT_HAIR",
+     "confidence": 0.3,
+     "type": "unknown",
+     "components": 0,
+     "evidence": {
+      "head_proximity": 1.0,
+      "scalp": 1.0,
+      "alpha": 1.0
+     }
+    },
+    {
+     "mesh": "CC_Base_EyeOcclusion",
+     "material": "Std_Eye_Occlusion_L",
+     "classification": "NOT_HAIR",
+     "confidence": 0.3,
+     "type": "unknown",
+     "components": 0,
+     "evidence": {
+      "head_proximity": 1.0,
+      "scalp": 1.0,
+      "alpha": 1.0
+     }
+    },
+    {
+     "mesh": "CC_Base_TearLine",
+     "material": "Std_Tearline_R",
+     "classification": "HAIR_POSSIBLE",
+     "confidence": 0.7,
+     "type": "alpha-cards",
+     "components": 1,
+     "evidence": {
+      "head_proximity": 1.0,
+      "scalp": 1.0,
+      "alpha": 1.0
+     }
+    },
+    {
+     "mesh": "CC_Base_TearLine",
+     "material": "Std_Tearline_L",
+     "classification": "HAIR_POSSIBLE",
+     "confidence": 0.7,
+     "type": "alpha-cards",
+     "components": 1,
+     "evidence": {
+      "head_proximity": 1.0,
+      "scalp": 1.0,
+      "alpha": 1.0
+     }
+    },
+    {
+     "mesh": "CC_Base_Teeth",
+     "material": "Std_Upper_Teeth",
+     "classification": "NOT_HAIR",
+     "confidence": 0.3,
+     "type": "unknown",
+     "components": 0,
+     "evidence": {
+      "head_proximity": 1.0,
+      "scalp": 1.0
+     }
+    },
+    {
+     "mesh": "CC_Base_Teeth",
+     "material": "Std_Lower_Teeth",
+     "classification": "NOT_HAIR",
+     "confidence": 0.3,
+     "type": "unknown",
+     "components": 0,
+     "evidence": {
+      "head_proximity": 1.0,
+      "scalp": 1.0
+     }
+    },
+    {
+     "mesh": "CC_Base_Tongue",
+     "material": null,
+     "classification": "NOT_HAIR",
+     "confidence": 0.3,
+     "type": "unknown",
+     "components": 0,
+     "evidence": {
+      "head_proximity": 1.0,
+      "scalp": 1.0
+     }
+    },
+    {
+     "mesh": "Crop_T_Shirt",
+     "material": null,
+     "classification": "NOT_HAIR",
+     "confidence": 0.0,
+     "type": "unknown",
+     "components": 0,
+     "evidence": {
+      "head_proximity": 0.0,
+      "scalp": 0.0
+     }
+    },
+    {
+     "mesh": "Hair_Base",
+     "material": "Hair_Transparency",
+     "classification": "HAIR_CONFIDENT",
+     "confidence": 0.998,
+     "type": "alpha-cards",
+     "components": 362,
+     "evidence": {
+      "object_name": 1.0,
+      "material_name": 1.0,
+      "texture_name": 1.0,
+      "head_proximity": 1.0,
+      "scalp": 1.0,
+      "alpha": 1.0,
+      "outer_shell": 1.0
+     }
+    },
+    {
+     "mesh": "Hair_Base",
+     "material": "Scalp_Transparency",
+     "classification": "HAIR_CONFIDENT",
+     "confidence": 0.994,
+     "type": "solid-mass",
+     "components": 1,
+     "evidence": {
+      "object_name": 1.0,
+      "material_name": 1.0,
+      "texture_name": 1.0,
+      "head_proximity": 0.94,
+      "scalp": 1.0,
+      "alpha": 1.0
+     }
+    },
+    {
+     "mesh": "Jeans",
+     "material": null,
+     "classification": "NOT_HAIR",
+     "confidence": 0.0,
+     "type": "unknown",
+     "components": 0,
+     "evidence": {
+      "scalp": 0.0
+     }
+    },
+    {
+     "mesh": "Punk_Leather_Jacket",
+     "material": null,
+     "classification": "NOT_HAIR",
+     "confidence": 0.003,
+     "type": "unknown",
+     "components": 0,
+     "evidence": {
+      "head_proximity": 0.007,
+      "scalp": 0.0
+     }
+    },
+    {
+     "mesh": "Real_Hair",
+     "material": null,
+     "classification": "HAIR_CONFIDENT",
+     "confidence": 0.993,
+     "type": "alpha-cards",
+     "components": 218,
+     "evidence": {
+      "object_name": 1.0,
+      "material_name": 1.0,
+      "texture_name": 1.0,
+      "head_proximity": 0.665,
+      "scalp": 1.0,
+      "alpha": 1.0
+     }
+    },
+    {
+     "mesh": "Underwear_Bottoms",
+     "material": null,
+     "classification": "NOT_HAIR",
+     "confidence": 0.2,
+     "type": "unknown",
+     "components": 0,
+     "evidence": {
+      "head_proximity": 0.0,
+      "scalp": 0.0,
+      "alpha": 1.0
+     }
+    }
+   ],
+   "chains": [],
+   "generatedRig": [],
+   "generatedRigSkipped": [
+    "feature disabled (--generate-hair-rig)"
+   ]
+  },
+  "materials": {
+   "Boots": {
+    "semantic": "clothes",
+    "confidence": 0.97,
+    "source": "material",
+    "evidence": {
+     "material_name": 1.0,
+     "mesh_name": 1.0,
+     "texture_name": 1.0
+    }
+   },
+   "Bra": {
+    "semantic": "other",
+    "confidence": 0.3,
+    "source": "material",
+    "evidence": {}
+   },
+   "Female_Brow_Base_Transparency": {
+    "semantic": "eyebrow",
+    "confidence": 0.981,
+    "source": "material",
+    "evidence": {
+     "material_name": 1.0,
+     "mesh_name": 1.0,
+     "texture_name": 1.0,
+     "transparency": 1.0
+    }
+   },
+   "Female_Brow_Transparency": {
+    "semantic": "eyebrow",
+    "confidence": 0.981,
+    "source": "material",
+    "evidence": {
+     "material_name": 1.0,
+     "mesh_name": 1.0,
+     "texture_name": 1.0,
+     "transparency": 1.0
+    }
+   },
+   "Female_T_Shirt": {
+    "semantic": "clothes",
+    "confidence": 0.97,
+    "source": "material",
+    "evidence": {
+     "material_name": 1.0,
+     "mesh_name": 1.0,
+     "texture_name": 1.0
+    }
+   },
+   "Hair_Transparency": {
+    "semantic": "hair",
+    "confidence": 0.986,
+    "source": "material",
+    "evidence": {
+     "material_name": 1.0,
+     "mesh_name": 1.0,
+     "texture_name": 1.0,
+     "position": 0.55,
+     "transparency": 1.0
+    }
+   },
+   "Hair_Transparency.001": {
+    "semantic": "hair",
+    "confidence": 0.966,
+    "source": "material",
+    "evidence": {
+     "material_name": 1.0,
+     "texture_name": 1.0,
+     "position": 0.55,
+     "transparency": 1.0
+    }
+   },
+   "Hair_Transparency.002": {
+    "semantic": "hair",
+    "confidence": 0.981,
+    "source": "material",
+    "evidence": {
+     "material_name": 1.0,
+     "mesh_name": 1.0,
+     "texture_name": 1.0,
+     "transparency": 1.0
+    }
+   },
+   "Hair_Transparency.003": {
+    "semantic": "hair",
+    "confidence": 0.986,
+    "source": "material",
+    "evidence": {
+     "material_name": 1.0,
+     "mesh_name": 1.0,
+     "texture_name": 1.0,
+     "position": 0.55,
+     "transparency": 1.0
+    }
+   },
+   "Jeans": {
+    "semantic": "clothes",
+    "confidence": 0.978,
+    "source": "material",
+    "evidence": {
+     "material_name": 1.0,
+     "mesh_name": 1.0,
+     "texture_name": 1.0,
+     "position": 0.5
+    }
+   },
+   "Punk_Leather_jacket": {
+    "semantic": "clothes",
+    "confidence": 0.978,
+    "source": "material",
+    "evidence": {
+     "material_name": 1.0,
+     "mesh_name": 1.0,
+     "texture_name": 1.0,
+     "position": 0.5
+    }
+   },
+   "Scalp_Transparency": {
+    "semantic": "hair",
+    "confidence": 0.986,
+    "source": "material",
+    "evidence": {
+     "material_name": 1.0,
+     "mesh_name": 1.0,
+     "texture_name": 1.0,
+     "position": 0.55,
+     "transparency": 1.0
+    }
+   },
+   "Std_Cornea_L": {
+    "semantic": "cornea",
+    "confidence": 0.925,
+    "source": "material",
+    "evidence": {
+     "material_name": 1.0,
+     "texture_name": 1.0
+    }
+   },
+   "Std_Cornea_R": {
+    "semantic": "cornea",
+    "confidence": 0.925,
+    "source": "material",
+    "evidence": {
+     "material_name": 1.0,
+     "texture_name": 1.0
+    }
+   },
+   "Std_Eye_L": {
+    "semantic": "eye",
+    "confidence": 0.983,
+    "source": "material",
+    "evidence": {
+     "material_name": 1.0,
+     "mesh_name": 1.0,
+     "texture_name": 1.0,
+     "position": 0.8
+    }
+   },
+   "Std_Eye_Occlusion_L": {
+    "semantic": "eye",
+    "confidence": 0.983,
+    "source": "material",
+    "evidence": {
+     "material_name": 1.0,
+     "mesh_name": 1.0,
+     "texture_name": 1.0,
+     "position": 0.8
+    }
+   },
+   "Std_Eye_Occlusion_R": {
+    "semantic": "eye",
+    "confidence": 0.983,
+    "source": "material",
+    "evidence": {
+     "material_name": 1.0,
+     "mesh_name": 1.0,
+     "texture_name": 1.0,
+     "position": 0.8
+    }
+   },
+   "Std_Eye_R": {
+    "semantic": "eye",
+    "confidence": 0.983,
+    "source": "material",
+    "evidence": {
+     "material_name": 1.0,
+     "mesh_name": 1.0,
+     "texture_name": 1.0,
+     "position": 0.8
+    }
+   },
+   "Std_Eyelash": {
+    "semantic": "eyelash",
+    "confidence": 0.951,
+    "source": "material",
+    "evidence": {
+     "material_name": 1.0,
+     "texture_name": 1.0,
+     "transparency": 1.0
+    }
+   },
+   "Std_Lower_Teeth": {
+    "semantic": "teeth",
+    "confidence": 0.97,
+    "source": "material",
+    "evidence": {
+     "material_name": 1.0,
+     "mesh_name": 1.0,
+     "texture_name": 1.0
+    }
+   },
+   "Std_Nails": {
+    "semantic": "skin",
+    "confidence": 0.71,
+    "source": "geometry",
+    "evidence": {
+     "mesh_name": 1.0,
+     "position": 0.5
+    }
+   },
+   "Std_Skin_Arm": {
+    "semantic": "skin",
+    "confidence": 0.978,
+    "source": "material",
+    "evidence": {
+     "material_name": 1.0,
+     "mesh_name": 1.0,
+     "texture_name": 1.0,
+     "position": 0.5
+    }
+   },
+   "Std_Skin_Body": {
+    "semantic": "skin",
+    "confidence": 0.978,
+    "source": "material",
+    "evidence": {
+     "material_name": 1.0,
+     "mesh_name": 1.0,
+     "texture_name": 1.0,
+     "position": 0.5
+    }
+   },
+   "Std_Skin_Head": {
+    "semantic": "skin",
+    "confidence": 0.978,
+    "source": "material",
+    "evidence": {
+     "material_name": 1.0,
+     "mesh_name": 1.0,
+     "texture_name": 1.0,
+     "position": 0.5
+    }
+   },
+   "Std_Skin_Leg": {
+    "semantic": "skin",
+    "confidence": 0.978,
+    "source": "material",
+    "evidence": {
+     "material_name": 1.0,
+     "mesh_name": 1.0,
+     "texture_name": 1.0,
+     "position": 0.5
+    }
+   },
+   "Std_Tearline_L": {
+    "semantic": "cornea",
+    "confidence": 0.981,
+    "source": "material",
+    "evidence": {
+     "material_name": 1.0,
+     "mesh_name": 1.0,
+     "texture_name": 1.0,
+     "transparency": 1.0
+    }
+   },
+   "Std_Tearline_R": {
+    "semantic": "cornea",
+    "confidence": 0.981,
+    "source": "material",
+    "evidence": {
+     "material_name": 1.0,
+     "mesh_name": 1.0,
+     "texture_name": 1.0,
+     "transparency": 1.0
+    }
+   },
+   "Std_Tongue": {
+    "semantic": "tongue",
+    "confidence": 0.97,
+    "source": "material",
+    "evidence": {
+     "material_name": 1.0,
+     "mesh_name": 1.0,
+     "texture_name": 1.0
+    }
+   },
+   "Std_Upper_Teeth": {
+    "semantic": "teeth",
+    "confidence": 0.97,
+    "source": "material",
+    "evidence": {
+     "material_name": 1.0,
+     "mesh_name": 1.0,
+     "texture_name": 1.0
+    }
+   },
+   "Underwear_Bottoms": {
+    "semantic": "other",
+    "confidence": 0.3,
+    "source": "material",
+    "evidence": {}
+   }
+  },
+  "warnings": [
+   {
+    "code": "skeleton-conflict",
+    "message": "leftUpperArm: names say 'CC_Base_L_Upperarm', topology says 'CC_Base_L_Clavicle'",
+    "area": "skeleton"
+   },
+   {
+    "code": "skeleton-conflict",
+    "message": "leftLowerArm: names say 'CC_Base_L_Forearm', topology says 'CC_Base_L_Upperarm'",
+    "area": "skeleton"
+   },
+   {
+    "code": "skeleton-conflict",
+    "message": "rightUpperArm: names say 'CC_Base_R_Upperarm', topology says 'CC_Base_R_Clavicle'",
+    "area": "skeleton"
+   },
+   {
+    "code": "skeleton-conflict",
+    "message": "rightLowerArm: names say 'CC_Base_R_Forearm', topology says 'CC_Base_R_Upperarm'",
+    "area": "skeleton"
+   },
+   {
+    "code": "hair-no-bones",
+    "message": "hair mesh detected but no usable hair bone chains",
+    "area": "hair"
+   }
+  ]
+ },
+ "authoring": {
+  "enabled": true,
+  "flags": {
+   "autoAuthor": true,
+   "generateFace": false,
+   "generateFingerRig": false,
+   "generateHairRig": false
+  },
+  "applied": true,
+  "restPose": {
+   "poseType": "A-pose",
+   "armAbductionDeg": {
+    "left": 59.94,
+    "right": 59.71
+   },
+   "targetAbductionDeg": 22.33,
+   "torsoLeanDeg": 6.44,
+   "headTiltDeg": 3.61,
+   "confidence": 0.6,
+   "space": "anatomical-frame (left, up, forward)",
+   "bones": {
+    "spine": {
+     "rest": [
+      -0.104714,
+      -0.000374,
+      0.002805,
+      0.994498
+     ],
+     "angleDeg": 12.03,
+     "confidence": 0.952
+    },
+    "chest": {
+     "rest": [
+      0.074186,
+      8.7e-05,
+      0.000836,
+      0.997244
+     ],
+     "angleDeg": 8.51,
+     "confidence": 0.952
+    },
+    "neck": {
+     "rest": [
+      -0.148925,
+      -0.000754,
+      0.007513,
+      0.98882
+     ],
+     "angleDeg": 17.15,
+     "confidence": 0.952
+    },
+    "head": {
+     "rest": [
+      0.031527,
+      -0.0,
+      0.000938,
+      0.999502
+     ],
+     "angleDeg": 3.61,
+     "confidence": 0.952
+    },
+    "leftUpperArm": {
+     "rest": [
+      -0.010743,
+      -0.004413,
+      -0.322293,
+      0.946569
+     ],
+     "angleDeg": 37.63,
+     "confidence": 0.6
+    },
+    "rightUpperArm": {
+     "rest": [
+      -0.005755,
+      0.002364,
+      0.320387,
+      0.947266
+     ],
+     "angleDeg": 37.38,
+     "confidence": 0.6
+    }
+   },
+   "mutatesScene": false,
+   "notes": []
+  },
+  "expressions": {
+   "blink": {
+    "status": "MAPPED",
+    "confidence": 0.9,
+    "detail": "Eye_Blink_L + Eye_Blink_L + Eye_Blink_L + Eye_Blink_L + Eye_Blink_R + Eye_Blink_R + Eye_Blink_R + Eye_Blink_R"
+   },
+   "blinkLeft": {
+    "status": "SOURCE",
+    "confidence": 0.9,
+    "detail": "Eye_Blink_L, Eye_Blink_L, Eye_Blink_L, Eye_Blink_L"
+   },
+   "blinkRight": {
+    "status": "SOURCE",
+    "confidence": 0.9,
+    "detail": "Eye_Blink_R, Eye_Blink_R, Eye_Blink_R, Eye_Blink_R"
+   },
+   "aa": {
+    "status": "MAPPED",
+    "confidence": 0.85,
+    "detail": "V_Open + V_Open + V_Open + V_Open + V_Open + Jaw_Open + Jaw_Open + Jaw_Open + Prosopon_JawOpen x1.0"
+   },
+   "ih": {
+    "status": "MAPPED",
+    "confidence": 0.85,
+    "detail": "V_Wide + V_Wide + V_Wide + V_Wide + Jaw_Open + Jaw_Open + Jaw_Open + Prosopon_JawOpen x0.35"
+   },
+   "ou": {
+    "status": "MAPPED",
+    "confidence": 0.85,
+    "detail": "V_Tight_O + V_Tight_O + V_Tight_O + Jaw_Open + Jaw_Open + Jaw_Open + Prosopon_JawOpen x0.35"
+   },
+   "ee": {
+    "status": "MAPPED",
+    "confidence": 0.85,
+    "detail": "V_Wide + V_Wide + V_Wide + V_Wide + Jaw_Open + Jaw_Open + Jaw_Open + Prosopon_JawOpen x0.25"
+   },
+   "oh": {
+    "status": "MAPPED",
+    "confidence": 0.85,
+    "detail": "V_Tight_O + V_Tight_O + V_Tight_O + Jaw_Open + Jaw_Open + Jaw_Open + V_Open + V_Open + V_Open + V_Open + V_Open + Prosopon_JawOpen x0.75"
+   },
+   "happy": {
+    "status": "MAPPED",
+    "confidence": 0.75,
+    "detail": "Mouth_Smile_L + Mouth_Smile_L + Mouth_Smile_L + Mouth_Smile_L + Mouth_Smile_L + Mouth_Smile_R + Mouth_Smile_R + Mouth_Smile_R + Mouth_Smile_R + Cheek_Raise_L + Cheek_Raise_L + Cheek_Raise_L + Cheek_Raise_L + Cheek_Raise_R + Cheek_Raise_R + Cheek_Raise_R + Cheek_Raise_R"
+   },
+   "sad": {
+    "status": "MAPPED",
+    "confidence": 0.75,
+    "detail": "Brow_Raise_Inner_L + Brow_Raise_Inner_L + Brow_Raise_Inner_L + Brow_Raise_Inner_L + Brow_Raise_Inner_R + Brow_Raise_Inner_R + Brow_Raise_Inner_R + Brow_Raise_Inner_R + Mouth_Frown_L + Mouth_Frown_L + Mouth_Frown_R + Mouth_Frown_R"
+   },
+   "surprised": {
+    "status": "MAPPED",
+    "confidence": 0.75,
+    "detail": "Brow_Raise_Inner_L + Brow_Raise_Inner_L + Brow_Raise_Inner_L + Brow_Raise_Inner_L + Brow_Raise_Inner_R + Brow_Raise_Inner_R + Brow_Raise_Inner_R + Brow_Raise_Inner_R + Eye_Wide_L + Eye_Wide_L + Eye_Wide_L + Eye_Wide_L + Eye_Wide_R + Eye_Wide_R + Eye_Wide_R + Eye_Wide_R + Brow_Raise_Outer_L + Brow_Raise_Outer_L + Brow_Raise_Outer_L + Brow_Raise_Outer_L + Brow_Raise_Outer_R + Brow_Raise_Outer_R + Brow_Raise_Outer_R + Brow_Raise_Outer_R + V_Open + V_Open + V_Open + V_Open + V_Open"
+   }
+  },
+  "shapeKeys": [
+   {
+    "name": "Prosopon_JawOpen",
+    "meshes": [
+     "CC_Base_Body",
+     "CC_Base_Teeth",
+     "CC_Base_Tongue"
+    ],
+    "vertices": 40824,
+    "maxOffset": 0.02692,
+    "confidence": 0.97,
+    "boundTo": null,
+    "description": "jaw rotation 20 deg about the jaw joint (existing aa opens -0.0035 of 0.0267)",
+    "valid": true
+   }
+  ],
+  "fingers": [],
+  "hairRig": {
+   "chains": [],
+   "skipped": [
+    {
+     "what": "hair rig",
+     "reason": "feature disabled (--generate-hair-rig)",
+     "confidence": 0.9983
+    }
+   ]
+  },
+  "springs": {
+   "chains": [],
+   "skipped": []
+  },
+  "colliders": [],
+  "skipped": [
+   {
+    "what": "hair rig",
+    "reason": "feature disabled (--generate-hair-rig)",
+    "confidence": 0.9983
+   }
+  ],
+  "planIssues": [],
+  "result": {
+   "shapeKeys": {
+    "Prosopon_JawOpen": [
+     "CC_Base_Body",
+     "CC_Base_Teeth",
+     "CC_Base_Tongue"
+    ]
+   },
+   "materials": {
+    "Hair_Transparency": [
+     "specular 0.5",
+     "alpha clip 0.35"
+    ],
+    "Hair_Transparency.001": [
+     "specular 0.5",
+     "alpha clip 0.35"
+    ],
+    "Hair_Transparency.002": [
+     "specular 0.5",
+     "alpha clip 0.35"
+    ],
+    "Hair_Transparency.003": [
+     "specular 0.5",
+     "alpha clip 0.35"
+    ],
+    "Scalp_Transparency": [
+     "roughness 0.8",
+     "specular 0.2"
+    ],
+    "Std_Cornea_L": [
+     "roughness 0.05",
+     "specular 0.5"
+    ],
+    "Std_Cornea_R": [
+     "roughness 0.05",
+     "specular 0.5"
+    ],
+    "Std_Eye_L": [
+     "roughness 0.3",
+     "specular 0.5"
+    ],
+    "Std_Eye_R": [
+     "roughness 0.3",
+     "specular 0.5"
+    ],
+    "Std_Eyelash": [
+     "specular 0.25"
+    ],
+    "Std_Lower_Teeth": [
+     "roughness 0.35",
+     "specular 0.5"
+    ],
+    "Std_Tongue": [
+     "roughness 0.45",
+     "specular 0.5"
+    ],
+    "Std_Upper_Teeth": [
+     "roughness 0.35",
+     "specular 0.5"
+    ]
+   },
+   "createdBones": [],
+   "failed": {},
+   "validation": []
+  },
+  "augmented": {
+   "aa": [
+    {
+     "key": "Prosopon_JawOpen",
+     "weight": 1.0
+    }
+   ],
+   "oh": [
+    {
+     "key": "Prosopon_JawOpen",
+     "weight": 0.75
+    }
+   ],
+   "ou": [
+    {
+     "key": "Prosopon_JawOpen",
+     "weight": 0.35
+    }
+   ],
+   "ih": [
+    {
+     "key": "Prosopon_JawOpen",
+     "weight": 0.35
+    }
+   ],
+   "ee": [
+    {
+     "key": "Prosopon_JawOpen",
+     "weight": 0.25
+    }
+   ]
+  },
+  "materials": [
+   {
+    "material": "Hair_Transparency",
+    "role": "hair",
+    "confidence": 0.986,
+    "changes": [
+     "specular 0.5",
+     "alpha clip 0.35"
+    ],
+    "textures": {}
+   },
+   {
+    "material": "Hair_Transparency.001",
+    "role": "hair",
+    "confidence": 0.966,
+    "changes": [
+     "specular 0.5",
+     "alpha clip 0.35"
+    ],
+    "textures": {}
+   },
+   {
+    "material": "Hair_Transparency.002",
+    "role": "hair",
+    "confidence": 0.981,
+    "changes": [
+     "specular 0.5",
+     "alpha clip 0.35"
+    ],
+    "textures": {}
+   },
+   {
+    "material": "Hair_Transparency.003",
+    "role": "hair",
+    "confidence": 0.986,
+    "changes": [
+     "specular 0.5",
+     "alpha clip 0.35"
+    ],
+    "textures": {}
+   },
+   {
+    "material": "Scalp_Transparency",
+    "role": "scalp",
+    "confidence": 0.986,
+    "changes": [
+     "roughness 0.8",
+     "specular 0.2"
+    ],
+    "textures": {}
+   },
+   {
+    "material": "Std_Cornea_L",
+    "role": "cornea",
+    "confidence": 0.925,
+    "changes": [
+     "roughness 0.05",
+     "specular 0.5"
+    ],
+    "textures": {}
+   },
+   {
+    "material": "Std_Cornea_R",
+    "role": "cornea",
+    "confidence": 0.925,
+    "changes": [
+     "roughness 0.05",
+     "specular 0.5"
+    ],
+    "textures": {}
+   },
+   {
+    "material": "Std_Eye_L",
+    "role": "eye",
+    "confidence": 0.983,
+    "changes": [
+     "roughness 0.3",
+     "specular 0.5"
+    ],
+    "textures": {}
+   },
+   {
+    "material": "Std_Eye_R",
+    "role": "eye",
+    "confidence": 0.983,
+    "changes": [
+     "roughness 0.3",
+     "specular 0.5"
+    ],
+    "textures": {}
+   },
+   {
+    "material": "Std_Eyelash",
+    "role": "eyelash",
+    "confidence": 0.951,
+    "changes": [
+     "specular 0.25"
+    ],
+    "textures": {}
+   },
+   {
+    "material": "Std_Lower_Teeth",
+    "role": "teeth",
+    "confidence": 0.97,
+    "changes": [
+     "roughness 0.35",
+     "specular 0.5"
+    ],
+    "textures": {}
+   },
+   {
+    "material": "Std_Tongue",
+    "role": "tongue",
+    "confidence": 0.97,
+    "changes": [
+     "roughness 0.45",
+     "specular 0.5"
+    ],
+    "textures": {}
+   },
+   {
+    "material": "Std_Upper_Teeth",
+    "role": "teeth",
+    "confidence": 0.97,
+    "changes": [
+     "roughness 0.35",
+     "specular 0.5"
+    ],
+    "textures": {}
+   }
+  ]
+ }
+}
