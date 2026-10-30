@@ -7,7 +7,7 @@ from pathlib import Path
 from PyInstaller.utils.hooks import collect_submodules
 
 ROOT = Path(SPECPATH).parent
-NAME = "Moviva FBX to VRM"
+NAME = "moviva-fbx-to-vrm"  # no spaces: folder, program and .app are typed in terminals
 BPY = Path(importlib.util.find_spec("bpy").origin).parent
 
 # bpy is a whole Blender: copied as-is, never analysed (its .so, datafiles and Python scripts load each other by path).
@@ -42,4 +42,4 @@ coll = COLLECT(exe, a.binaries, a.datas, name=NAME)
 if sys.platform == "darwin":
     app = BUNDLE(coll, name=f"{NAME}.app", icon=str(ROOT / "packaging" / "icon.png"),
                  bundle_identifier="app.moviva.fbx-to-vrm",
-                 info_plist={"NSHighResolutionCapable": True, "LSMinimumSystemVersion": "14.0"})
+                 info_plist={"CFBundleDisplayName": "Moviva FBX to VRM", "NSHighResolutionCapable": True, "LSMinimumSystemVersion": "14.0"})

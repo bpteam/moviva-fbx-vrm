@@ -63,22 +63,22 @@ jobs:
       - name: Smoke test and package (Linux)
         if: runner.os == 'Linux'
         run: |
-          "dist/Moviva FBX to VRM/Moviva FBX to VRM" doctor
-          tar -C dist -czf "${{ matrix.artifact }}" "Moviva FBX to VRM"
+          dist/moviva-fbx-to-vrm/moviva-fbx-to-vrm doctor
+          tar -C dist -czf "${{ matrix.artifact }}" moviva-fbx-to-vrm
       - name: Smoke test and package (macOS)
         if: runner.os == 'macOS'
         run: |
-          "dist/Moviva FBX to VRM.app/Contents/MacOS/Moviva FBX to VRM" doctor
-          ditto -c -k --keepParent "dist/Moviva FBX to VRM.app" "${{ matrix.artifact }}"
+          dist/moviva-fbx-to-vrm.app/Contents/MacOS/moviva-fbx-to-vrm doctor
+          ditto -c -k --keepParent dist/moviva-fbx-to-vrm.app "${{ matrix.artifact }}"
       - name: Smoke test and package (Windows)
         if: runner.os == 'Windows'
         shell: pwsh
         run: |
-          $p = Start-Process -FilePath "dist/Moviva FBX to VRM/Moviva FBX to VRM.exe" -ArgumentList "doctor" `
+          $p = Start-Process -FilePath dist/moviva-fbx-to-vrm/moviva-fbx-to-vrm.exe -ArgumentList "doctor" `
             -Wait -PassThru -NoNewWindow -RedirectStandardOutput doctor.txt -RedirectStandardError doctor-err.txt
           Get-Content doctor.txt, doctor-err.txt
           if ($p.ExitCode -ne 0) { exit $p.ExitCode }
-          Compress-Archive -Path "dist/Moviva FBX to VRM" -DestinationPath "${{ matrix.artifact }}"
+          Compress-Archive -Path dist/moviva-fbx-to-vrm -DestinationPath "${{ matrix.artifact }}"
 
       - uses: actions/upload-artifact@v4
         with:

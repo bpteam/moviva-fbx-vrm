@@ -21,12 +21,13 @@ why and what to fix.
 
 ## Download
 
-[Releases](../../releases): one archive per system. Unpack and run **Moviva FBX to VRM**.
+[Releases](../../releases): one archive per system. Unpack it: inside is a `moviva-fbx-to-vrm` folder (an app on macOS); double-click
+`moviva-fbx-to-vrm` (`moviva-fbx-to-vrm.exe` on Windows) to open the window.
 
 | System | File | First start |
 |---|---|---|
 | Windows 10/11 x64 | `moviva-fbx-to-vrm-windows-x64.zip` | SmartScreen: *More info → Run anyway* (the app is not signed) |
-| macOS 14+ Apple Silicon | `moviva-fbx-to-vrm-macos-arm64.zip` | *System Settings → Privacy & Security → Open Anyway*, or `xattr -dr com.apple.quarantine "Moviva FBX to VRM.app"` |
+| macOS 14+ Apple Silicon | `moviva-fbx-to-vrm-macos-arm64.zip` | *System Settings → Privacy & Security → Open Anyway*, or `xattr -dr com.apple.quarantine moviva-fbx-to-vrm.app` |
 | Linux x64 (glibc 2.35+: Ubuntu 22.04, Debian 12, Fedora 36 or newer) | `moviva-fbx-to-vrm-linux-x64.tar.gz` | needs an X11/Wayland desktop (`libxcb-cursor0` on Debian/Ubuntu) |
 
 Intel Macs and ARM Linux are not supported: Blender publishes no `bpy` build for them.
@@ -52,13 +53,19 @@ Intel Macs and ARM Linux are not supported: Blender publishes no `bpy` build for
 The same program converts without the window:
 
 ```bash
-"Moviva FBX to VRM" convert model.fbx model.vrm --auto-author --generate-face --geometry-profile video-call
-"Moviva FBX to VRM" doctor     # checks the built-in Blender and VRM Add-on
+# Linux
+tar -xzf moviva-fbx-to-vrm-linux-x64.tar.gz
+./moviva-fbx-to-vrm/moviva-fbx-to-vrm                # the window
+./moviva-fbx-to-vrm/moviva-fbx-to-vrm doctor         # checks the built-in Blender and VRM Add-on
+./moviva-fbx-to-vrm/moviva-fbx-to-vrm convert model.fbx model.vrm --auto-author --generate-face --geometry-profile video-call
+
+# macOS
+moviva-fbx-to-vrm.app/Contents/MacOS/moviva-fbx-to-vrm doctor
 ```
 
 All `character-vrm` commands and options work; see [character_vrm/README.md](character_vrm/README.md). A conversion
 writes `model.vrm` and `model.vrm.report.json`. On Windows the app is a windowed program: run it as
-`start /wait "" "Moviva FBX to VRM.exe" convert …` in `cmd` (or `Start-Process -Wait` in PowerShell) so the prompt
+`start /wait "" moviva-fbx-to-vrm\moviva-fbx-to-vrm.exe convert …` in `cmd` (or `Start-Process -Wait` in PowerShell) so the prompt
 waits for it.
 
 ## How it is built
