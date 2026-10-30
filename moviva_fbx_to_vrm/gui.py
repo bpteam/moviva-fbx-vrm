@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import os
 import sys
 import time
 from pathlib import Path
@@ -314,8 +315,10 @@ class Window(QWidget):
         head.setStyleSheet(f"font-size: 19px; font-weight: 600; color: {color};")
         self.result_box.addWidget(head)
         if summary.verdict != FAILED:
-            where = QLabel(t("result.saved", name=self.output.name))
+            where = QLabel(t("result.saved", name=str(self.output)))
             where.setObjectName("muted")
+            where.setWordWrap(True)
+            where.setTextInteractionFlags(Qt.TextInteractionFlag.TextSelectableByMouse)
             self.result_box.addWidget(where)
         if summary.advice:
             advice = QLabel(summary.advice)
@@ -351,7 +354,20 @@ class Window(QWidget):
         QDesktopServices.openUrl(QUrl.fromLocalFile(str(path)))
 
 
+def system_library_path() -> None:
+    """PyInstaller points LD_LIBRARY_PATH at its bundled libraries; the file manager "Show VRM in folder" opens then
+    crashes on them. The window restores the system value; the converter copy gets the bundled one from PyInstaller."""
+    if not getattr(sys, "frozen", False) or "LD_LIBRARY_PATH" not in os.environ:
+        return
+    original = os.environ.pop("LD_LIBRARY_PATH_ORIG", None)
+    if original is None:
+        del os.environ["LD_LIBRARY_PATH"]
+    else:
+        os.environ["LD_LIBRARY_PATH"] = original
+
+
 def run_gui() -> int:
+    system_library_path()
     app = QApplication(sys.argv)
     app.setApplicationName("Moviva FBX to VRM")
     app.setStyleSheet(STYLE)
