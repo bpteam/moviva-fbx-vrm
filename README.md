@@ -54,7 +54,9 @@ Intel Macs and ARM Linux are not supported: Blender publishes no `bpy` build for
 - **Facial blend shapes** (ARKit, VRoid, Character Creator, or visemes) for lip sync, blinking and expressions. Without
   them the converter generates what the face geometry allows; otherwise the avatar moves but its lips stay still.
 - **Finger bones** for hand gestures, **hair bones** for swaying hair.
-- A reasonable size: above ~150k triangles or ~150 MB the avatar loads and animates slowly on weaker machines.
+- A reasonable size: above ~150k triangles the avatar loads and animates slowly on weaker machines. The converter
+  keeps only the facial shapes the avatar's expressions use and scales textures down to 1024 px, so a 226 MB
+  Character Creator FBX becomes a 170 MB VRM (it was 819 MB).
 
 ## Command line
 
