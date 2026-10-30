@@ -25,7 +25,7 @@ jobs:
             artifact: moviva-fbx-to-vrm-linux-x64.tar.gz
           - os: windows-latest
             artifact: moviva-fbx-to-vrm-windows-x64.zip
-          - os: macos-14  # Apple Silicon; there is no Intel-mac bpy wheel
+          - os: macos-15  # Apple Silicon; there is no Intel-mac bpy wheel (macos-14 images retire Nov 2026)
             artifact: moviva-fbx-to-vrm-macos-arm64.zip
     runs-on: ${{ matrix.os }}
     steps:
@@ -45,9 +45,18 @@ jobs:
       - name: Fetch the VRM Add-on (pinned, checksum-verified)
         run: python packaging/fetch_addon.py
       - name: Tests
-        run: python -m pytest -q
+        shell: bash
+        # character_vrm reads its sources without an encoding (cp1252 on Windows), and its launcher test expects
+        # POSIX execute bits; the app never uses that launcher (Blender is in-process).
+        run: |
+          if [ "$RUNNER_OS" = Windows ]; then
+            python -m pytest -q --deselect character_vrm/tests/unit/test_cli.py::test_resolution_errors
+          else
+            python -m pytest -q
+          fi
         env:
           QT_QPA_PLATFORM: offscreen
+          PYTHONUTF8: "1"
       - name: Build
         run: pyinstaller packaging/moviva-fbx-to-vrm.spec --noconfirm --workpath .pyi-work --distpath dist
 
