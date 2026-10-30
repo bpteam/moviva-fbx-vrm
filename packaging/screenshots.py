@@ -31,7 +31,7 @@ def main() -> int:
     report = json.loads((ROOT / "tests" / "fixtures" / "amber.report.json").read_text(encoding="utf-8"))
     for name in VISEMES:
         report["expressions"]["mapped"].pop(name, None)
-    window.output = Path("amber.vrm")
+    window.output = Path("~/Models/amber.vrm")  # a neutral path, not the machine that renders
     window._show(summarize(report))
     app.processEvents()
     window.grab().save(str(ROOT / "docs" / "screenshot-result.png"))

@@ -6,6 +6,7 @@ import json
 import os
 import sys
 import time
+from html import escape
 from pathlib import Path
 
 from PySide6.QtCore import QLocale, QProcess, Qt, QTimer, QUrl
@@ -25,6 +26,8 @@ INTRO_SIZE = (544, 200)  # shown size; assets/intro.png should be twice that (10
 STAGES = ("reading", "analysing", "authoring", "writing")  # ``@stage <name>`` lines from the converter
 COLORS = {OK: "#57d797", WARN: "#ffc053", BAD: "#ff6574", READY: "#57d797", FAILED: "#ff6574"}
 MARKS = {OK: "✓", WARN: "!", BAD: "✕"}
+MOVIVA_URL = "https://moviva.bpt22.tech/?utm_source=app"
+MOVIVA_LINK = f'<a href="{MOVIVA_URL}" style="color: #ff7546;">Moviva: AI Avatar for ChatGPT Voice</a>'
 
 STYLE = """
 QWidget { background: #0b1319; color: #eef3f7; font-size: 14px; }
@@ -177,8 +180,9 @@ class Window(QWidget):
             badge.setFixedSize(22, 22)
             badge.setAlignment(Qt.AlignmentFlag.AlignCenter)
             row.addWidget(badge)
-            step = QLabel(t(f"step.{n}"))
+            step = QLabel(t(f"step.{n}", moviva=MOVIVA_LINK) if n == 3 else t(f"step.{n}"))
             step.setWordWrap(True)
+            step.setOpenExternalLinks(True)
             row.addWidget(step, 1)
             layout.addLayout(row)
         layout.addSpacing(4)
@@ -234,6 +238,10 @@ class Window(QWidget):
         self.result_scroll = QScrollArea()
         self.result_scroll.setWidgetResizable(True)
         layout.addWidget(self.result_scroll, 1)
+        self.where = QLabel()  # the path stays findable by hand if the button cannot open the folder
+        self.where.setWordWrap(True)
+        self.where.setTextInteractionFlags(Qt.TextInteractionFlag.TextSelectableByMouse)
+        layout.addWidget(self.where)
         buttons = QHBoxLayout()
         self.reveal = QPushButton(t("button.reveal"))
         self.reveal.setObjectName("primary")
@@ -314,12 +322,8 @@ class Window(QWidget):
         head.setWordWrap(True)
         head.setStyleSheet(f"font-size: 19px; font-weight: 600; color: {color};")
         self.result_box.addWidget(head)
-        if summary.verdict != FAILED:
-            where = QLabel(t("result.saved", name=str(self.output)))
-            where.setObjectName("muted")
-            where.setWordWrap(True)
-            where.setTextInteractionFlags(Qt.TextInteractionFlag.TextSelectableByMouse)
-            self.result_box.addWidget(where)
+        self.where.setText(f'{t("result.saved")}<br><b>{escape(str(self.output))}</b>')
+        self.where.setVisible(summary.verdict != FAILED)
         if summary.advice:
             advice = QLabel(summary.advice)
             advice.setWordWrap(True)
