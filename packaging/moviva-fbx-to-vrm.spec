@@ -42,4 +42,4 @@ coll = COLLECT(exe, a.binaries, a.datas, name=NAME)
 if sys.platform == "darwin":
     app = BUNDLE(coll, name=f"{NAME}.app", icon=str(ROOT / "packaging" / "icon.png"),
                  bundle_identifier="app.moviva.fbx-to-vrm",
-                 info_plist={"CFBundleDisplayName": "Moviva FBX to VRM", "NSHighResolutionCapable": True, "LSMinimumSystemVersion": "14.0"})
+                 info_plist={"CFBundleDisplayName": "Moviva FBX to VRM", "NSHighResolutionCapable": True, "LSMinimumSystemVersion": "12.0"})
