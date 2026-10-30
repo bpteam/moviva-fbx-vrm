@@ -26,7 +26,7 @@ INTRO_SIZE = (544, 200)  # shown size; assets/intro.png should be twice that (10
 STAGES = ("reading", "analysing", "authoring", "writing")  # ``@stage <name>`` lines from the converter
 COLORS = {OK: "#57d797", WARN: "#ffc053", BAD: "#ff6574", READY: "#57d797", FAILED: "#ff6574"}
 MARKS = {OK: "✓", WARN: "!", BAD: "✕"}
-MOVIVA_URL = "https://moviva.bpt22.tech/?utm_source=app"
+MOVIVA_URL = "https://moviva.bpt22.tech/?utm_source=app_moviva_fbx_vrm"
 MOVIVA_LINK = f'<a href="{MOVIVA_URL}" style="color: #ff7546;">Moviva: AI Avatar for ChatGPT Voice</a>'
 
 STYLE = """
