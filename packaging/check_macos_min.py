@@ -8,7 +8,9 @@ import subprocess
 import sys
 from pathlib import Path
 
-MACHO = {b"\xcf\xfa\xed\xfe", b"\xce\xfa\xed\xfe", b"\xca\xfe\xba\xbe"}  # 64-bit, 32-bit, universal
+# thin 64/32-bit (little-endian as on Apple Silicon), universal and 64-bit universal (big-endian on disk, either order)
+MACHO = {b"\xcf\xfa\xed\xfe", b"\xce\xfa\xed\xfe", b"\xca\xfe\xba\xbe", b"\xbe\xba\xfe\xca",
+         b"\xca\xfe\xba\xbf", b"\xbf\xba\xfe\xca"}
 # LC_BUILD_VERSION prints "minos 12.0"; the older LC_VERSION_MIN_MACOSX prints "version 10.13" after its cmd line
 MIN = re.compile(r"LC_BUILD_VERSION.*?minos (\d+(?:\.\d+)*)|LC_VERSION_MIN_MACOSX.*?version (\d+(?:\.\d+)*)", re.S)
 
@@ -17,14 +19,16 @@ def version(text: str) -> tuple[int, ...]:
     return tuple(int(p) for p in text.split("."))
 
 
+def is_macho(path: Path) -> bool:
+    with path.open("rb") as f:
+        return f.read(4) in MACHO
+
+
 def main(app: str, limit: str) -> int:
     too_new = []
     for path in Path(app).rglob("*"):
-        if path.is_symlink() or not path.is_file():
+        if path.is_symlink() or not path.is_file() or not is_macho(path):
             continue
-        with path.open("rb") as f:
-            if f.read(4) not in MACHO:
-                continue
         out = subprocess.run(["otool", "-l", str(path)], capture_output=True, text=True).stdout
         needs = max((version(a or b) for a, b in MIN.findall(out)), default=(0,))
         if needs > version(limit):
