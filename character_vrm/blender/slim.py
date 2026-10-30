@@ -24,14 +24,20 @@ def slim(plan: VrmPlan, bpy: Any = None) -> tuple[int, int]:
 
 
 def drop_unbound_shape_keys(plan: VrmPlan, objects: Any) -> int:
-    bound = {(b.mesh, b.shape_key) for mapping in plan.expressions.values() for b in mapping.binds}
-    removed = 0
+    by_mesh: dict[str, set[str]] = {}
+    for mapping in plan.expressions.values():
+        for b in mapping.binds:
+            by_mesh.setdefault(b.mesh, set()).add(b.shape_key)
+    # objects can share one mesh datablock (bpy compares and hashes it by pointer): a key any of them binds stays
+    users: dict[Any, tuple[Any, set[str]]] = {}
     for obj in objects:
-        keys = obj.data.shape_keys if obj.type == "MESH" else None
-        if keys is None:
-            continue
+        if obj.type == "MESH" and obj.data.shape_keys is not None:
+            users.setdefault(obj.data, (obj, set()))[1].update(by_mesh.get(obj.name, ()))
+    removed = 0
+    for obj, bound in users.values():
+        keys = obj.data.shape_keys
         for block in list(keys.key_blocks):
-            if block == keys.reference_key or (obj.name, block.name) in bound or block.name.endswith(KEEP_SUFFIXES):
+            if block == keys.reference_key or block.name in bound or block.name.endswith(KEEP_SUFFIXES):
                 continue
             obj.shape_key_remove(block)
             removed += 1
