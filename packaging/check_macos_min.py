@@ -24,18 +24,24 @@ def is_macho(path: Path) -> bool:
         return f.read(4) in MACHO
 
 
+def minimum(path: Path) -> tuple[int, ...] | None:
+    """The newest macOS any architecture of ``path`` needs; None when otool cannot tell (an unverified file)."""
+    run = subprocess.run(["otool", "-l", str(path)], capture_output=True, text=True)
+    found = [version(a or b) for a, b in MIN.findall(run.stdout)]
+    return max(found) if run.returncode == 0 and found else None
+
+
 def main(app: str, limit: str) -> int:
     too_new = []
     for path in Path(app).rglob("*"):
         if path.is_symlink() or not path.is_file() or not is_macho(path):
             continue
-        out = subprocess.run(["otool", "-l", str(path)], capture_output=True, text=True).stdout
-        needs = max((version(a or b) for a, b in MIN.findall(out)), default=(0,))
-        if needs > version(limit):
-            too_new.append(f"{'.'.join(map(str, needs))}  {path}")
+        needs = minimum(path)
+        if needs is None or needs > version(limit):
+            too_new.append(f"{'.'.join(map(str, needs)) if needs else 'unknown'}  {path}")
     for line in too_new:
         print(f"ERROR needs macOS {line}", file=sys.stderr)
-    print(f"{len(too_new)} Mach-O files need a macOS newer than {limit}")
+    print(f"{len(too_new)} Mach-O files need a macOS newer than {limit} or could not be read")
     return 1 if too_new else 0
 
 
