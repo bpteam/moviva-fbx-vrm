@@ -221,14 +221,16 @@ def test_export_operator_is_called_with_the_armature_pinned():
     ops = MagicMock()
     ops.export_scene.vrm.return_value = {"FINISHED"}
     addon.export_vrm(ops, "/tmp/out.vrm", "Armature")
-    ops.export_scene.vrm.assert_called_once_with(filepath="/tmp/out.vrm", armature_object_name="Armature")
+    ops.export_scene.vrm.assert_called_once_with(filepath="/tmp/out.vrm", armature_object_name="Armature",
+                                                 enable_advanced_preferences=True, export_try_sparse_sk=True,
+                                                 export_all_influences=False)
 
 
 def test_all_bone_influences_is_an_explicit_opt_in():
     ops = MagicMock()
     ops.export_scene.vrm.return_value = {"FINISHED"}
     addon.export_vrm(ops, "/tmp/out.vrm", "Armature")
-    assert "export_all_influences" not in ops.export_scene.vrm.call_args.kwargs
+    assert ops.export_scene.vrm.call_args.kwargs["export_all_influences"] is False
     addon.export_vrm(ops, "/tmp/out.vrm", "Armature", all_influences=True)
     assert ops.export_scene.vrm.call_args.kwargs["export_all_influences"] is True
     assert ops.export_scene.vrm.call_args.kwargs["enable_advanced_preferences"] is True

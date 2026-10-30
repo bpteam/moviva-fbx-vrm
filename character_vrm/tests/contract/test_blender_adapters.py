@@ -39,7 +39,7 @@ def _python_files():
 def test_bpy_is_only_imported_inside_blender_adapters():
     allowed = {"importer.py", "scene_inspector.py", "vrm_addon.py", "compat_v4_7_2.py", "bridge.py",
                "anatomy_adapter.py", "shape_key_author.py", "rig_author.py", "hair_author.py", "face_geometry.py",
-               "material_author.py"}
+               "material_author.py", "slim.py"}
     offenders = []
     for path in _python_files():
         tree = ast.parse(path.read_text())
@@ -245,7 +245,9 @@ def test_export_calls_the_official_operator():
     bpy = MagicMock()
     bpy.ops.export_scene.vrm.return_value = {"FINISHED"}
     vrm_addon.export("Arm", "/tmp/o.vrm", bpy=bpy)
-    bpy.ops.export_scene.vrm.assert_called_once_with(filepath="/tmp/o.vrm", armature_object_name="Arm")
+    bpy.ops.export_scene.vrm.assert_called_once_with(filepath="/tmp/o.vrm", armature_object_name="Arm",
+                                                     enable_advanced_preferences=True, export_try_sparse_sk=True,
+                                                     export_all_influences=False)
 
 
 def test_real_bridge_is_lazy():

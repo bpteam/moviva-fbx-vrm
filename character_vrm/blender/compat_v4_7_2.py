@@ -218,10 +218,12 @@ def apply_meta(armature: Any, meta: dict[str, object]) -> None:
 def export_vrm(ops: Any, filepath: str, armature_object_name: str, all_influences: bool = False) -> None:
     """``bpy.ops.export_scene.vrm``. ``armature_object_name`` pins the exported armature, which matters
     as soon as the scene holds more than one. ``all_influences`` is an explicit opt-in: the add-on's
-    default (at most four bone influences per vertex) is what every consumer supports."""
-    kwargs: dict[str, Any] = {"filepath": filepath, "armature_object_name": armature_object_name}
-    if all_influences:
-        kwargs.update(enable_advanced_preferences=True, export_all_influences=True)
+    default (at most four bone influences per vertex) is what every consumer supports. Shape keys are always
+    sparse (only the vertices a key moves are stored: a Character Creator face is ~30% smaller); every other
+    advanced option keeps the add-on's default (off)."""
+    kwargs: dict[str, Any] = {"filepath": filepath, "armature_object_name": armature_object_name,
+                              "enable_advanced_preferences": True, "export_try_sparse_sk": True,
+                              "export_all_influences": all_influences}
     result = ops.export_scene.vrm(**kwargs)
     if result != {"FINISHED"}:
         raise ConversionError("export-failed", f"bpy.ops.export_scene.vrm did not finish: {sorted(result)}")

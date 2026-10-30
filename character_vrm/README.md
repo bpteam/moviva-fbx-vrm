@@ -149,7 +149,8 @@ spring joints referencing valid nodes).
 | 4d mutate | `blender/anatomy_adapter.py` | applies the plans (`Prosopon_` shape keys / bones, material edits), then validates the result; failures are recorded and the affected bindings dropped |
 | 5 preserve | `core/geometry.py` + `blender/scene_inspector.py` | the source rig is never rebuilt: no new armature, no auto-weighting, vertex groups untouched; the geometry planner protects arms/hands, shoulder transitions, head and hair before cropping static body faces; twist / helper / breast / cloth / hair / corrective bones stay as they are (simply not humanoid) |
 | 6-9, 11 configure | `blender/compat_v4_7_2.py` | `spec_version = "1.0"`, human bones, expressions, LookAt, spring bones, meta |
-| 12 export | `blender/compat_v4_7_2.py` | `bpy.ops.export_scene.vrm(filepath=..., armature_object_name=...)`; must return `{'FINISHED'}` |
+| 11b slim | `blender/slim.py` | removes shape keys no expression binds (Basis and Moviva's VRoid `Fcl_` face morphs stay), scales textures down to 1024 px; a Character Creator model drops from 819 to 170 MB |
+| 12 export | `blender/compat_v4_7_2.py` | `bpy.ops.export_scene.vrm(filepath=..., armature_object_name=..., export_try_sparse_sk=True)`: shape keys store only the vertices they move; must return `{'FINISHED'}` |
 
 Blender's own bone-influence policy applies (the add-on's compatible maximum of four influences per vertex).
 `--all-bone-influences` is deliberately not implemented until it is verified against three-vrm / Moviva.

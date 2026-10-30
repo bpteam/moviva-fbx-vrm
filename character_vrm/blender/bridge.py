@@ -76,8 +76,9 @@ class RealBlenderBridge:
         scene_inspector.apply_geometry_plan(plan)
 
     def configure_vrm(self, plan: VrmPlan) -> None:
-        from . import vrm_addon
+        from . import slim, vrm_addon
         vrm_addon.configure(plan)
+        slim.slim(plan)
 
     def export_vrm(self, armature: str, output_path: str, all_influences: bool = False) -> None:
         from . import vrm_addon
