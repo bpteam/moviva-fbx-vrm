@@ -9,6 +9,14 @@
   listens and reacts to you in real time.
 </p>
 
+<p align="center">
+  <img src="docs/screenshot-start.png" alt="Start: drop a character" width="45%">
+  &nbsp;
+  <img src="docs/screenshot-result.png" alt="Result: what the avatar can do, lip sync marked missing" width="45%">
+</p>
+<p align="center"><sub>Before and after: here a model without mouth shapes converts, and the window says its lips will
+stay still and why.</sub></p>
+
 Drop a rigged 3D character (FBX, GLB or glTF), get a **VRM 1.0** avatar for [Moviva](https://moviva.bpt22.tech/?utm_source=github) and any other VRM app.
 Everything runs on your computer: nothing is uploaded, nothing to install, Blender is built in.
 
@@ -27,7 +35,7 @@ why and what to fix.
 | System | File | First start |
 |---|---|---|
 | Windows 10/11 x64 | `moviva-fbx-to-vrm-windows-x64.zip` | SmartScreen: *More info → Run anyway* (the app is not signed) |
-| macOS 14+ Apple Silicon | `moviva-fbx-to-vrm-macos-arm64.zip` | *System Settings → Privacy & Security → Open Anyway*, or `xattr -dr com.apple.quarantine moviva-fbx-to-vrm.app` |
+| macOS 12+ Apple Silicon (M1 and newer) | `moviva-fbx-to-vrm-macos-arm64.zip` | *System Settings → Privacy & Security → Open Anyway*, or `xattr -dr com.apple.quarantine moviva-fbx-to-vrm.app` |
 | Linux x64 (glibc 2.35+: Ubuntu 22.04, Debian 12, Fedora 36 or newer) | `moviva-fbx-to-vrm-linux-x64.tar.gz` | needs an X11/Wayland desktop (`libxcb-cursor0` on Debian/Ubuntu) |
 
 Intel Macs and ARM Linux are not supported: Blender publishes no `bpy` build for them.
@@ -100,6 +108,10 @@ request (the binaries are downloadable from the run for 14 days). A merge to `ma
 the three archives as GitHub release `v<version>.<run number>` (version from `pyproject.toml`); if any system fails,
 nothing is released. PyInstaller cannot cross-compile, so each system is
 built on its own runner.
+
+### Screenshots
+
+`docs/screenshot-*.png` come from the real window: `QT_QPA_PLATFORM=offscreen QT_SCALE_FACTOR=2 python packaging/screenshots.py`.
 
 ### Intro picture
 
