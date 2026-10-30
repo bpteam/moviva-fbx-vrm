@@ -4,9 +4,14 @@ from character_vrm.blender import slim
 from character_vrm.core.model import MorphBind
 
 
+class Mesh:  # hashable by identity, like a bpy datablock by pointer
+    def __init__(self, shape_keys):
+        self.shape_keys = shape_keys
+
+
 def mesh(name, *keys):
     blocks = [NS(name=k) for k in ("Basis", *keys)]
-    obj = NS(name=name, type="MESH", data=NS(shape_keys=NS(key_blocks=blocks, reference_key=blocks[0])))
+    obj = NS(name=name, type="MESH", data=Mesh(NS(key_blocks=blocks, reference_key=blocks[0])))
     obj.shape_key_remove = blocks.remove
     return obj
 
@@ -18,6 +23,14 @@ def test_only_expression_keys_basis_and_moviva_vroid_morphs_survive():
     assert removed == 2
     assert [b.name for b in face.data.shape_keys.key_blocks] == ["Basis", "V_Open", "Fcl_BRW_Joy"]
     assert [b.name for b in body.data.shape_keys.key_blocks] == ["Basis"]  # same key name, unbound on this mesh
+
+
+def test_a_key_bound_on_one_user_of_a_shared_mesh_stays():
+    face = mesh("Face", "V_Open", "Unused")
+    twin = NS(name="FaceTwin", type="MESH", data=face.data, shape_key_remove=face.shape_key_remove)
+    plan = NS(expressions={"aa": NS(binds=[MorphBind("Face", "V_Open")])})
+    assert slim.drop_unbound_shape_keys(plan, [twin, face]) == 1
+    assert [b.name for b in face.data.shape_keys.key_blocks] == ["Basis", "V_Open"]
 
 
 def test_textures_shrink_to_1024_on_the_longest_side_keeping_the_aspect():
