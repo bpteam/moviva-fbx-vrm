@@ -218,9 +218,14 @@ def run(
             emit()
             emit("Dry run: nothing was exported.")
             return EXIT_OK
+        from .core import compress, surface_labels
+        doc, _ = compress.read_glb(output)  # skin / cloth / limb / body labels for the avatar's contact rules
+        unnamed = {m.get("name", "") for m in doc.get("materials", []) if not surface_labels.class_from_name(m.get("name", ""))}
+        votes = bridge.surface_votes(outcome.report["humanoid"]["armature"], unnamed) \
+            if unnamed and hasattr(bridge, "surface_votes") else {}
+        outcome.report["surfaceLabels"] = compress.add_surface_labels(output, votes)
         compression = {}
         if getattr(args, "ktx2", False) or getattr(args, "meshopt", False):
-            from .core import compress
             if args.ktx2:
                 compression["ktx2"] = compress.compress_textures(output, log=emit)
             if args.meshopt:

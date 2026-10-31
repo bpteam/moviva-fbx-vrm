@@ -260,3 +260,10 @@ def source_expressions(data: Any) -> dict[str, dict[str, float]]:
         if out:
             break
     return out
+
+
+def humanoid_bone(armature: Any, vrm_bone: str) -> str | None:
+    """The armature bone the add-on maps to a VRM 1.0 human bone (``leftUpperArm``), or None."""
+    node = getattr(extension(armature).vrm1.humanoid.human_bones, snake(vrm_bone), None)
+    name = node.node.bone_name if node is not None else ""
+    return name or None

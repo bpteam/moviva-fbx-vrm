@@ -88,6 +88,12 @@ class RealBlenderBridge:
         vrm_addon.configure(plan)
         slim.slim(plan)
 
+    def surface_votes(self, armature: str, materials: set[str]) -> dict[str, str]:
+        """MediaPipe's class for each material whose name says nothing (``core.surface_labels``)."""
+        import bpy
+        from . import surface_vote
+        return surface_vote.vote(bpy, armature, materials)
+
     def export_vrm(self, armature: str, output_path: str, all_influences: bool = False) -> None:
         from . import vrm_addon
         vrm_addon.export(armature, output_path, all_influences)

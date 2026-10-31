@@ -225,3 +225,94 @@ def compress_geometry(path: Path) -> dict:
         doc[key] = sorted(set(doc.get(key, [])) | {"EXT_meshopt_compression"})
     write_glb(path, doc, pack.new)
     return {"views": views, "before": before, "after": after}
+
+
+def _read_accessor(doc: dict, blob: bytes, i: int):
+    """An accessor as a (count, width) float array (normalised integers scaled to 0..1). Dense views only."""
+    import numpy as np
+    a = doc["accessors"][i]
+    dtype = {5121: np.uint8, 5123: np.uint16, 5125: np.uint32, 5126: np.float32}[a["componentType"]]
+    width = _WIDTH[a["type"]]
+    bv = doc["bufferViews"][a["bufferView"]]
+    item = np.dtype(dtype).itemsize * width
+    stride = bv.get("byteStride", item)
+    start = bv.get("byteOffset", 0) + a.get("byteOffset", 0)
+    raw = np.frombuffer(bytes(blob[start:start + stride * (a["count"] - 1) + item]), np.uint8)
+    rows = np.lib.stride_tricks.as_strided(raw, (a["count"], item), (stride, 1)).copy()
+    out = rows.view(dtype).reshape(a["count"], width).astype(np.float64)
+    if a.get("normalized") and dtype != np.float32:
+        out /= np.iinfo(dtype).max
+    return out
+
+
+def add_surface_labels(path: Path, votes: dict | None = None) -> dict:
+    """The ``_MOVIVA_SURFACE`` vertex attribute on every skinned primitive and the ``MOVIVA_surface_labels`` root
+    extension (``core.surface_labels``). Returns the report section: per mesh, vertices per label and the signal
+    that decided each material."""
+    import numpy as np
+    from . import surface_labels as SL
+    doc, blob = read_glb(path)
+    human = doc.get("extensions", {}).get("VRMC_vrm", {}).get("humanoid", {}).get("humanBones", {})
+    arm_nodes = {b["node"] for name, b in human.items() if name in SL.ARM_BONES}
+    pack = _Packer(doc, blob)
+    labels_for: dict[int, np.ndarray] = {}  # POSITION accessor -> labels (primitives may share vertex buffers)
+    report: dict[str, dict] = {}
+    for mesh in doc.get("meshes", []):
+        mesh_name = mesh.get("name", "")
+        entry = report.setdefault(mesh_name or f"mesh{len(report)}", {"labels": {}, "materials": {}})
+        for p in mesh["primitives"]:
+            attrs = p["attributes"]
+            if "JOINTS_0" not in attrs or "WEIGHTS_0" not in attrs or "indices" not in p:
+                continue
+            mat = doc["materials"][p["material"]].get("name", "") if "material" in p else ""
+            cls, signal = SL.decide(mat, mesh_name, votes)
+            entry["materials"][mat] = {"class": cls, "signal": signal}
+            pos = attrs["POSITION"]
+            count = doc["accessors"][pos]["count"]
+            if pos not in labels_for:
+                labels_for[pos] = np.full(count, SL.ID["cloth_body"], np.uint8)
+            skin = next((s for s in doc.get("skins", []) if s), None)
+            joints = _read_accessor(doc, blob, attrs["JOINTS_0"]).astype(int)
+            weights = _read_accessor(doc, blob, attrs["WEIGHTS_0"])
+            skin_index = next((n.get("skin") for n in doc["nodes"] if n.get("mesh") == doc["meshes"].index(mesh)), 0)
+            nodes = np.array(doc["skins"][skin_index or 0]["joints"]) if skin else np.zeros(1, int)
+            arm = (np.isin(nodes[joints.clip(0, len(nodes) - 1)], list(arm_nodes)) * weights).sum(axis=1)
+            used = np.unique(_read_accessor(doc, blob, p["indices"]).astype(int).ravel())
+            if cls == "per-vertex":  # the nearest point MediaPipe labelled, vertex by vertex
+                pts = np.array([q[:3] for q in votes["points"]], float)
+                kinds = [q[3] for q in votes["points"]]
+                xyz = _read_accessor(doc, blob, pos)[used]
+                near = [int(np.argmin(((pts - x) ** 2).sum(axis=1))) for x in xyz]
+                ids = np.array([SL.label(kinds[n], w) for n, w in zip(near, arm[used])], np.uint8)
+            else:
+                ids = np.array([SL.label(cls, w) for w in arm[used]], np.uint8)
+            labels_for[pos][used] = ids
+            for k, n in zip(*np.unique(ids, return_counts=True)):
+                name = SL.CLASSES[k]
+                entry["labels"][name] = entry["labels"].get(name, 0) + int(n)
+    if not labels_for:
+        return {}
+    # keep every view's bytes, append one 4-byte-strided view per labelled vertex buffer (glTF aligns attributes)
+    for vi in range(len(doc["bufferViews"])):
+        bv = doc["bufferViews"][vi]
+        bv["byteOffset"], bv["byteLength"] = pack.add(pack.view_bytes(vi))
+    accessor_of: dict[int, int] = {}
+    for pos, lab in labels_for.items():
+        padded = np.zeros((len(lab), 4), np.uint8)
+        padded[:, 0] = lab
+        off, length = pack.add(padded.tobytes())
+        doc["bufferViews"].append({"buffer": 0, "byteOffset": off, "byteLength": length, "byteStride": 4,
+                                   "target": 34962})
+        doc["accessors"].append({"bufferView": len(doc["bufferViews"]) - 1, "componentType": 5121,
+                                 "count": len(lab), "type": "SCALAR"})
+        accessor_of[pos] = len(doc["accessors"]) - 1
+    for mesh in doc["meshes"]:
+        for p in mesh["primitives"]:
+            if p["attributes"].get("POSITION") in accessor_of and "JOINTS_0" in p["attributes"]:
+                p["attributes"]["_MOVIVA_SURFACE"] = accessor_of[p["attributes"]["POSITION"]]
+    doc["buffers"][0]["byteLength"] = len(pack.new)
+    doc.setdefault("extensions", {})["MOVIVA_surface_labels"] = {"version": 1, "classes": list(SL.CLASSES),
+                                                                  "source": "character_vrm"}
+    doc["extensionsUsed"] = sorted(set(doc.get("extensionsUsed", [])) | {"MOVIVA_surface_labels"})
+    write_glb(path, doc, pack.new)
+    return report
