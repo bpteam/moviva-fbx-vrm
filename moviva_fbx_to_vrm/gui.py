@@ -36,6 +36,9 @@ STYLE = """
 QWidget { background: #0b1319; color: #eef3f7; font-size: 14px; }
 QLabel#title { font-size: 20px; font-weight: 700; }
 QLabel#muted, QCheckBox#muted { color: #a9bac8; }
+QCheckBox::indicator { width: 16px; height: 16px; border: 2px solid #a9bac8; border-radius: 4px; background: #0f1620; }
+QCheckBox::indicator:checked { background: #ff7546; border-color: #ff7546; }
+QCheckBox::indicator:disabled { border-color: #3a4652; background: #141c26; }
 QFrame#drop { border: 2px dashed #405461; border-radius: 14px; background: #0c141a; }
 QFrame#drop[hover="true"] { border-color: #ff5d2b; background: #21191a; }
 QFrame#card { background: #101b22; border-radius: 12px; }

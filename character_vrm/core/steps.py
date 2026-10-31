@@ -46,10 +46,12 @@ STEPS: tuple[StepSpec, ...] = (
              "CPU", "bundled Blender", "Needs recognizable humanoid geometry, preferably a T- or A-pose. "
              "Stylized or covered limbs reduce quality. Skeleton and skin weights are one step.", "standard",
              requires=("humanoid_geometry", "no_armature")),
-    StepSpec("face_expressions", "Generate facial expressions", "Moviva Face Auto-Author",
-             "Generates missing blink, visemes and basic emotions as shape keys on the face mesh.",
-             "CPU", "bundled", "Needs a dense, geometric face; a painted mouth or a low-poly face is skipped.",
-             "standard", requires=("armature_or_rig", "face_geometry", "expressions_missing"), after=("auto_rig",)),
+    StepSpec("face_expressions", "Generate facial expressions", "MediaPipe Face Landmarker + Moviva Face Auto-Author",
+             "Finds eyes, lips and brows (MediaPipe on a rendered view, the face geometry otherwise) and generates "
+             "missing blink, visemes and basic emotions as shape keys on the face mesh.",
+             "CPU", "bundled", "Painted eyes cannot blink; a face MediaPipe does not recognise needs dense geometry. "
+             "What cannot be made safely is skipped and reported.",
+             "standard", requires=("armature_or_rig", "expressions_missing"), after=("auto_rig",)),
     StepSpec("spring_bones", "Configure secondary animation", "Moviva hair / spring-bone authoring",
              "Turns existing hair bones into VRM spring bones with colliders.", "CPU", "bundled",
              "Only existing hair bones are used unless the experimental hair rig is on.", "fast",
@@ -61,11 +63,6 @@ STEPS: tuple[StepSpec, ...] = (
     StepSpec("hair_rig", "Generate hair bones", "Moviva experimental hair rig",
              "Bones for a hair mesh that has none.", "CPU", "bundled", "Experimental.", "standard",
              requires=("armature_or_rig",), experimental=True, after=("auto_rig",)),
-    StepSpec("face_landmarks", "Detect facial landmarks", "MediaPipe Face Landmarker",
-             "Finds eyes, lips and brows on rendered views and projects them onto the head.", "CPU", "MediaPipe",
-             "Runs with the facial-expression step; on stylised faces it may find nothing, and the geometry decides.",
-             "standard", requires=("face_geometry",), available=False,
-             unavailable_reason="Always on when the face is analysed: its points replace only weak geometric guesses."),
     StepSpec("ai_rigging", "AI auto-rigging (replaces the CPU auto-rig)", "SkinTokens / TokenRig",
              "AI skeleton (fingers included) and skin weights on the GPU; textures and scale are kept.",
              "NVIDIA GPU, 14 GB+ VRAM", "Python 3.11 + PyTorch CUDA + weights, downloaded once on demand (~12 GB)",
@@ -73,6 +70,7 @@ STEPS: tuple[StepSpec, ...] = (
              requires=("humanoid_geometry", "no_armature"), experimental=True),
 )
 BY_ID = {s.id: s for s in STEPS}
+ALTERNATIVES = {"auto_rig": ("ai_rigging",)}  # a prerequisite another enabled step provides as well
 
 
 @dataclass
@@ -148,7 +146,7 @@ def plan(facts: Facts, selected: dict[str, bool] | None = None) -> list[PlannedS
         if spec.id == "spring_bones" and not facts.spring_bones_possible:
             status, default_on = OPTIONAL, False
         why = {"auto_rig": "The model has a humanoid body but no skeleton.",
-               "face_expressions": "Blink and visemes are missing. Skipped automatically if the face geometry is not safe to deform.",
+               "face_expressions": "Blink and visemes are missing. Whatever the face cannot carry safely is skipped and reported.",
                "spring_bones": "Hair bones were found.",
                "ai_rigging": "Installed: runs instead of the CPU auto-rig." if facts.ai_rig == "READY" else
                "Not installed: switching it on offers the one-time download."}.get(spec.id, "Optional enhancement.")
@@ -164,6 +162,8 @@ def plan(facts: Facts, selected: dict[str, bool] | None = None) -> list[PlannedS
             d = out[dep]
             if d.status == NOT_NEEDED:
                 continue  # the model already has what the prerequisite makes
+            if any(out[a].enabled for a in ALTERNATIVES.get(dep, ()) if a in out):
+                continue
             if not d.enabled:
                 step.enabled = False
                 step.blocked_by.append(dep)
