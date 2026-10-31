@@ -35,7 +35,7 @@ def main(argv: Sequence[str] | None = None) -> int:
 
     # Cheap failures before starting a multi-second Blender.
     try:
-        if args.command != "doctor":
+        if args.command not in ("doctor", "ai"):
             if not Path(args.source).is_file():
                 print(f"ERROR source not found: {args.source}", file=sys.stderr)
                 return EXIT_FAILED
