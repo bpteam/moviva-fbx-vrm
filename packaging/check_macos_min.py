@@ -1,6 +1,6 @@
 """Fails when any Mach-O file in the built app needs a newer macOS than the app promises (``LSMinimumSystemVersion``).
 
-Run on macOS after the build:  python packaging/check_macos_min.py "dist/moviva-fbx-to-vrm.app" 12.0
+Run on macOS after the build:  python packaging/check_macos_min.py "dist/moviva-fbx-to-vrm.app" 14.0
 """
 
 import re

@@ -10,7 +10,7 @@ license = "GPL-3.0-or-later"
 requires-python = "==3.13.*"  # the bpy wheel is built for exactly one Python
 dependencies = [
   "bpy==5.2.2",  # must match character_vrm/toolchain.json
-  "PySide6-Essentials>=6.8,<6.10",  # 6.10+ needs macOS 13+, 6.8 is the first for Python 3.13: keeps macOS 12
+  "PySide6-Essentials>=6.8,<6.10",  # 6.8 is the first for Python 3.13
 ]
 
 [project.optional-dependencies]
