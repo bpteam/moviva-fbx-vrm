@@ -87,6 +87,7 @@ class ConfigView(QWidget):
         self.selected: dict[str, bool] = {}
         self.steps: list[PlannedStep] = []
         self.profile = "video-call"  # what Moviva shows; kept across models in one session
+        self.compress = {"ktx2": False, "meshopt": False}  # Moviva-only files: off unless asked
 
     def load(self, document: dict) -> None:
         from character_vrm.ai import skintokens
@@ -113,6 +114,7 @@ class ConfigView(QWidget):
             note.setWordWrap(True)
             self.layout_.addWidget(note)
         self.layout_.addWidget(self._profile_row())
+        self.layout_.addWidget(self._compress_row())
         for step in self.steps:
             card = StepCard(step)
             card.toggled.connect(lambda c=card, sid=step.spec.id: self._changed(sid, c.box.isChecked()))
@@ -135,6 +137,25 @@ class ConfigView(QWidget):
         combo.setCurrentIndex(combo.findData(self.profile))
         combo.currentIndexChanged.connect(lambda _: setattr(self, "profile", combo.currentData()))
         lay.addWidget(combo)
+        return row
+
+    def _compress_row(self) -> QFrame:
+        """KTX2 / meshopt: the converter's --ktx2 / --meshopt, with who can open the result in the tooltip."""
+        from character_vrm.core.compress import ktx_tool
+        row = QFrame()
+        row.setObjectName("card")
+        lay = QHBoxLayout(row)
+        lay.addWidget(QLabel(t("compress.title")))
+        info = QLabel("ⓘ")
+        info.setToolTip(f"<p>{escape(t('compress.help'))}</p>")
+        lay.addWidget(info)
+        lay.addStretch(1)
+        for key, available in (("ktx2", ktx_tool() is not None), ("meshopt", True)):
+            box = QCheckBox(t(f"compress.{key}"))
+            box.setChecked(self.compress[key] and available)
+            box.setEnabled(available)
+            box.toggled.connect(lambda on, k=key: self.compress.__setitem__(k, on))
+            lay.addWidget(box)
         return row
 
     def _changed(self, step_id: str, on: bool) -> None:

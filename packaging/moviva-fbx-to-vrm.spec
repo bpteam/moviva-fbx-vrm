@@ -16,7 +16,7 @@ MEDIAPIPE = Path(importlib.util.find_spec("mediapipe").origin).parent
 # Blender's own scripts and the VRM Add-on import standard-library modules PyInstaller cannot see, so ship them all.
 skip = {"tkinter", "turtle", "turtledemo", "idlelib", "test", "lib2to3", "ensurepip", "pydoc_data", "__phello__"}
 stdlib = sorted(m for m in sys.stdlib_module_names if m not in skip and not m.startswith("_"))
-hidden = [sub for name in stdlib + ["numpy", "zstandard", "requests", "cattrs", "absl", "flatbuffers", "certifi"]
+hidden = [sub for name in stdlib + ["numpy", "zstandard", "requests", "cattrs", "absl", "flatbuffers", "certifi", "meshoptimizer"]
           for sub in collect_submodules(name, filter=lambda m: ".tests" not in m and ".test." not in m)]
 
 a = Analysis(
