@@ -70,3 +70,9 @@ def test_russian_summary_and_language_detection():
         assert summarize(AMBER).headline == "Аватар готов."
     finally:
         set_language("en")
+
+
+def test_generated_rig_is_reported_first():
+    report = {**AMBER, "autoRig": {"status": "CHECK", "method": "blender-bone-heat"}}
+    s = summarize(report)
+    assert s.checks[0].status == WARN and "blender-bone-heat" in s.checks[0].detail

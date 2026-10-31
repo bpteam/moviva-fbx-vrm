@@ -72,6 +72,10 @@ def _bone_words(detail: str) -> str:
 def _checks(report: dict[str, Any]) -> list[Check]:
     checks = [_body(report), _hands(report), _blink(report), _lips(report), _moods(report), _eyes(report),
               _hair(report), _weight(report)]
+    rig = report.get("autoRig")
+    if rig:  # generated, not source: say so first
+        checks.insert(0, Check(OK if rig["status"] == "PASS" else WARN, t("autorig.title"),
+                               t("autorig.detail", method=rig["method"], status=rig["status"])))
     return [c for c in checks if c is not None]
 
 

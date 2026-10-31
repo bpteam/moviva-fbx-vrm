@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+from dataclasses import asdict
 import json
 from pathlib import Path
 from typing import Callable, Sequence, TextIO
@@ -10,6 +11,9 @@ from typing import Callable, Sequence, TextIO
 from .blender.bridge import BlenderBridge
 from .core.config import ConfigError, ConversionConfig, GEOMETRY_PROFILES, load_config
 from .core.errors import ConversionError
+from .core.events import encode as encode_event
+from .core.preflight import run_preflight
+from .core.steps import plan as plan_steps
 from .core.pipeline import ConverterCore, source_format
 from .core.anatomy.report import format_analysis
 from .core.authoring.report import authoring_to_dict, format_authoring
@@ -55,6 +59,10 @@ def build_parser(prog: str = "character-vrm", with_blender: bool = True) -> argp
     p = sub.add_parser("inspect", help="import and describe a character")
     p.add_argument("source")
     common(p)
+    p = sub.add_parser("preflight", help="inspect a model (with or without a skeleton) and print the processing "
+                                         "plan as JSON; converts nothing")
+    p.add_argument("source")
+    common(p)
     p = sub.add_parser("analyze", help="describe the anatomy of a character (frame, skeleton, hands, face, hair, "
                                        "materials) without modifying it")
     p.add_argument("source")
@@ -68,6 +76,7 @@ def build_parser(prog: str = "character-vrm", with_blender: bool = True) -> argp
     p.add_argument("source")
     p.add_argument("output")
     p.add_argument("--dry-run", action="store_true", help="analyse and report; write no VRM")
+    p.add_argument("--events", action="store_true", help="print structured progress as '@event {json}' lines")
     p.add_argument("--no-springs", action="store_true", help="never generate spring bones")
     common(p)
     return parser
@@ -127,8 +136,15 @@ def run(
             return EXIT_OK if report.ok else EXIT_FAILED
 
         config = _load_config(args)
-        core = ConverterCore(bridge)
+        events = (lambda e: emit(encode_event(e))) if getattr(args, "events", False) else None
+        core = ConverterCore(bridge, events=events)
         source = Path(args.source).resolve()
+
+        if args.command == "preflight":
+            info, facts = run_preflight(core.load(source), source, config)
+            document = {"model": info, "facts": asdict(facts), "steps": [s.to_dict() for s in plan_steps(facts)]}
+            emit("@preflight " + json.dumps(document))  # one line: the window finds it among Blender's log output
+            return EXIT_OK
 
         if args.command == "inspect":
             analysis = core.inspect(source, config)

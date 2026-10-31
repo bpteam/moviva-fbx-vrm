@@ -94,5 +94,18 @@
  "weight.ok": "{triangles} triangles.",
  "weight.ok_size": "{triangles} triangles, {size}.",
  "size.mb": "{mb} MB",
- "size.unknown": "size unknown"
+ "size.unknown": "size unknown",
+ "analysis.geometry": "Humanoid geometry ({confidence} confidence)",
+ "analysis.skeleton": "Skeleton present",
+ "analysis.skin": "Skin weights present",
+ "analysis.morphs": "{n} facial / shape keys",
+ "analysis.textures": "{n} textures",
+ "card.hardware": "Hardware:",
+ "card.software": "Software:",
+ "card.cost": "Cost:",
+ "card.limits": "Limits:",
+ "button.start": "Start conversion",
+ "stage.preflight": "Analyzing the model",
+ "autorig.title": "Generated skeleton",
+ "autorig.detail": "The skeleton and skin weights were generated from the geometry ({method}). Pose tests: {status}. Check arms, legs and head in a viewer before using the avatar."
 }

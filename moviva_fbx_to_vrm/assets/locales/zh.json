@@ -94,5 +94,18 @@
  "weight.ok": "{triangles} 个三角面。",
  "weight.ok_size": "{triangles} 个三角面，{size}。",
  "size.mb": "{mb} MB",
- "size.unknown": "大小未知"
+ "size.unknown": "大小未知",
+ "analysis.geometry": "人形几何（置信度 {confidence}）",
+ "analysis.skeleton": "已有骨架",
+ "analysis.skin": "已有蒙皮权重",
+ "analysis.morphs": "{n} 个形态键",
+ "analysis.textures": "{n} 张贴图",
+ "card.hardware": "硬件：",
+ "card.software": "软件：",
+ "card.cost": "开销：",
+ "card.limits": "限制：",
+ "button.start": "开始转换",
+ "stage.preflight": "正在分析模型",
+ "autorig.title": "自动生成的骨架",
+ "autorig.detail": "骨架和蒙皮权重由几何体自动生成（{method}）。姿势测试：{status}。使用前请在查看器中检查手臂、腿部和头部。"
 }

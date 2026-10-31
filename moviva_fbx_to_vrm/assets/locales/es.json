@@ -94,5 +94,18 @@
  "weight.ok": "{triangles} triángulos.",
  "weight.ok_size": "{triangles} triángulos, {size}.",
  "size.mb": "{mb} MB",
- "size.unknown": "tamaño desconocido"
+ "size.unknown": "tamaño desconocido",
+ "analysis.geometry": "Geometría humanoide (confianza {confidence})",
+ "analysis.skeleton": "Esqueleto presente",
+ "analysis.skin": "Pesos de piel presentes",
+ "analysis.morphs": "{n} claves de forma",
+ "analysis.textures": "{n} texturas",
+ "card.hardware": "Hardware:",
+ "card.software": "Software:",
+ "card.cost": "Coste:",
+ "card.limits": "Límites:",
+ "button.start": "Iniciar conversión",
+ "stage.preflight": "Analizando el modelo",
+ "autorig.title": "Esqueleto generado",
+ "autorig.detail": "El esqueleto y los pesos de piel se generaron a partir de la geometría ({method}). Pruebas de pose: {status}. Revisa brazos, piernas y cabeza en un visor antes de usar el avatar."
 }

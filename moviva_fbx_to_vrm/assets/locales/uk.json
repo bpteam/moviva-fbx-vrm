@@ -94,5 +94,18 @@
  "weight.ok": "{triangles} трикутників.",
  "weight.ok_size": "{triangles} трикутників, {size}.",
  "size.mb": "{mb} МБ",
- "size.unknown": "розмір невідомий"
+ "size.unknown": "розмір невідомий",
+ "analysis.geometry": "Гуманоїдна геометрія (впевненість {confidence})",
+ "analysis.skeleton": "Скелет є",
+ "analysis.skin": "Ваги шкіри є",
+ "analysis.morphs": "Ключів форми обличчя: {n}",
+ "analysis.textures": "Текстур: {n}",
+ "card.hardware": "Залізо:",
+ "card.software": "ПЗ:",
+ "card.cost": "Вартість:",
+ "card.limits": "Обмеження:",
+ "button.start": "Почати конвертацію",
+ "stage.preflight": "Аналіз моделі",
+ "autorig.title": "Створений скелет",
+ "autorig.detail": "Скелет і ваги шкіри створено за геометрією ({method}). Тести поз: {status}. Перевірте руки, ноги й голову у переглядачі перед використанням."
 }
