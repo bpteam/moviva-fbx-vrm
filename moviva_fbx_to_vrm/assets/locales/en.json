@@ -112,5 +112,9 @@
  "geometry.video-call": "Video call: waist up",
  "geometry.face": "Face: chest up",
  "geometry.full": "Full body",
- "geometry.help": "Everything below the cut is removed from the file: triangles, vertices, skin weights, shape-key data, and materials and textures nothing else uses. The bones stay (VRM requires them). The avatar loads faster and costs the GPU less. Video call is what Moviva shows; choose Full body for other VRM apps that show the legs."
+ "geometry.help": "Everything below the cut is removed from the file: triangles, vertices, skin weights, shape-key data, and materials and textures nothing else uses. The bones stay (VRM requires them). The avatar loads faster and costs the GPU less. Video call is what Moviva shows; choose Full body for other VRM apps that show the legs.",
+ "compress.title": "Compress for Moviva",
+ "compress.ktx2": "KTX2 textures",
+ "compress.meshopt": "meshopt geometry",
+ "compress.help": "Textures as KTX2: about 4 times less video memory, so the avatar runs smoother on weak devices. Geometry with meshopt: a smaller file that downloads faster. Moviva opens such files; many other VRM apps do not, so leave both off for those."
 }

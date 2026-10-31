@@ -321,7 +321,7 @@ class Window(QWidget):
         self.output.with_name(self.output.name + ".report.json").unlink(missing_ok=True)  # never read a stale one
         # the visible part and the step flags come from the configure screen the user confirmed
         args = ["convert", str(source), str(self.output), "--geometry-profile", self.config.profile, "--events",
-                *cli_flags(self.config.steps)]
+                *cli_flags(self.config.steps), *[f"--{k}" for k, on in self.config.compress.items() if on]]
         self.step_list.reset(self.config.steps)
         self.step_list.setVisible(True)
         self.progress_stage.setText(t("stage.starting"))

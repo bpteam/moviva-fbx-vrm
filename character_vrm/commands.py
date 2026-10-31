@@ -85,6 +85,10 @@ def build_parser(prog: str = "character-vrm", with_blender: bool = True) -> argp
     p.add_argument("--dry-run", action="store_true", help="analyse and report; write no VRM")
     p.add_argument("--events", action="store_true", help="print structured progress as '@event {json}' lines")
     p.add_argument("--no-springs", action="store_true", help="never generate spring bones")
+    p.add_argument("--ktx2", action="store_true",
+                   help="textures as KTX2 (4x less GPU memory); only loaders with a KTX2 decoder open the file")
+    p.add_argument("--meshopt", action="store_true",
+                   help="geometry as EXT_meshopt_compression (smaller file); only loaders with a meshopt decoder open it")
     common(p)
     return parser
 
@@ -214,6 +218,14 @@ def run(
             emit()
             emit("Dry run: nothing was exported.")
             return EXIT_OK
+        compression = {}
+        if getattr(args, "ktx2", False) or getattr(args, "meshopt", False):
+            from .core import compress
+            if args.ktx2:
+                compression["ktx2"] = compress.compress_textures(output, log=emit)
+            if args.meshopt:
+                compression["meshopt"] = compress.compress_geometry(output)
+            outcome.report["compression"] = {**compression, "bytes": output.stat().st_size}
         report_path.write_text(json.dumps(outcome.report, indent=2) + "\n", encoding="utf-8")
         emit(f"Converted: {output}")
         emit(f"Report:    {report_path}")
