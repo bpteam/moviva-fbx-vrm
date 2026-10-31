@@ -131,7 +131,7 @@ def fit_skeleton(points: np.ndarray) -> RigFit:
         width[i] = _central_halfwidth(l[m], gap)
         extent[i] = float(np.abs(l[m]).max())
         lm = l[m]
-        g = max(gap, 4.0 * float(np.ptp(lm)) / len(lm))
+        g = max(gap, 4.0 * float(np.median(np.diff(np.sort(lm)))))  # typical spacing, not range: two legs are far apart
         split[i] = (lm > g).sum() >= 3 and (lm < -g).sum() >= 3 and \
             not ((lm > -g) & (lm < g)).any()
     t = (edges[:-1] + edges[1:]) / 2 / H
@@ -153,7 +153,10 @@ def fit_skeleton(points: np.ndarray) -> RigFit:
 
     # Neck: the narrowest outline between the legs and the top of a (possibly huge) head, highest among near-ties.
     lo, hi = int(0.40 * SLICES), int(0.88 * SLICES)  # above that: a hair tip, not a neck
-    w = np.where(np.isnan(extent[lo:hi]), np.inf, extent[lo:hi])
+    # running max over 3 slices: a slice that happens to hold few vertices must not read as a narrow waist
+    pad = np.where(np.isnan(extent), 0.0, extent)
+    smooth = np.maximum(np.maximum(np.roll(pad, 1), pad), np.roll(pad, -1))
+    w = np.where(np.isnan(extent[lo:hi]), np.inf, smooth[lo:hi])
     if np.isfinite(w).any():
         near = np.where(w <= w.min() * 1.08)[0]
         neck_u = float(edges[lo + near[-1]] + H / SLICES / 2)
@@ -170,7 +173,7 @@ def fit_skeleton(points: np.ndarray) -> RigFit:
     # A hollow low-poly slice has no vertices near the middle, so the central cluster reads far too thin;
     # half the outline (arms included) is a floor for the torso half-width.
     ext_w = [extent[i] for i in wb if not np.isnan(extent[i])]
-    if ext_w:
+    if ext_w and waist_half < 0.05 * H:  # only when the cluster is implausibly thin
         waist_half = max(waist_half, 0.5 * float(np.median(ext_w)))
     waist_u = (crotch + sh_u) / 2
     # Shoulder width: the widest torso-only slice between mid-torso and the neck (arms may be out, so cap it).
@@ -178,7 +181,7 @@ def fit_skeleton(points: np.ndarray) -> RigFit:
             and not np.isnan(width[i])]
     sh_half = float(np.clip(max((width[i] for i in band), default=waist_half), 0.8 * waist_half, 1.3 * waist_half))
     ext_s = [extent[i] for i in band if not np.isnan(extent[i])]
-    if ext_s:
+    if ext_s and sh_half < 0.05 * H:
         sh_half = max(sh_half, 0.5 * float(min(ext_s)))
 
     # Arms: vertices clearly outside the torso between the knees and the neck.
