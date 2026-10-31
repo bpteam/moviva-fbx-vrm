@@ -17,11 +17,17 @@
 <p align="center"><sub>Before and after: here a model without mouth shapes converts, and the window says its lips will
 stay still and why.</sub></p>
 
-Drop a rigged 3D character (FBX, GLB or glTF), get a **VRM 1.0** avatar for [Moviva](https://moviva.bpt22.tech/?utm_source=github) and any other VRM app.
+Drop a 3D character (FBX, GLB, glTF or an existing VRM), get a **VRM 1.0** avatar for [Moviva](https://moviva.bpt22.tech/?utm_source=github) and any other VRM app.
 Everything runs on your computer: nothing is uploaded, nothing to install, Blender is built in.
 
 The window speaks the six languages of the Moviva extension (English, Russian, Spanish, Ukrainian, Japanese,
 Simplified Chinese) and follows the system language; strings live in `moviva_fbx_to_vrm/assets/locales/`.
+
+Before converting, the window shows what it found in the model and the processing steps it suggests, each with a
+check box: generate a skeleton (CPU, or AI on an NVIDIA GPU), facial expressions, hair physics; the **visible part**
+(waist up for a video call, chest up, or the full body: everything below the cut is removed from the file); and
+**Moviva-only compression** (KTX2 textures, about 4x less GPU memory; meshopt geometry, a smaller file). An existing
+VRM goes through the same steps: its own expressions and hair physics are kept, the rest is cut and slimmed.
 
 After a conversion the window says, in plain words, what the avatar can do (body, fingers, blinking, lip sync,
 facial expressions, eye contact, hair, weight) and, when the model cannot be converted or something is missing,
@@ -49,7 +55,10 @@ Intel Macs and ARM Linux are not supported: Blender publishes no `bpy` build for
 
 ## What makes a good source model
 
-- **A skeleton** (armature) that moves the mesh. Unrigged models cannot be converted; Mixamo's free auto-rigger fixes that.
+- **A skeleton** (armature) that moves the mesh is best. Without one the converter fits one: on the CPU with
+  [Autorig Workbench](https://github.com/sambena/autorig-workbench) and Mesh2Motion's human skeleton, or, on an
+  NVIDIA GPU with 14 GB or more, with [SkinTokens](https://github.com/VAST-AI-Research/SkinTokens) (downloaded once,
+  about 12 GB, after you agree; Linux for now). Check the result's poses before relying on it.
 - **One character** per file.
 - **Facial blend shapes** (ARKit, VRoid, Character Creator, or visemes) for lip sync, blinking and expressions. Without
   them the converter generates what the face geometry allows; otherwise the avatar moves but its lips stay still.
@@ -70,6 +79,10 @@ tar -xzf moviva-fbx-to-vrm-linux-x64.tar.gz
 ./moviva-fbx-to-vrm/moviva-fbx-to-vrm convert model.fbx model.vrm --auto-author --generate-face --geometry-profile video-call
 # a model without a skeleton: fit one from the geometry and skin it (pose-tested; never replaces an existing rig)
 ./moviva-fbx-to-vrm/moviva-fbx-to-vrm convert statue.glb statue.vrm --auto-rig
+# the same with SkinTokens on an NVIDIA GPU (install once with: ai install)
+./moviva-fbx-to-vrm/moviva-fbx-to-vrm convert statue.glb statue.vrm --ai-rig
+# slim an existing VRM for Moviva: waist up, KTX2 textures, meshopt geometry
+./moviva-fbx-to-vrm/moviva-fbx-to-vrm convert avatar.vrm avatar-moviva.vrm --geometry-profile video-call --ktx2 --meshopt
 # inspect only, print the processing plan; --events adds '@event {json}' progress lines to convert
 ./moviva-fbx-to-vrm/moviva-fbx-to-vrm preflight statue.glb
 
@@ -81,6 +94,14 @@ All `character-vrm` commands and options work; see [character_vrm/README.md](cha
 writes `model.vrm` and `model.vrm.report.json`. On Windows the app is a windowed program: run it as
 `start /wait "" moviva-fbx-to-vrm\moviva-fbx-to-vrm.exe convert …` in `cmd` (or `Start-Process -Wait` in PowerShell) so the prompt
 waits for it.
+
+## Surface labels
+
+Every output VRM carries a per-vertex `_MOVIVA_SURFACE` attribute (skin or clothing, on a limb or the body, hair,
+accessory, face detail) and the `MOVIVA_surface_labels` root extension, so the avatar's motion can let a sleeve brush
+the body but never let a hand sink into it. Other viewers ignore both. The class comes from the material names
+(VRoid's `_SKIN` / `_CLOTH` / `_HAIR`, `Dress`, `Body_Hands`...), else from MediaPipe's segmentation of rendered views
+(rough on stylised characters with one texture atlas); the report names the signal for each material.
 
 ## How it is built
 
