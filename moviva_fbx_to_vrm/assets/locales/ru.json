@@ -94,5 +94,18 @@
  "weight.ok": "{triangles} треугольников.",
  "weight.ok_size": "{triangles} треугольников, {size}.",
  "size.mb": "{mb} МБ",
- "size.unknown": "размер неизвестен"
+ "size.unknown": "размер неизвестен",
+ "analysis.geometry": "Гуманоидная геометрия (уверенность {confidence})",
+ "analysis.skeleton": "Скелет есть",
+ "analysis.skin": "Веса кожи есть",
+ "analysis.morphs": "Лицевых ключей формы: {n}",
+ "analysis.textures": "Текстур: {n}",
+ "card.hardware": "Железо:",
+ "card.software": "ПО:",
+ "card.cost": "Цена:",
+ "card.limits": "Ограничения:",
+ "button.start": "Начать конвертацию",
+ "stage.preflight": "Анализ модели",
+ "autorig.title": "Созданный скелет",
+ "autorig.detail": "Скелет и веса кожи созданы по геометрии ({method}). Тесты поз: {status}. Проверьте руки, ноги и голову в просмотрщике перед использованием."
 }

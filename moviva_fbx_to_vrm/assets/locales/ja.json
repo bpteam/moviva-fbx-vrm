@@ -94,5 +94,18 @@
  "weight.ok": "{triangles} ポリゴン。",
  "weight.ok_size": "{triangles} ポリゴン、{size}。",
  "size.mb": "{mb} MB",
- "size.unknown": "サイズ不明"
+ "size.unknown": "サイズ不明",
+ "analysis.geometry": "ヒューマノイド形状（信頼度 {confidence}）",
+ "analysis.skeleton": "スケルトンあり",
+ "analysis.skin": "スキンウェイトあり",
+ "analysis.morphs": "シェイプキー {n} 個",
+ "analysis.textures": "テクスチャ {n} 枚",
+ "card.hardware": "ハードウェア:",
+ "card.software": "ソフトウェア:",
+ "card.cost": "処理コスト:",
+ "card.limits": "制限:",
+ "button.start": "変換を開始",
+ "stage.preflight": "モデルを解析中",
+ "autorig.title": "生成されたスケルトン",
+ "autorig.detail": "スケルトンとスキンウェイトをジオメトリから生成しました（{method}）。ポーズテスト: {status}。使用前にビューアで腕・脚・頭を確認してください。"
 }
