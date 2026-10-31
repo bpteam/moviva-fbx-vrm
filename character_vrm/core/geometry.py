@@ -87,7 +87,13 @@ def _is_attached_to_arm(mesh: MeshInfo, arm_bones: set[str]) -> bool:
     return bool(set(mesh.attached_bones) & arm_bones) or mesh.parent_bone in arm_bones
 
 
-def _has_hair_evidence(mesh: MeshInfo) -> bool:
+def _has_hair_evidence(mesh: MeshInfo, share: float = 0.3) -> bool:
+    """Hair by its weights: VRoid gives every mesh a vertex group for every bone, hair bones included, so a group
+    name alone says nothing. Without weights, the names decide."""
+    if mesh.vertex_weights:
+        hair = sum(1 for ws in mesh.vertex_weights.values()
+                   if sum(w for b, w in ws.items() if _contains(b, _HAIR_TOKENS)) >= 0.5)
+        return hair >= share * len(mesh.vertex_weights)
     return any(_contains(group, _HAIR_TOKENS) for group in (*mesh.vertex_groups, *mesh.attached_bones))
 
 

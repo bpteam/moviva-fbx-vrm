@@ -193,6 +193,8 @@ def inspect_scene(source_path: str, fmt: str, bpy: Any = None) -> CharacterInspe
         if image.name in used_images:
             width, height = image.size
             result.images.append(ImageInfo(image.name, int(width), int(height), bool(image.packed_file), image.filepath))
+    from .compat_v4_7_2 import source_expressions
+    result.source_expressions = source_expressions(data)
     try:
         from . import face_detect
         result.face_points = face_detect.detect(bpy)
@@ -254,3 +256,4 @@ def apply_geometry_plan(plan: GeometryOptimizationPlan, bpy: Any = None) -> None
 
     # Never remove materials or images here.  A shared skin atlas can be used
     # by a surviving hand polygon even when all leg polygons disappeared.
+

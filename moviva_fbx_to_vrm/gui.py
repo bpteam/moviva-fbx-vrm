@@ -23,7 +23,7 @@ from .config_view import ConfigView, StepList, parse_preflight
 from .i18n import language_for, set_language, t
 from .summary import BAD, FAILED, OK, READY, WARN, Summary, summarize
 
-SOURCES = (".fbx", ".glb", ".gltf")
+SOURCES = (".fbx", ".glb", ".gltf", ".vrm")  # a VRM is re-cut and slimmed
 ASSETS = Path(__file__).with_name("assets")
 INTRO_SIZE = (544, 200)  # shown size; assets/intro.png should be twice that (1088 x 400) for sharp HiDPI screens
 STAGES = ("reading", "analysing", "authoring", "writing")  # ``@stage <name>`` lines from the converter
@@ -63,7 +63,7 @@ def converter_command(args: list[str]) -> tuple[str, list[str]]:
 
 
 def free_output_path(source: Path) -> Path:
-    candidate = source.with_suffix(".vrm")
+    candidate = source.with_suffix(".vrm") if source.suffix.lower() != ".vrm" else source.with_name(source.stem + "-moviva.vrm")
     n = 2
     while candidate.exists():
         candidate = source.with_name(f"{source.stem}-{n}.vrm")
@@ -121,7 +121,7 @@ class DropZone(QFrame):
             self.on_file(path)
 
     def mousePressEvent(self, event) -> None:
-        name, _ = QFileDialog.getOpenFileName(self, t("drop.dialog"), "", f"{t('drop.filter')} (*.fbx *.glb *.gltf)")
+        name, _ = QFileDialog.getOpenFileName(self, t("drop.dialog"), "", f"{t('drop.filter')} (*.fbx *.glb *.gltf *.vrm)")
         if name:
             self.on_file(Path(name))
 
