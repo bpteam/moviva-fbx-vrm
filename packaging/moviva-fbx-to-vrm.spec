@@ -10,7 +10,7 @@ ROOT = Path(SPECPATH).parent
 NAME = "moviva-fbx-to-vrm"  # no spaces: folder, program and .app are typed in terminals
 BPY = Path(importlib.util.find_spec("bpy").origin).parent
 # MediaPipe, like bpy, loads its native library by path: copied as-is (packaging/fetch_mediapipe.py installs it)
-MEDIAPIPE = Path(importlib.util.find_spec("mediapipe").origin).parent if sys.platform.startswith("linux") else None
+MEDIAPIPE = Path(importlib.util.find_spec("mediapipe").origin).parent
 
 # bpy is a whole Blender: copied as-is, never analysed (its .so, datafiles and Python scripts load each other by path).
 # Blender's own scripts and the VRM Add-on import standard-library modules PyInstaller cannot see, so ship them all.
@@ -24,7 +24,7 @@ a = Analysis(
     pathex=[str(ROOT)],
     datas=[
         (str(BPY), "bpy"),
-        *([(str(MEDIAPIPE), "mediapipe")] if MEDIAPIPE else []),
+        (str(MEDIAPIPE), "mediapipe"),
         (str(ROOT / "vendor"), "vendor"),
         (str(ROOT / "character_vrm" / "toolchain.json"), "character_vrm"),
         (str(ROOT / "moviva_fbx_to_vrm" / "assets"), "moviva_fbx_to_vrm/assets"),
@@ -45,4 +45,4 @@ coll = COLLECT(exe, a.binaries, a.datas, name=NAME)
 if sys.platform == "darwin":
     app = BUNDLE(coll, name=f"{NAME}.app", icon=str(ROOT / "packaging" / "icon.png"),
                  bundle_identifier="app.moviva.fbx-to-vrm",
-                 info_plist={"CFBundleDisplayName": "Moviva FBX to VRM", "NSHighResolutionCapable": True, "LSMinimumSystemVersion": "12.0"})
+                 info_plist={"CFBundleDisplayName": "Moviva FBX to VRM", "NSHighResolutionCapable": True, "LSMinimumSystemVersion": "14.0"})

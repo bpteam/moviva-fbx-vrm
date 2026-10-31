@@ -42,9 +42,7 @@ def _landmarker(path: Path):
 
 def detect(bpy: Any) -> dict[str, tuple[float, float, float]]:
     """{landmark name: world position} for the face found, or {}."""
-    # shortcut: Linux only. Windows CI crashed rendering headless, and the macOS wheel needs macOS 14 (the app
-    # supports 12); enable each once a packaged build is checked there
-    if not sys.platform.startswith("linux"):
+    if os.environ.get("MOVIVA_NO_FACE_RENDER"):  # a machine without OpenGL (CI's Windows runners) crashes rendering
         return {}
     path = model_path()
     if path is None:
