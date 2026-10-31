@@ -116,5 +116,6 @@
  "compress.title": "Comprimir para Moviva",
  "compress.ktx2": "Texturas KTX2",
  "compress.meshopt": "Geometría meshopt",
- "compress.help": "Texturas en KTX2: unas 4 veces menos memoria de vídeo, el avatar va más fluido en dispositivos modestos. Geometría meshopt: archivo más pequeño que se descarga antes. Moviva abre estos archivos; muchas otras apps VRM no, así que déjalo desactivado para ellas."
+ "compress.help": "Texturas en KTX2: unas 4 veces menos memoria de vídeo, el avatar va más fluido en dispositivos modestos. Geometría meshopt: archivo más pequeño que se descarga antes. Moviva abre estos archivos; muchas otras apps VRM no, así que déjalo desactivado para ellas. El pelo es la mitad o más de los vértices de un avatar VRoid. Con la mitad de triángulos (se conservan las puntas y las costuras de la textura) apenas se nota y la GPU trabaja menos. Se abre en cualquier app VRM.",
+ "compress.hair": "Simplificar el pelo"
 }

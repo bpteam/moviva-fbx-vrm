@@ -116,5 +116,6 @@
  "compress.title": "Compress for Moviva",
  "compress.ktx2": "KTX2 textures",
  "compress.meshopt": "meshopt geometry",
- "compress.help": "Textures as KTX2: about 4 times less video memory, so the avatar runs smoother on weak devices. Geometry with meshopt: a smaller file that downloads faster. Moviva opens such files; many other VRM apps do not, so leave both off for those."
+ "compress.help": "Textures as KTX2: about 4 times less video memory, so the avatar runs smoother on weak devices. Geometry with meshopt: a smaller file that downloads faster. Moviva opens such files; many other VRM apps do not, so leave both off for those. Hair is half or more of a VRoid avatar's vertices. Halving its triangles, with strand tips and texture seams kept, barely shows and makes the avatar lighter for the GPU. Opens in every VRM app.",
+ "compress.hair": "Simplify hair"
 }

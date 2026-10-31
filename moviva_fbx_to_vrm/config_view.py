@@ -87,7 +87,7 @@ class ConfigView(QWidget):
         self.selected: dict[str, bool] = {}
         self.steps: list[PlannedStep] = []
         self.profile = "video-call"  # what Moviva shows; kept across models in one session
-        self.compress = {"ktx2": False, "meshopt": False}  # Moviva-only files: off unless asked
+        self.compress = {"simplify-hair": False, "ktx2": False, "meshopt": False}  # off unless asked
 
     def load(self, document: dict) -> None:
         from character_vrm.ai import skintokens
@@ -150,8 +150,8 @@ class ConfigView(QWidget):
         info.setToolTip(f"<p>{escape(t('compress.help'))}</p>")
         lay.addWidget(info)
         lay.addStretch(1)
-        for key, available in (("ktx2", ktx_tool() is not None), ("meshopt", True)):
-            box = QCheckBox(t(f"compress.{key}"))
+        for key, available in (("simplify-hair", True), ("ktx2", ktx_tool() is not None), ("meshopt", True)):
+            box = QCheckBox(t("compress.hair" if key == "simplify-hair" else f"compress.{key}"))
             box.setChecked(self.compress[key] and available)
             box.setEnabled(available)
             box.toggled.connect(lambda on, k=key: self.compress.__setitem__(k, on))

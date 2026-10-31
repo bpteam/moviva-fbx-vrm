@@ -116,5 +116,6 @@
  "compress.title": "为 Moviva 压缩",
  "compress.ktx2": "KTX2 纹理",
  "compress.meshopt": "meshopt 几何",
- "compress.help": "纹理转为 KTX2：显存约减少到四分之一，头像在低配设备上更流畅。几何使用 meshopt：文件更小、下载更快。Moviva 可以打开此类文件，但许多其他 VRM 应用不行，用于它们时请保持关闭。"
+ "compress.help": "纹理转为 KTX2：显存约减少到四分之一，头像在低配设备上更流畅。几何使用 meshopt：文件更小、下载更快。Moviva 可以打开此类文件，但许多其他 VRM 应用不行，用于它们时请保持关闭。 头发占 VRoid 头像一半以上的顶点。三角面减半（保留发梢和纹理接缝）几乎看不出差别，GPU 负担更小。任何 VRM 应用都能打开。",
+ "compress.hair": "简化头发"
 }
