@@ -319,8 +319,8 @@ class Window(QWidget):
         source = self.source
         self.output = free_output_path(source)
         self.output.with_name(self.output.name + ".report.json").unlink(missing_ok=True)  # never read a stale one
-        # waist up, as in calls; the step flags come from the plan the user confirmed
-        args = ["convert", str(source), str(self.output), "--geometry-profile", "video-call", "--events",
+        # the visible part and the step flags come from the configure screen the user confirmed
+        args = ["convert", str(source), str(self.output), "--geometry-profile", self.config.profile, "--events",
                 *cli_flags(self.config.steps)]
         self.step_list.reset(self.config.steps)
         self.step_list.setVisible(True)

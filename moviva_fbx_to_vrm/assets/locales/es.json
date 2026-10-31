@@ -107,5 +107,10 @@
  "button.start": "Iniciar conversión",
  "stage.preflight": "Analizando el modelo",
  "autorig.title": "Esqueleto generado",
- "autorig.detail": "El esqueleto y los pesos de piel se generaron a partir de la geometría ({method}). Pruebas de pose: {status}. Revisa brazos, piernas y cabeza en un visor antes de usar el avatar."
+ "autorig.detail": "El esqueleto y los pesos de piel se generaron a partir de la geometría ({method}). Pruebas de pose: {status}. Revisa brazos, piernas y cabeza en un visor antes de usar el avatar.",
+ "geometry.title": "Parte visible",
+ "geometry.video-call": "Videollamada: de cintura para arriba",
+ "geometry.face": "Cara: de pecho para arriba",
+ "geometry.full": "Cuerpo entero",
+ "geometry.help": "Todo lo que queda por debajo del corte se elimina del archivo: triángulos, vértices, pesos de piel, datos de shape keys y los materiales y texturas que ya nada usa. Los huesos se conservan (VRM los exige). El avatar carga más rápido y exige menos a la GPU. Moviva muestra Videollamada; elige Cuerpo entero para otras apps VRM que muestran las piernas."
 }

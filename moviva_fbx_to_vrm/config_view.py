@@ -6,8 +6,8 @@ import json
 from html import escape
 
 from PySide6.QtCore import QProcess, Qt, Signal
-from PySide6.QtWidgets import (QCheckBox, QFrame, QHBoxLayout, QLabel, QMessageBox, QProgressDialog, QToolButton,
-                               QVBoxLayout, QWidget)
+from PySide6.QtWidgets import (QCheckBox, QComboBox, QFrame, QHBoxLayout, QLabel, QMessageBox, QProgressDialog,
+                               QToolButton, QVBoxLayout, QWidget)
 
 from character_vrm.core import events
 from character_vrm.core.steps import MANDATORY, Facts, PlannedStep, plan
@@ -86,6 +86,7 @@ class ConfigView(QWidget):
         self.facts = Facts()
         self.selected: dict[str, bool] = {}
         self.steps: list[PlannedStep] = []
+        self.profile = "video-call"  # what Moviva shows; kept across models in one session
 
     def load(self, document: dict) -> None:
         from character_vrm.ai import skintokens
@@ -111,11 +112,30 @@ class ConfigView(QWidget):
             note.setObjectName("muted")
             note.setWordWrap(True)
             self.layout_.addWidget(note)
+        self.layout_.addWidget(self._profile_row())
         for step in self.steps:
             card = StepCard(step)
             card.toggled.connect(lambda c=card, sid=step.spec.id: self._changed(sid, c.box.isChecked()))
             self.layout_.addWidget(card)
         self.layout_.addStretch(1)
+
+    def _profile_row(self) -> QFrame:
+        """Visible part: the converter's --geometry-profile, with what it removes in the tooltip."""
+        row = QFrame()
+        row.setObjectName("card")
+        lay = QHBoxLayout(row)
+        lay.addWidget(QLabel(t("geometry.title")))
+        info = QLabel("ⓘ")
+        info.setToolTip(f"<p>{escape(t('geometry.help'))}</p>")
+        lay.addWidget(info)
+        lay.addStretch(1)
+        combo = QComboBox()
+        for key in ("video-call", "face", "full"):
+            combo.addItem(t(f"geometry.{key}"), key)
+        combo.setCurrentIndex(combo.findData(self.profile))
+        combo.currentIndexChanged.connect(lambda _: setattr(self, "profile", combo.currentData()))
+        lay.addWidget(combo)
+        return row
 
     def _changed(self, step_id: str, on: bool) -> None:
         self.selected = {s.spec.id: s.enabled for s in self.steps}

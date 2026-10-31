@@ -107,5 +107,10 @@
  "button.start": "Start conversion",
  "stage.preflight": "Analyzing the model",
  "autorig.title": "Generated skeleton",
- "autorig.detail": "The skeleton and skin weights were generated from the geometry ({method}). Pose tests: {status}. Check arms, legs and head in a viewer before using the avatar."
+ "autorig.detail": "The skeleton and skin weights were generated from the geometry ({method}). Pose tests: {status}. Check arms, legs and head in a viewer before using the avatar.",
+ "geometry.title": "Visible part",
+ "geometry.video-call": "Video call: waist up",
+ "geometry.face": "Face: chest up",
+ "geometry.full": "Full body",
+ "geometry.help": "Everything below the cut is removed from the file: triangles, vertices, skin weights, shape-key data, and materials and textures nothing else uses. The bones stay (VRM requires them). The avatar loads faster and costs the GPU less. Video call is what Moviva shows; choose Full body for other VRM apps that show the legs."
 }
