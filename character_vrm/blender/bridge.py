@@ -10,6 +10,7 @@ from __future__ import annotations
 
 from typing import Protocol
 
+from ..core.autorig import AutoRigResult
 from ..core.authoring.plan import AuthoringResult, AutoAuthorPlan
 from ..core.model import CharacterInspection, GeometryOptimizationPlan, VrmPlan
 from ..toolchain import EnvironmentFacts
@@ -27,6 +28,9 @@ class BlenderBridge(Protocol):
 
     def inspect(self, source_path: str, fmt: str) -> CharacterInspection:
         """Stage 3: what actually survived the import, as a ``bpy``-free description."""
+
+    def auto_rig(self) -> AutoRigResult:
+        """Procedural skeleton + skin weights for a scene without an armature (never replaces one)."""
 
     def isolate_armature(self, armature: str) -> list[str]:
         """Exclude every other armature and the meshes it deforms from the export."""
@@ -62,6 +66,10 @@ class RealBlenderBridge:
     def inspect(self, source_path: str, fmt: str) -> CharacterInspection:
         from . import scene_inspector
         return scene_inspector.inspect_scene(source_path, fmt)
+
+    def auto_rig(self) -> AutoRigResult:
+        from . import autorig
+        return autorig.auto_rig()
 
     def isolate_armature(self, armature: str) -> list[str]:
         from . import scene_inspector

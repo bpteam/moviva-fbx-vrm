@@ -193,6 +193,11 @@ def inspect_scene(source_path: str, fmt: str, bpy: Any = None) -> CharacterInspe
         if image.name in used_images:
             width, height = image.size
             result.images.append(ImageInfo(image.name, int(width), int(height), bool(image.packed_file), image.filepath))
+    try:
+        from . import face_detect
+        result.face_points = face_detect.detect(bpy)
+    except Exception:  # optional evidence: the geometry analysis stands on its own
+        result.face_points = {}
     return result
 
 

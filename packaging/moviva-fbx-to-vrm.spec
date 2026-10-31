@@ -9,12 +9,14 @@ from PyInstaller.utils.hooks import collect_submodules
 ROOT = Path(SPECPATH).parent
 NAME = "moviva-fbx-to-vrm"  # no spaces: folder, program and .app are typed in terminals
 BPY = Path(importlib.util.find_spec("bpy").origin).parent
+# MediaPipe, like bpy, loads its native library by path: copied as-is (packaging/fetch_mediapipe.py installs it)
+MEDIAPIPE = Path(importlib.util.find_spec("mediapipe").origin).parent
 
 # bpy is a whole Blender: copied as-is, never analysed (its .so, datafiles and Python scripts load each other by path).
 # Blender's own scripts and the VRM Add-on import standard-library modules PyInstaller cannot see, so ship them all.
 skip = {"tkinter", "turtle", "turtledemo", "idlelib", "test", "lib2to3", "ensurepip", "pydoc_data", "__phello__"}
 stdlib = sorted(m for m in sys.stdlib_module_names if m not in skip and not m.startswith("_"))
-hidden = [sub for name in stdlib + ["numpy", "zstandard", "requests", "cattrs"]
+hidden = [sub for name in stdlib + ["numpy", "zstandard", "requests", "cattrs", "absl", "flatbuffers", "certifi"]
           for sub in collect_submodules(name, filter=lambda m: ".tests" not in m and ".test." not in m)]
 
 a = Analysis(
@@ -22,12 +24,13 @@ a = Analysis(
     pathex=[str(ROOT)],
     datas=[
         (str(BPY), "bpy"),
+        (str(MEDIAPIPE), "mediapipe"),
         (str(ROOT / "vendor"), "vendor"),
         (str(ROOT / "character_vrm" / "toolchain.json"), "character_vrm"),
         (str(ROOT / "moviva_fbx_to_vrm" / "assets"), "moviva_fbx_to_vrm/assets"),
     ],
     hiddenimports=hidden + collect_submodules("character_vrm", filter=lambda m: ".tests" not in m),
-    excludes=["bpy", "tkinter"],
+    excludes=["bpy", "mediapipe", "tkinter"],
     noarchive=False,
 )
 pyz = PYZ(a.pure)
@@ -42,4 +45,4 @@ coll = COLLECT(exe, a.binaries, a.datas, name=NAME)
 if sys.platform == "darwin":
     app = BUNDLE(coll, name=f"{NAME}.app", icon=str(ROOT / "packaging" / "icon.png"),
                  bundle_identifier="app.moviva.fbx-to-vrm",
-                 info_plist={"CFBundleDisplayName": "Moviva FBX to VRM", "NSHighResolutionCapable": True, "LSMinimumSystemVersion": "12.0"})
+                 info_plist={"CFBundleDisplayName": "Moviva FBX to VRM", "NSHighResolutionCapable": True, "LSMinimumSystemVersion": "14.0"})

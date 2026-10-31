@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+from dataclasses import asdict
 import json
 from pathlib import Path
 from typing import Callable, Sequence, TextIO
@@ -10,6 +11,9 @@ from typing import Callable, Sequence, TextIO
 from .blender.bridge import BlenderBridge
 from .core.config import ConfigError, ConversionConfig, GEOMETRY_PROFILES, load_config
 from .core.errors import ConversionError
+from .core.events import encode as encode_event
+from .core.preflight import run_preflight
+from .core.steps import plan as plan_steps
 from .core.pipeline import ConverterCore, source_format
 from .core.anatomy.report import format_analysis
 from .core.authoring.report import authoring_to_dict, format_authoring
@@ -36,6 +40,12 @@ def build_parser(prog: str = "character-vrm", with_blender: bool = True) -> argp
                        help="humanoid confidence gate (default 0.75)")
         p.add_argument("--geometry-profile", choices=sorted(GEOMETRY_PROFILES),
                        help="geometry profile (default: full)")
+        p.add_argument("--auto-rig", action="store_true",
+                       help="source without a skeleton: generate a humanoid skeleton and skin weights from the "
+                            "geometry (validated by pose tests; never replaces an existing armature)")
+        p.add_argument("--ai-rig", action="store_true",
+                       help="source without a skeleton: SkinTokens (NVIDIA GPU, installed with 'ai install') adds the "
+                            "skeleton and skin weights before conversion")
         p.add_argument("--auto-author", action="store_true",
                        help="rest-pose calibration, hair -> spring bones, anatomical colliders and generated "
                             "blink / visemes when confidence is high (conservative)")
@@ -49,7 +59,15 @@ def build_parser(prog: str = "character-vrm", with_blender: bool = True) -> argp
     doctor = sub.add_parser("doctor", help="verify Blender, the VRM Add-on and the pinned toolchain")
     if with_blender:
         doctor.add_argument("--blender", metavar="PATH", default=argparse.SUPPRESS, help=argparse.SUPPRESS)
+    ai = sub.add_parser("ai", help="optional AI engines: status, or install SkinTokens (downloads ~12 GB)")
+    ai.add_argument("action", choices=("status", "install"))
+    if with_blender:
+        ai.add_argument("--blender", metavar="PATH", default=argparse.SUPPRESS, help=argparse.SUPPRESS)
     p = sub.add_parser("inspect", help="import and describe a character")
+    p.add_argument("source")
+    common(p)
+    p = sub.add_parser("preflight", help="inspect a model (with or without a skeleton) and print the processing "
+                                         "plan as JSON; converts nothing")
     p.add_argument("source")
     common(p)
     p = sub.add_parser("analyze", help="describe the anatomy of a character (frame, skeleton, hands, face, hair, "
@@ -65,6 +83,7 @@ def build_parser(prog: str = "character-vrm", with_blender: bool = True) -> argp
     p.add_argument("source")
     p.add_argument("output")
     p.add_argument("--dry-run", action="store_true", help="analyse and report; write no VRM")
+    p.add_argument("--events", action="store_true", help="print structured progress as '@event {json}' lines")
     p.add_argument("--no-springs", action="store_true", help="never generate spring bones")
     common(p)
     return parser
@@ -82,6 +101,8 @@ def _load_config(args: argparse.Namespace) -> ConversionConfig:
         config.spring.enabled = False
     if getattr(args, "geometry_profile", None):
         config.geometry.profile = args.geometry_profile
+    if getattr(args, "auto_rig", False):
+        config.auto_rig = True
     author = config.auto_author
     if getattr(args, "auto_author", False):
         author.enabled = True
@@ -121,9 +142,23 @@ def run(
             emit(report.format())
             return EXIT_OK if report.ok else EXIT_FAILED
 
+        if args.command == "ai":
+            from .ai import skintokens
+            if args.action == "install":
+                skintokens.install(log=emit)
+            emit(json.dumps({"skintokens": skintokens.status()}, indent=2))
+            return EXIT_OK
+
         config = _load_config(args)
-        core = ConverterCore(bridge)
+        events = (lambda e: emit(encode_event(e))) if getattr(args, "events", False) else None
+        core = ConverterCore(bridge, events=events)
         source = Path(args.source).resolve()
+
+        if args.command == "preflight":
+            info, facts = run_preflight(core.load(source), source, config)
+            document = {"model": info, "facts": asdict(facts), "steps": [s.to_dict() for s in plan_steps(facts)]}
+            emit("@preflight " + json.dumps(document))  # one line: the window finds it among Blender's log output
+            return EXIT_OK
 
         if args.command == "inspect":
             analysis = core.inspect(source, config)
@@ -158,6 +193,11 @@ def run(
 
         # convert
         output = Path(args.output).resolve()
+        if getattr(args, "ai_rig", False):
+            from .ai import skintokens
+            rigged = output.with_name(output.stem + ".skintokens.glb")
+            skintokens.rig(source, rigged, log=emit)
+            source = rigged
         report_path = output.with_name(output.name + ".report.json")
         try:
             outcome = core.convert(source, output, config, dry_run=args.dry_run)

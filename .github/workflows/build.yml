@@ -42,15 +42,15 @@ jobs:
             libegl1 libxcb-cursor0 libxkbcommon-x11-0 libdbus-1-3
       - name: Install
         run: python -m pip install -e ".[dev]"
-      - name: Wheels for macOS 12 (macOS)
-        if: runner.os == 'macOS'
-        # pip picks the newest wheel the runner accepts (numpy: macOS 14+); swap every package for its macOS 12 build
-        run: |
-          python -m pip freeze --exclude-editable > frozen.txt
-          python -m pip download -r frozen.txt --no-deps --only-binary=:all: --platform macosx_12_0_arm64 -d wheels-12
-          python -m pip install --no-deps --force-reinstall wheels-12/*.whl
       - name: Fetch the VRM Add-on (pinned, checksum-verified)
         run: python packaging/fetch_addon.py
+      - name: Fetch Autorig Workbench and Mesh2Motion's human skeleton (pinned, checksum-verified)
+        run: python packaging/fetch_autorig.py
+      - name: MediaPipe (no OpenCV / matplotlib) and its face model (pinned, checksum-verified)
+        shell: bash
+        run: |
+          python -m pip install --no-deps mediapipe==1.2.0 absl-py flatbuffers certifi
+          python packaging/fetch_mediapipe.py
       - name: Tests
         shell: bash
         # character_vrm reads its sources without an encoding (cp1252 on Windows), and its launcher test expects
@@ -64,9 +64,34 @@ jobs:
         env:
           QT_QPA_PLATFORM: offscreen
           PYTHONUTF8: "1"
+      - name: Real Blender integration tests (auto-rig through the converter, real importers and exporter)
+        run: python -m pytest -q character_vrm/tests/integration
+        env:
+          PYTHONUTF8: "1"
       - name: Build
         run: pyinstaller packaging/moviva-fbx-to-vrm.spec --noconfirm --workpath .pyi-work --distpath dist
 
+      - name: Real-model smoke test of the built app (unrigged model -> rigged VRM)
+        shell: bash
+        env:
+          PYTHONUTF8: "1"
+        run: |
+          case "$RUNNER_OS" in
+            Linux) exe=dist/moviva-fbx-to-vrm/moviva-fbx-to-vrm ;;
+            macOS) exe=dist/moviva-fbx-to-vrm.app/Contents/MacOS/moviva-fbx-to-vrm ;;
+            Windows) exe=dist/moviva-fbx-to-vrm/moviva-fbx-to-vrm.exe ;;
+          esac
+          python packaging/smoke_convert.py "$exe"
+      - name: Distribution size report
+        shell: bash
+        run: |
+          python - <<'PY'
+          import os
+          total = sum(os.path.getsize(os.path.join(d, f)) for d, _, fs in os.walk("dist") for f in fs)
+          print(f"unpacked distribution: {total / 1e6:.1f} MB")
+          assert not [f for d, _, fs in os.walk("dist") for f in fs if f.endswith((".ckpt", ".safetensors", ".pth"))], \
+              "model weights must not ship in the default build"
+          PY
       - name: Smoke test and package (Linux)
         if: runner.os == 'Linux'
         run: |
@@ -76,7 +101,7 @@ jobs:
         if: runner.os == 'macOS'
         run: |
           dist/moviva-fbx-to-vrm.app/Contents/MacOS/moviva-fbx-to-vrm doctor
-          python packaging/check_macos_min.py dist/moviva-fbx-to-vrm.app 12.0
+          python packaging/check_macos_min.py dist/moviva-fbx-to-vrm.app 14.0
           ditto -c -k --keepParent dist/moviva-fbx-to-vrm.app "${{ matrix.artifact }}"
       - name: Smoke test and package (Windows)
         if: runner.os == 'Windows'

@@ -10,6 +10,8 @@ from ..toolchain import Toolchain, load_toolchain
 from .config import HEIGHT_RANGE_M, ConversionConfig
 from .errors import ConversionError
 from .expressions import BLINKS, VISEMES, ExpressionConfigError, ExpressionResult, resolve_expressions
+from . import events
+from .autorig import AutoRigResult
 from .anatomy.model import HumanModelAnalysis, analyze_human
 from .anatomy.morph_signatures import classify_morphs
 from .authoring.plan import AuthoringResult, AutoAuthorPlan, apply_authoring_result, build_authoring_plan, thresholds_from
@@ -238,8 +240,9 @@ class ConversionOutcome:
 
 
 class ConverterCore:
-    def __init__(self, bridge: "BlenderBridge", toolchain: Toolchain | None = None) -> None:
+    def __init__(self, bridge: "BlenderBridge", toolchain: Toolchain | None = None, events=None) -> None:
         self.bridge = bridge
+        self.events = events or (lambda event: None)  # structured progress: see core/events.py
         self.toolchain = toolchain or load_toolchain()
 
     def load(self, source: str | Path) -> CharacterInspection:
@@ -251,17 +254,53 @@ class ConverterCore:
         self.bridge.import_character(str(source), fmt)
         return self.bridge.inspect(str(source), fmt)
 
+    def auto_rig(self, inspection: CharacterInspection, source: str | Path) -> tuple[CharacterInspection, AutoRigResult]:
+        """Skeleton + weights for a source without an armature, then a fresh inspection of the rigged scene."""
+        result = self.bridge.auto_rig()
+        if result.status == "FAIL":
+            raise ConversionError("autorig-failed", "Automatic rigging did not produce a trustworthy skeleton and "
+                                  "skin weights; nothing was exported.", [*result.warnings, *(
+                                      f"{a['method']}: {a['status']}" for a in result.attempts)])
+        return self.bridge.inspect(str(source), inspection.source_format), result
+
     def inspect(self, source: str | Path, config: ConversionConfig | None = None) -> Analysis:
         return analyze(self.load(source), config or ConversionConfig())
+
+    def _author(self, analysis: Analysis, plan: VrmPlan, authoring: AutoAuthorPlan) -> None:
+        if authoring.needs_mutation:
+            # ANALYZE -> PLAN -> VALIDATE PLAN happened in analyze(); now MUTATE and VALIDATE RESULT.
+            analysis.authoring_result = self.bridge.apply_authoring(authoring)
+        else:
+            analysis.authoring_result = AuthoringResult()
+        for note in apply_authoring_result(plan, authoring, analysis.authoring_result):
+            analysis.warnings.append(ConversionWarning("authoring-not-applied", note))
+        for what, reason in analysis.authoring_result.failed.items():
+            analysis.warnings.append(ConversionWarning("authoring-failed", f"{what}: {reason}"))
 
     def convert(
         self, source: str | Path, output: str | Path, config: ConversionConfig | None = None, dry_run: bool = False,
     ) -> ConversionOutcome:
         config = config or ConversionConfig()
         analysis: Analysis | None = None
+        ev = self.events
         try:
-            inspection = self.load(source)
-            analysis = analyze(inspection, config)
+            with events.step(ev, "import", "Importing the model"):
+                inspection = self.load(source)
+            rig: AutoRigResult | None = None
+            if config.auto_rig and not inspection.armatures and not dry_run:
+                with events.step(ev, "auto_rig", "Generating skeleton and skin weights") as done:
+                    inspection, rig = self.auto_rig(inspection, source)
+                    done["status"] = "SUCCESS" if rig.status == "PASS" else "WARNING"
+                    done["detail"] = f"{rig.method}, deformation tests {rig.status}"
+            else:
+                events.skipped(ev, "auto_rig", "The model already has a skeleton" if inspection.armatures
+                               else "Not requested")
+            with events.step(ev, "map", "Analyzing the skeleton and face"):
+                analysis = analyze(inspection, config)
+            if rig is not None:
+                analysis.warnings.append(ConversionWarning(
+                    "autorig", f"Skeleton and skin weights were generated procedurally ({rig.method}, "
+                    f"deformation tests {rig.status}, confidence {rig.confidence:.2f}); inspect the pose in a viewer."))
             require_humanoid(analysis.humanoid, config.min_confidence)
             plan = build_plan(analysis, output)
             if dry_run:
@@ -269,23 +308,23 @@ class ConverterCore:
 
             self.bridge.isolate_armature(plan.armature)
             authoring = analysis.authoring
-            if authoring is not None:
-                if authoring.needs_mutation:
-                    # ANALYZE -> PLAN -> VALIDATE PLAN happened in analyze(); now MUTATE and VALIDATE RESULT.
-                    analysis.authoring_result = self.bridge.apply_authoring(authoring)
-                else:
-                    analysis.authoring_result = AuthoringResult()
-                for note in apply_authoring_result(plan, authoring, analysis.authoring_result):
-                    analysis.warnings.append(ConversionWarning("authoring-not-applied", note))
-                for what, reason in analysis.authoring_result.failed.items():
-                    analysis.warnings.append(ConversionWarning("authoring-failed", f"{what}: {reason}"))
+            if authoring is None:
+                events.skipped(ev, "authoring", "Not requested")
+            else:
+                with events.step(ev, "authoring", "Authoring face, hair and materials"):
+                    self._author(analysis, plan, authoring)
             if plan.geometry is not None and plan.geometry.requires_mutation:
                 self.bridge.apply_geometry(plan.geometry)
-            self.bridge.configure_vrm(plan)
-            self.bridge.export_vrm(plan.armature, str(output), config.all_bone_influences)
-            check = check_vrm_output(output, plan, inspection)
+            with events.step(ev, "export", "Writing the VRM"):
+                self.bridge.configure_vrm(plan)
+                self.bridge.export_vrm(plan.armature, str(output), config.all_bone_influences)
+            with events.step(ev, "validate", "Validating the VRM"):
+                check = check_vrm_output(output, plan, inspection)
             analysis.warnings.extend(check.warnings)
-            return ConversionOutcome(build_report(self.toolchain, analysis, "success", check, source), analysis, check)
+            report = build_report(self.toolchain, analysis, "success", check, source)
+            if rig is not None:
+                report["autoRig"] = rig.to_dict()
+            return ConversionOutcome(report, analysis, check)
         except ConversionError as exc:
             exc.report = build_report(self.toolchain, analysis, "failed", None, source, error=exc)  # type: ignore[attr-defined]
             raise

@@ -35,7 +35,7 @@ why and what to fix.
 | System | File | First start |
 |---|---|---|
 | Windows 10/11 x64 | `moviva-fbx-to-vrm-windows-x64.zip` | SmartScreen: *More info → Run anyway* (the app is not signed) |
-| macOS 12+ Apple Silicon (M1 and newer) | `moviva-fbx-to-vrm-macos-arm64.zip` | *System Settings → Privacy & Security → Open Anyway*, or `xattr -dr com.apple.quarantine moviva-fbx-to-vrm.app` |
+| macOS 14+ Apple Silicon (M1 and newer) | `moviva-fbx-to-vrm-macos-arm64.zip` | *System Settings → Privacy & Security → Open Anyway*, or `xattr -dr com.apple.quarantine moviva-fbx-to-vrm.app` |
 | Linux x64 (glibc 2.35+: Ubuntu 22.04, Debian 12, Fedora 36 or newer) | `moviva-fbx-to-vrm-linux-x64.tar.gz` | needs an X11/Wayland desktop (`libxcb-cursor0` on Debian/Ubuntu) |
 
 Intel Macs and ARM Linux are not supported: Blender publishes no `bpy` build for them.
@@ -68,6 +68,10 @@ tar -xzf moviva-fbx-to-vrm-linux-x64.tar.gz
 ./moviva-fbx-to-vrm/moviva-fbx-to-vrm                # the window
 ./moviva-fbx-to-vrm/moviva-fbx-to-vrm doctor         # checks the built-in Blender and VRM Add-on
 ./moviva-fbx-to-vrm/moviva-fbx-to-vrm convert model.fbx model.vrm --auto-author --generate-face --geometry-profile video-call
+# a model without a skeleton: fit one from the geometry and skin it (pose-tested; never replaces an existing rig)
+./moviva-fbx-to-vrm/moviva-fbx-to-vrm convert statue.glb statue.vrm --auto-rig
+# inspect only, print the processing plan; --events adds '@event {json}' progress lines to convert
+./moviva-fbx-to-vrm/moviva-fbx-to-vrm preflight statue.glb
 
 # macOS
 moviva-fbx-to-vrm.app/Contents/MacOS/moviva-fbx-to-vrm doctor
