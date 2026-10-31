@@ -206,6 +206,7 @@ class CharacterInspection:
     materials: list[MaterialInfo] = field(default_factory=list)
     shape_keys: list[ShapeKeyInfo] = field(default_factory=list)
     images: list[ImageInfo] = field(default_factory=list)
+    face_points: dict[str, tuple[float, float, float]] = field(default_factory=dict)  # MediaPipe, world space
 
     @property
     def triangle_count(self) -> int:
