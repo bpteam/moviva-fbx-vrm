@@ -5,8 +5,9 @@ from __future__ import annotations
 import json
 from html import escape
 
-from PySide6.QtCore import Qt, Signal
-from PySide6.QtWidgets import QCheckBox, QFrame, QHBoxLayout, QLabel, QToolButton, QVBoxLayout, QWidget
+from PySide6.QtCore import QProcess, Qt, Signal
+from PySide6.QtWidgets import (QCheckBox, QFrame, QHBoxLayout, QLabel, QMessageBox, QProgressDialog, QToolButton,
+                               QVBoxLayout, QWidget)
 
 from character_vrm.core import events
 from character_vrm.core.steps import MANDATORY, Facts, PlannedStep, plan
@@ -87,7 +88,9 @@ class ConfigView(QWidget):
         self.steps: list[PlannedStep] = []
 
     def load(self, document: dict) -> None:
-        self.facts = Facts(**document["facts"])
+        from character_vrm.ai import skintokens
+        st = skintokens.status()
+        self.facts = Facts(**{**document["facts"], "ai_rig": st["state"], "ai_rig_reason": st.get("reason", "")})
         self.model = document["model"]
         self.selected = {}
         self._render()
@@ -116,8 +119,46 @@ class ConfigView(QWidget):
 
     def _changed(self, step_id: str, on: bool) -> None:
         self.selected = {s.spec.id: s.enabled for s in self.steps}
+        if step_id == "ai_rigging" and on and self.facts.ai_rig != "READY":
+            on = self._install_ai()  # stays off unless the download was approved and finished
         self.selected[step_id] = on
         self._render()
+
+    def _install_ai(self) -> bool:
+        """Ask, then run ``<app> ai install`` with its output as progress. Nothing is downloaded without a yes."""
+        from character_vrm.ai import skintokens
+        gpu = skintokens.status().get("gpu", {})
+        ok = QMessageBox.question(self, "Install AI rigging components?", (
+            "Engine: SkinTokens / TokenRig (MIT)\n"
+            f"GPU: {gpu.get('name', '?')} ({gpu.get('mib', 0) // 1024} GB)\n\n"
+            "Downloads once: its source, Python 3.11, PyTorch with CUDA libraries, flash-attn and the model weights "
+            "(about 12 GB on disk, into " f"{skintokens.home()}).\n\n"
+            "All processing stays on this computer. The components are kept for later conversions."))
+        if ok != QMessageBox.StandardButton.Yes:
+            return False
+        from .gui import converter_command
+        program, args = converter_command(["ai", "install"])
+        dialog = QProgressDialog("Installing SkinTokens…", "Cancel", 0, 0, self)
+        dialog.setWindowTitle("Installing SkinTokens")
+        dialog.setMinimumWidth(460)
+        proc = QProcess(self)
+        proc.setProcessChannelMode(QProcess.ProcessChannelMode.MergedChannels)
+        def show() -> None:  # the installer's last line ("Downloading model weights", pip's progress)
+            lines = [x for x in bytes(proc.readAllStandardOutput()).decode("utf-8", "replace").splitlines() if x.strip()]
+            if lines:
+                dialog.setLabelText(lines[-1][-120:])
+        proc.readyReadStandardOutput.connect(show)
+        proc.finished.connect(dialog.close)
+        dialog.canceled.connect(proc.kill)  # a rerun resumes: finished steps are skipped
+        proc.start(program, args)
+        dialog.exec()
+        proc.waitForFinished(-1)
+        st = skintokens.status()
+        self.facts.ai_rig, self.facts.ai_rig_reason = st["state"], st.get("reason", "")
+        if st["state"] != "READY":
+            QMessageBox.warning(self, "SkinTokens", "The installation did not finish. Switch the step on again to "
+                                "resume it.")
+        return st["state"] == "READY"
 
 
 class StepList(QWidget):
