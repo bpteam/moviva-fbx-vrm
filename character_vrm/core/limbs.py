@@ -179,9 +179,13 @@ def _arm_chain(verts: np.ndarray, edges: np.ndarray, tip_point: np.ndarray, H: f
         spread.append(float(np.sqrt(((ring - c) ** 2).sum(axis=1).mean())))
     if len(line) < 5:
         return None
-    spread = np.array(spread)
-    arm = np.median(spread[: max(3, int(len(spread) * 0.6))])  # the hand is wider than the arm: not the reference
-    join = next((i for i in range(len(spread) // 2, len(spread)) if spread[i] > 2.2 * arm), len(line) - 1)
+    # the armpit: the first band far wider than the arm traced so far (the hand's first bands, wider than the
+    # forearm, are not the reference); a separately modelled arm just ends
+    join = len(line) - 1
+    for i in range(6, len(spread)):
+        if spread[i] > 2.2 * float(np.median(spread[3:i])):
+            join = i
+            break
     line = np.array(line[: join + 1])
     seg = np.linalg.norm(np.diff(line, axis=0), axis=1)
     arc = np.concatenate([[0.0], np.cumsum(seg)])
