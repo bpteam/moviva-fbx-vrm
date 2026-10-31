@@ -10,7 +10,7 @@ ROOT = Path(SPECPATH).parent
 NAME = "moviva-fbx-to-vrm"  # no spaces: folder, program and .app are typed in terminals
 BPY = Path(importlib.util.find_spec("bpy").origin).parent
 # MediaPipe, like bpy, loads its native library by path: copied as-is (packaging/fetch_mediapipe.py installs it)
-MEDIAPIPE = Path(importlib.util.find_spec("mediapipe").origin).parent
+MEDIAPIPE = Path(importlib.util.find_spec("mediapipe").origin).parent if sys.platform.startswith("linux") else None
 
 # bpy is a whole Blender: copied as-is, never analysed (its .so, datafiles and Python scripts load each other by path).
 # Blender's own scripts and the VRM Add-on import standard-library modules PyInstaller cannot see, so ship them all.
@@ -24,7 +24,7 @@ a = Analysis(
     pathex=[str(ROOT)],
     datas=[
         (str(BPY), "bpy"),
-        (str(MEDIAPIPE), "mediapipe"),
+        *([(str(MEDIAPIPE), "mediapipe")] if MEDIAPIPE else []),
         (str(ROOT / "vendor"), "vendor"),
         (str(ROOT / "character_vrm" / "toolchain.json"), "character_vrm"),
         (str(ROOT / "moviva_fbx_to_vrm" / "assets"), "moviva_fbx_to_vrm/assets"),
