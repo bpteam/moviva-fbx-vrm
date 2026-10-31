@@ -107,5 +107,10 @@
  "button.start": "开始转换",
  "stage.preflight": "正在分析模型",
  "autorig.title": "自动生成的骨架",
- "autorig.detail": "骨架和蒙皮权重由几何体自动生成（{method}）。姿势测试：{status}。使用前请在查看器中检查手臂、腿部和头部。"
+ "autorig.detail": "骨架和蒙皮权重由几何体自动生成（{method}）。姿势测试：{status}。使用前请在查看器中检查手臂、腿部和头部。",
+ "geometry.title": "可见部分",
+ "geometry.video-call": "视频通话：腰部以上",
+ "geometry.face": "面部：胸部以上",
+ "geometry.full": "全身",
+ "geometry.help": "切口以下的内容会从文件中删除：三角面、顶点、蒙皮权重、形态键数据，以及不再被使用的材质和纹理。骨骼会保留（VRM 要求）。头像加载更快，GPU 负担更小。Moviva 显示的是视频通话画面；如需在显示腿部的其他 VRM 应用中使用，请选择“全身”。"
 }
