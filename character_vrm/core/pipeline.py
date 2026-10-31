@@ -7,7 +7,7 @@ from pathlib import Path
 from typing import TYPE_CHECKING
 
 from ..toolchain import Toolchain, load_toolchain
-from .config import HEIGHT_RANGE_M, ConversionConfig
+from .config import ExpressionOverride, HEIGHT_RANGE_M, ConversionConfig
 from .errors import ConversionError
 from .expressions import BLINKS, VISEMES, ExpressionConfigError, ExpressionResult, resolve_expressions
 from . import events
@@ -32,7 +32,7 @@ from .validation import OutputCheck, check_vrm_output, require_humanoid
 if TYPE_CHECKING:  # the core depends on the protocol's shape only, never on Blender-facing code
     from ..blender.bridge import BlenderBridge
 
-SUPPORTED_FORMATS = {".glb": "glb", ".gltf": "gltf", ".fbx": "fbx"}
+SUPPORTED_FORMATS = {".glb": "glb", ".gltf": "gltf", ".fbx": "fbx", ".vrm": "vrm"}
 
 FBX_NO_SHAPE_KEYS = (
     "Source FBX imported successfully, but no facial shape keys were available after Blender import. "
@@ -92,8 +92,15 @@ def analyze(inspection: CharacterInspection, config: ConversionConfig) -> Analys
 
     excluded = [m.name for m in inspection.meshes if m.armature not in (None, selection.name)]
     included = {m.name for m in inspection.meshes} - set(excluded)
+    overrides = dict(config.expressions)
+    if inspection.source_expressions:  # a VRM source: its own bindings, unless the map file says otherwise
+        present = {k.name for k in inspection.shape_keys if k.mesh in included}
+        for name, binds in inspection.source_expressions.items():
+            kept = {k: w for k, w in binds.items() if k in present}
+            if kept and name not in overrides:
+                overrides[name] = ExpressionOverride(binds=kept)
     try:
-        expressions = resolve_expressions(inspection, config.expressions, config.expression_min_confidence, included)
+        expressions = resolve_expressions(inspection, overrides, config.expression_min_confidence, included)
     except ExpressionConfigError as exc:
         raise ConversionError("config-invalid", str(exc)) from exc
 
