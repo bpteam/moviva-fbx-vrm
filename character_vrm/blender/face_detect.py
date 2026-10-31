@@ -35,8 +35,8 @@ def model_path() -> Path | None:
 
 
 def _can_render() -> bool:
-    """Windows without a real GPU (only Microsoft's basic display driver, as on CI runners) crashes Blender's
-    render; skip it there. Other systems render in software when they must."""
+    """Windows without a real GPU (CI runners show Microsoft's basic or Hyper-V display adapters) crashes Blender's
+    render; there it runs only with an NVIDIA, AMD or Intel adapter. Other systems render in software if they must."""
     if sys.platform != "win32":
         return True
     import subprocess
@@ -47,7 +47,7 @@ def _can_render() -> bool:
     except (OSError, subprocess.SubprocessError):
         return False
     gpus = [n.strip() for n in names.splitlines() if n.strip()]
-    return any("basic" not in n.lower() for n in gpus)
+    return any(v in n.lower() for n in gpus for v in ("nvidia", "amd", "radeon", "intel"))
 
 
 def _landmarker(path: Path):
