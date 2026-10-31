@@ -260,7 +260,8 @@ def analyze_human(
     if head_bone is not None:
         eyes = {f"{s}_eye": joints[f"{s}Eye"] for s in ("left", "right") if f"{s}Eye" in joints}
         morphs = face_morphs(inspection, expression_binds or {})
-        face = analyze_face(frame, face_geo, head_bone.head, head_top, eyes or None, "jaw" in final, morphs)
+        face = analyze_face(frame, face_geo, head_bone.head, head_top, eyes or None, "jaw" in final, morphs,
+                            detected=getattr(inspection, "face_points", None) or None)
         if face is not None and "jaw" in joints:
             face.jaw_pivot = frame.to_local(joints["jaw"])
         if face is None:
