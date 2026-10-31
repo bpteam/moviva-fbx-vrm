@@ -64,9 +64,34 @@ jobs:
         env:
           QT_QPA_PLATFORM: offscreen
           PYTHONUTF8: "1"
+      - name: Real Blender integration tests (auto-rig through the converter, real importers and exporter)
+        run: python -m pytest -q character_vrm/tests/integration
+        env:
+          PYTHONUTF8: "1"
       - name: Build
         run: pyinstaller packaging/moviva-fbx-to-vrm.spec --noconfirm --workpath .pyi-work --distpath dist
 
+      - name: Real-model smoke test of the built app (unrigged model -> rigged VRM)
+        shell: bash
+        env:
+          PYTHONUTF8: "1"
+        run: |
+          case "$RUNNER_OS" in
+            Linux) exe=dist/moviva-fbx-to-vrm/moviva-fbx-to-vrm ;;
+            macOS) exe=dist/moviva-fbx-to-vrm.app/Contents/MacOS/moviva-fbx-to-vrm ;;
+            Windows) exe=dist/moviva-fbx-to-vrm/moviva-fbx-to-vrm.exe ;;
+          esac
+          python packaging/smoke_convert.py "$exe"
+      - name: Distribution size report
+        shell: bash
+        run: |
+          python - <<'PY'
+          import os
+          total = sum(os.path.getsize(os.path.join(d, f)) for d, _, fs in os.walk("dist") for f in fs)
+          print(f"unpacked distribution: {total / 1e6:.1f} MB")
+          assert not [f for d, _, fs in os.walk("dist") for f in fs if f.endswith((".ckpt", ".safetensors", ".pth"))], \
+              "model weights must not ship in the default build"
+          PY
       - name: Smoke test and package (Linux)
         if: runner.os == 'Linux'
         run: |
