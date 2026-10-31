@@ -23,6 +23,9 @@ REPO = "https://github.com/VAST-AI-Research/SkinTokens"
 TORCH = ["torch==2.7.0", "torchvision==0.22.0", "--index-url", "https://download.pytorch.org/whl/cu128"]
 FLASH_ATTN = ("https://github.com/Dao-AILab/flash-attention/releases/download/v2.8.3/"
               "flash_attn-2.8.3+cu12torch2.7cxx11abiTRUE-cp311-cp311-linux_x86_64.whl")
+# (file, old, new) applied to the pinned source: upstream bugs that crash a conversion
+PATCHES = [("src/rig_package/parser/bpy.py", "ob.vertex_groups[name].remove(range(990))",
+            "ob.vertex_groups[name].remove(range(len(ob.data.vertices)))")]  # segfault on a mesh under 990 verts
 EXTRA = ["scipy"]  # imported by its code, missing from its requirements.txt
 CHECKPOINTS = ("experiments/articulation_xl_quantization_256_token_4/grpo_1400.ckpt",
                "experiments/skin_vae_2_10_32768/last.ckpt")
@@ -93,6 +96,11 @@ def install(log=print) -> None:
         subprocess.run(["git", "clone", "-q", REPO, str(tmp)], check=True)
         subprocess.run(["git", "-C", str(tmp), "checkout", "-q", COMMIT], check=True)
         tmp.rename(h)
+    for rel, old, new in PATCHES:
+        f = h / rel
+        text = f.read_text(encoding="utf-8")
+        if old in text:
+            f.write_text(text.replace(old, new), encoding="utf-8")
     py = python()
     pip = [uv, "pip", "install", "--python", str(py)]
     if not py.is_file():
@@ -115,6 +123,28 @@ def _env(gpu: int) -> dict:
     if os.environ.get("LD_LIBRARY_PATH_ORIG"):  # PyInstaller keeps the user's own here
         env["LD_LIBRARY_PATH"] = os.environ["LD_LIBRARY_PATH_ORIG"]
     return dict(env, CUDA_DEVICE_ORDER="PCI_BUS_ID", CUDA_VISIBLE_DEVICES=str(gpu))
+
+
+# Its transfer drops the source's root rotation (a Y-up glTF root comes back lying down): stand the result up again,
+# turning everything so the hips-to-chest line (the root to the first bone with three or more children: the neck
+# and both arms) points up. Run with its own bpy.
+UPRIGHT = r"""
+import sys, bpy
+from mathutils import Vector
+bpy.ops.wm.read_factory_settings(use_empty=True)
+bpy.ops.import_scene.gltf(filepath=sys.argv[-1])
+arm = next(o for o in bpy.data.objects if o.type == "ARMATURE")
+root = next(b for b in arm.data.bones if b.parent is None)
+chest = next(b for b in arm.data.bones if b != root and len(b.children) >= 3)
+up = (arm.matrix_world @ chest.head_local - arm.matrix_world @ root.head_local).normalized()
+if up.z < 0.9:
+    rot = up.rotation_difference(Vector((0, 0, 1))).to_matrix().to_4x4()
+    for o in bpy.data.objects:
+        if o.parent is None:
+            o.matrix_world = rot @ o.matrix_world
+    bpy.ops.object.select_all(action="SELECT")
+    bpy.ops.export_scene.gltf(filepath=sys.argv[-1], export_format="GLB")
+"""
 
 
 def _ping() -> bool:
@@ -163,3 +193,5 @@ def rig(source: Path, output: Path, log=print) -> None:
     if proc.returncode != 0 or not output.is_file():
         tail = (proc.stderr or proc.stdout).strip().splitlines()[-3:]
         raise RuntimeError("SkinTokens failed: " + " | ".join(tail))
+    subprocess.run([str(python()), "-c", UPRIGHT, str(output)], cwd=home(), env=_env(gpu), check=True,
+                   capture_output=True, timeout=600)
