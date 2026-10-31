@@ -65,10 +65,11 @@ STEPS: tuple[StepSpec, ...] = (
              "Finds eyes, lips and brows on rendered views and projects them onto the head.", "CPU", "MediaPipe",
              "Not integrated in this build.", "standard", requires=("face_geometry",), available=False,
              unavailable_reason="MediaPipe is not bundled in this build; the Moviva anatomy analyzer is used."),
-    StepSpec("ai_rigging", "AI auto-rigging", "SkinTokens / TokenRig",
-             "AI skeleton and skin-weight prediction.", "NVIDIA GPU, 14 GB+ VRAM", "PyTorch + CUDA, downloaded on demand",
-             "Heavy processing.", "heavy", available=False,
-             unavailable_reason="Not installed, and the on-demand installer is not part of this build."),
+    StepSpec("ai_rigging", "AI auto-rigging (replaces the CPU auto-rig)", "SkinTokens / TokenRig",
+             "AI skeleton (fingers included) and skin weights on the GPU; textures and scale are kept.",
+             "NVIDIA GPU, 14 GB+ VRAM", "Python 3.11 + PyTorch CUDA + weights, downloaded once on demand (~12 GB)",
+             "Linux x64 only for now. About a minute per model. Results vary from run to run.", "heavy",
+             requires=("humanoid_geometry", "no_armature"), experimental=True),
 )
 BY_ID = {s.id: s for s in STEPS}
 
@@ -85,6 +86,8 @@ class Facts:
     expressions_missing: bool = False
     hair_bones: bool = False
     spring_bones_possible: bool = False
+    ai_rig: str = "UNAVAILABLE"  # SkinTokens: READY / NOT_INSTALLED / UNAVAILABLE (set by the window, not the preflight)
+    ai_rig_reason: str = ""
 
     def capabilities(self) -> set[str]:
         caps = set()
@@ -124,6 +127,9 @@ def plan(facts: Facts, selected: dict[str, bool] | None = None) -> list[PlannedS
         if not spec.available:
             out[spec.id] = PlannedStep(spec, UNAVAILABLE, False, spec.unavailable_reason)
             continue
+        if spec.id == "ai_rigging" and facts.ai_rig == UNAVAILABLE and not missing:
+            out[spec.id] = PlannedStep(spec, UNAVAILABLE, False, facts.ai_rig_reason or "No suitable NVIDIA GPU.")
+            continue
         if "no_armature" in missing or (spec.id == "auto_rig" and facts.armature):
             out[spec.id] = PlannedStep(spec, NOT_NEEDED, False, "The model already has a skeleton; it is preserved.")
             continue
@@ -142,7 +148,9 @@ def plan(facts: Facts, selected: dict[str, bool] | None = None) -> list[PlannedS
             status, default_on = OPTIONAL, False
         why = {"auto_rig": "The model has a humanoid body but no skeleton.",
                "face_expressions": "Blink and visemes are missing. Skipped automatically if the face geometry is not safe to deform.",
-               "spring_bones": "Hair bones were found."}.get(spec.id, "Optional enhancement.")
+               "spring_bones": "Hair bones were found.",
+               "ai_rigging": "Installed: runs instead of the CPU auto-rig." if facts.ai_rig == "READY" else
+               "Not installed: switching it on offers the one-time download."}.get(spec.id, "Optional enhancement.")
         if spec.id == "spring_bones" and not facts.spring_bones_possible:
             why = "No hair bones were found, so there is nothing to configure."
         enabled = default_on if selected is None else bool(selected.get(spec.id, default_on))
@@ -165,7 +173,7 @@ def plan(facts: Facts, selected: dict[str, bool] | None = None) -> list[PlannedS
 def apply_selection(config: ConversionConfig, steps: list[PlannedStep]) -> ConversionConfig:
     """Write the plan into the converter configuration. Disabled steps stay off."""
     on = {s.spec.id: s.enabled for s in steps}
-    config.auto_rig = on.get("auto_rig", False)
+    config.auto_rig = on.get("auto_rig", False) and not on.get("ai_rigging", False)
     config.spring.enabled = on.get("spring_bones", False)
     a = config.auto_author
     if on.get("face_expressions"):
@@ -181,7 +189,8 @@ def cli_flags(steps: list[PlannedStep]) -> list[str]:
     """The ``convert`` options that realise a plan (the window runs the converter as a subprocess)."""
     on = {s.spec.id: s.enabled for s in steps}
     flags = []
-    if on.get("auto_rig"): flags.append("--auto-rig")
+    if on.get("ai_rigging"): flags.append("--ai-rig")  # the model then has a skeleton: no CPU auto-rig
+    elif on.get("auto_rig"): flags.append("--auto-rig")
     if on.get("face_expressions"): flags.append("--generate-face")
     if on.get("finger_rig"): flags.append("--generate-finger-rig")
     if on.get("hair_rig"): flags.append("--generate-hair-rig")
