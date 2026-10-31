@@ -5,6 +5,7 @@ from __future__ import annotations
 from ..anatomy.confidence import DEFAULT_THRESHOLDS, Thresholds
 from ..anatomy.model import HumanModelAnalysis
 from ..anatomy.regions import eye_ellipse, eye_usability
+from ..anatomy.vec import smoothstep
 from .facefields import FieldBuilder
 from .plans import ShapeKeyPlan, Skipped
 
@@ -21,12 +22,26 @@ def blink_fields(analysis: HumanModelAnalysis, side: str, closure: float = 1.0, 
     up, low = face.local(frame, f"{side}_upper_eyelid"), face.local(frame, f"{side}_lower_eyelid")
     if ell is None or up is None or low is None:
         return None
-    opening = abs(up[1] - low[1]) * closure  # measured lid gap, not a constant
     radius = 0.11 * face.head_width  # eyeball radius estimate from head width
+    box = face.eye_extent.get(side)
+    half = 0.5 * (box[1] - box[0]) if box is not None else 0.6 * ell.rx  # the eye opening's half width
+    top, bottom = up[1] - ell.cy, low[1] - ell.cy  # the lid margins over the eye's middle
     fb = FieldBuilder(face, frame)
 
     def field(dx: float, dy: float, r: float, w: float):
-        move = -UPPER_SHARE * opening * w if dy > 0 else LOWER_SHARE * opening * w
+        # Each lid margin travels the whole way to where the lids meet (a quarter of the gap up from the lower
+        # margin), following the eye's almond: the gap narrows to nothing at the corners. Skin past a margin
+        # follows less the farther it is, to nothing halfway to the region's edge (the brow stays, the cheek too).
+        t = max(0.0, 1.0 - (dx / half) ** 2) ** 0.5 if half > 0 else 0.0
+        yu, yl = top * t, bottom * t
+        meet = yl + LOWER_SHARE * (yu - yl)
+        if dy >= 0:
+            reach = (meet - yu) * closure
+            fade = 1.0 - smoothstep(max(0.0, dy - yu) / max(0.5 * (ell.ry_up - yu), 1e-9))
+        else:
+            reach = (meet - yl) * closure
+            fade = 1.0 - smoothstep(max(0.0, yl - dy) / max(0.5 * (ell.ry_down + yl), 1e-9))
+        move = reach * fade * (1.0 - smoothstep(max(0.0, abs(dx) - half) / max(ell.rx - half, 1e-9)))
         y0, y1 = dy, dy + move
         dz = max(0.0, (y0 * y0 - y1 * y1) / (2 * radius))  # lids ride over the eyeball's curvature
         return (0.0, move, dz)
