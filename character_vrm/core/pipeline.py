@@ -10,6 +10,7 @@ from ..toolchain import Toolchain, load_toolchain
 from .config import HEIGHT_RANGE_M, ConversionConfig
 from .errors import ConversionError
 from .expressions import BLINKS, VISEMES, ExpressionConfigError, ExpressionResult, resolve_expressions
+from .autorig import AutoRigResult
 from .anatomy.model import HumanModelAnalysis, analyze_human
 from .anatomy.morph_signatures import classify_morphs
 from .authoring.plan import AuthoringResult, AutoAuthorPlan, apply_authoring_result, build_authoring_plan, thresholds_from
@@ -251,6 +252,15 @@ class ConverterCore:
         self.bridge.import_character(str(source), fmt)
         return self.bridge.inspect(str(source), fmt)
 
+    def auto_rig(self, inspection: CharacterInspection, source: str | Path) -> tuple[CharacterInspection, AutoRigResult]:
+        """Skeleton + weights for a source without an armature, then a fresh inspection of the rigged scene."""
+        result = self.bridge.auto_rig()
+        if result.status == "FAIL":
+            raise ConversionError("autorig-failed", "Automatic rigging did not produce a trustworthy skeleton and "
+                                  "skin weights; nothing was exported.", [*result.warnings, *(
+                                      f"{a['method']}: {a['status']}" for a in result.attempts)])
+        return self.bridge.inspect(str(source), inspection.source_format), result
+
     def inspect(self, source: str | Path, config: ConversionConfig | None = None) -> Analysis:
         return analyze(self.load(source), config or ConversionConfig())
 
@@ -261,7 +271,14 @@ class ConverterCore:
         analysis: Analysis | None = None
         try:
             inspection = self.load(source)
+            rig: AutoRigResult | None = None
+            if config.auto_rig and not inspection.armatures and not dry_run:
+                inspection, rig = self.auto_rig(inspection, source)
             analysis = analyze(inspection, config)
+            if rig is not None:
+                analysis.warnings.append(ConversionWarning(
+                    "autorig", f"Skeleton and skin weights were generated procedurally ({rig.method}, "
+                    f"deformation tests {rig.status}, confidence {rig.confidence:.2f}); inspect the pose in a viewer."))
             require_humanoid(analysis.humanoid, config.min_confidence)
             plan = build_plan(analysis, output)
             if dry_run:
@@ -285,7 +302,10 @@ class ConverterCore:
             self.bridge.export_vrm(plan.armature, str(output), config.all_bone_influences)
             check = check_vrm_output(output, plan, inspection)
             analysis.warnings.extend(check.warnings)
-            return ConversionOutcome(build_report(self.toolchain, analysis, "success", check, source), analysis, check)
+            report = build_report(self.toolchain, analysis, "success", check, source)
+            if rig is not None:
+                report["autoRig"] = rig.to_dict()
+            return ConversionOutcome(report, analysis, check)
         except ConversionError as exc:
             exc.report = build_report(self.toolchain, analysis, "failed", None, source, error=exc)  # type: ignore[attr-defined]
             raise

@@ -39,7 +39,7 @@ def _python_files():
 def test_bpy_is_only_imported_inside_blender_adapters():
     allowed = {"importer.py", "scene_inspector.py", "vrm_addon.py", "compat_v4_7_2.py", "bridge.py",
                "anatomy_adapter.py", "shape_key_author.py", "rig_author.py", "hair_author.py", "face_geometry.py",
-               "material_author.py", "slim.py"}
+               "material_author.py", "slim.py", "autorig.py"}
     offenders = []
     for path in _python_files():
         tree = ast.parse(path.read_text())

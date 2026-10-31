@@ -36,6 +36,9 @@ def build_parser(prog: str = "character-vrm", with_blender: bool = True) -> argp
                        help="humanoid confidence gate (default 0.75)")
         p.add_argument("--geometry-profile", choices=sorted(GEOMETRY_PROFILES),
                        help="geometry profile (default: full)")
+        p.add_argument("--auto-rig", action="store_true",
+                       help="source without a skeleton: generate a humanoid skeleton and skin weights from the "
+                            "geometry (validated by pose tests; never replaces an existing armature)")
         p.add_argument("--auto-author", action="store_true",
                        help="rest-pose calibration, hair -> spring bones, anatomical colliders and generated "
                             "blink / visemes when confidence is high (conservative)")
@@ -82,6 +85,8 @@ def _load_config(args: argparse.Namespace) -> ConversionConfig:
         config.spring.enabled = False
     if getattr(args, "geometry_profile", None):
         config.geometry.profile = args.geometry_profile
+    if getattr(args, "auto_rig", False):
+        config.auto_rig = True
     author = config.auto_author
     if getattr(args, "auto_author", False):
         author.enabled = True

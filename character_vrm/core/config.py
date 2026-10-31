@@ -174,6 +174,7 @@ class ConversionConfig:
     all_bone_influences: bool = False  # reserved; the add-on default (<= 4 influences) is used
     geometry: GeometryConfig = field(default_factory=GeometryConfig)
     auto_author: AutoAuthorConfig = field(default_factory=AutoAuthorConfig)
+    auto_rig: bool = False  # procedural skeleton + skin weights when the source has no armature (never replaces one)
 
 
 _TOP_KEYS = {"armature", "humanoid", "expressions", "lookAt", "springBones", "meta", "geometry", "autoAuthor"}

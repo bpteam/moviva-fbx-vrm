@@ -27,4 +27,4 @@ exclude = ["character_vrm.tests*"]
 character_vrm = ["toolchain.json"]
 
 [tool.pytest.ini_options]
-testpaths = ["tests", "character_vrm/tests/unit", "character_vrm/tests/contract"]
+testpaths = ["tests", "character_vrm/tests/unit", "character_vrm/tests/contract", "character_vrm/tests/integration"]
