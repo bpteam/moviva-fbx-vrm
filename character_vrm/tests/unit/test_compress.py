@@ -76,3 +76,37 @@ def test_ktx2_marks_textures_and_keeps_vrm(tmp_path):
     assert doc["extensions"] == before["extensions"]
     view = doc["bufferViews"][doc["images"][0]["bufferView"]]
     assert bytes(blob[view["byteOffset"]:view["byteOffset"] + 12]) == b"\xabKTX 20\xbb\r\n\x1a\n"
+
+
+def test_simplify_hair_drops_vertices_and_keeps_every_attribute(tmp_path):
+    pytest.importorskip("meshoptimizer")
+    n = 20  # a dense, nearly flat 20x20 sheet named as hair
+    xs, ys = np.meshgrid(np.linspace(0, 1, n), np.linspace(0, 1, n))
+    pos = np.stack([xs.ravel(), ys.ravel(), 0.001 * np.sin(xs.ravel() * 3)], 1).astype(np.float32)
+    lab = np.zeros((n * n, 4), np.uint8)
+    lab[:, 0] = 4
+    quads = [(r * n + c, r * n + c + 1, (r + 1) * n + c) for r in range(n - 1) for c in range(n - 1)]
+    quads += [(r * n + c + 1, (r + 1) * n + c + 1, (r + 1) * n + c) for r in range(n - 1) for c in range(n - 1)]
+    idx = np.array(quads, np.uint32).ravel()
+    blob = pos.tobytes() + lab.tobytes() + idx.tobytes()
+    doc = {"asset": {"version": "2.0"}, "buffers": [{"byteLength": len(blob)}],
+           "bufferViews": [{"buffer": 0, "byteOffset": 0, "byteLength": pos.nbytes},
+                           {"buffer": 0, "byteOffset": pos.nbytes, "byteLength": lab.nbytes, "byteStride": 4},
+                           {"buffer": 0, "byteOffset": pos.nbytes + lab.nbytes, "byteLength": idx.nbytes}],
+           "accessors": [{"bufferView": 0, "componentType": 5126, "count": n * n, "type": "VEC3",
+                          "min": pos.min(0).tolist(), "max": pos.max(0).tolist()},
+                         {"bufferView": 1, "componentType": 5121, "count": n * n, "type": "SCALAR"},
+                         {"bufferView": 2, "componentType": 5125, "count": len(idx), "type": "SCALAR"}],
+           "materials": [{"name": "F00_000_Hair_00_HAIR_01"}],
+           "meshes": [{"name": "Hair001", "primitives": [{"attributes": {"POSITION": 0, "_MOVIVA_SURFACE": 1},
+                                                          "indices": 2, "material": 0}]}]}
+    path = tmp_path / "h.vrm"
+    compress.write_glb(path, doc, blob)
+    stats = compress.simplify_hair(path)
+    doc, blob = compress.read_glb(path)
+    assert stats["vertices"][1] < stats["vertices"][0] and stats["triangles"][1] < stats["triangles"][0]
+    p = doc["meshes"][0]["primitives"][0]
+    count = doc["accessors"][p["attributes"]["POSITION"]]["count"]
+    assert count == stats["vertices"][1] == doc["accessors"][p["attributes"]["_MOVIVA_SURFACE"]]["count"]
+    assert set(compress._read_accessor(doc, blob, p["attributes"]["_MOVIVA_SURFACE"])[:, 0]) == {4}
+    assert compress._read_accessor(doc, blob, p["indices"]).max() < count

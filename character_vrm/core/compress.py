@@ -316,3 +316,91 @@ def add_surface_labels(path: Path, votes: dict | None = None) -> dict:
     doc["extensionsUsed"] = sorted(set(doc.get("extensionsUsed", [])) | {"MOVIVA_surface_labels"})
     write_glb(path, doc, pack.new)
     return report
+
+
+def simplify_hair(path: Path, ratio: float = 0.5, error: float = 0.01) -> dict:
+    """Hair meshes with about ``ratio`` of their triangles (meshoptimizer's simplifier, borders locked so strand tips
+    and UV seams stay put), then their unused vertices dropped from every
+    attribute. Hair primitives with morph targets are left alone. Returns {"triangles": [before, after],
+    "vertices": [before, after]}."""
+    import numpy as np
+    import meshoptimizer as mo
+    from . import surface_labels as SL
+    doc, blob = read_glb(path)
+    hair: dict[int, list[dict]] = {}  # POSITION accessor -> its hair primitives (when all users are hair)
+    users: dict[int, list[dict]] = {}
+    for mesh in doc.get("meshes", []):
+        for p in mesh["primitives"]:
+            users.setdefault(p["attributes"]["POSITION"], []).append(p)
+            mat = doc["materials"][p["material"]].get("name", "") if "material" in p else ""
+            if SL.decide(mat, mesh.get("name", ""))[0] == "hair" and not p.get("targets") and "indices" in p:
+                hair.setdefault(p["attributes"]["POSITION"], []).append(p)
+    hair = {pos: ps for pos, ps in hair.items() if len(ps) == len(users[pos])}
+    if not hair:
+        return {}
+    tri_before = tri_after = v_before = v_after = 0
+    new_data: dict[int, np.ndarray] = {}  # accessor -> rewritten rows
+    for pos, prims in hair.items():
+        xyz = _read_accessor(doc, blob, pos).astype(np.float32)
+        kept: list[np.ndarray] = []
+        for p in prims:
+            idx = _read_accessor(doc, blob, p["indices"]).astype(np.uint32).ravel()
+            out = np.zeros(len(idx), np.uint32)
+            target = int(len(idx) * ratio) // 3 * 3
+            # borders locked: strand tips and UV seams (split vertices are borders) stay where they are
+            n = mo.simplify(out, idx, xyz, target_index_count=target, target_error=error,
+                            options=mo.SIMPLIFY_LOCK_BORDER)
+            kept.append(out[:n])
+            tri_before += len(idx) // 3
+            tri_after += n // 3
+        used = np.unique(np.concatenate(kept))
+        remap = np.full(len(xyz), -1, np.int64)
+        remap[used] = np.arange(len(used))
+        v_before += len(xyz)
+        v_after += len(used)
+        for p, k in zip(prims, kept):
+            new_data[p["indices"]] = remap[k].astype(np.uint32).reshape(-1, 1)
+        for name, a in prims[0]["attributes"].items():  # every vertex attribute of this buffer, labels included
+            new_data[a] = _read_accessor_raw(doc, blob, a)[used]
+    # rebuild: changed accessors get fresh views (attributes padded to 4-byte strides), the rest keep their bytes
+    index_ids = {p["indices"] for ps in hair.values() for p in ps}
+    pack = _Packer(doc, blob)
+    for vi in range(len(doc["bufferViews"])):
+        bv = doc["bufferViews"][vi]
+        bv["byteOffset"], bv["byteLength"] = pack.add(pack.view_bytes(vi))
+    for ai, rows in new_data.items():
+        a = doc["accessors"][ai]
+        view: dict = {"buffer": 0}
+        if ai in index_ids:
+            a["componentType"] = 5125
+            data = np.ascontiguousarray(rows, np.uint32).tobytes()
+        else:
+            raw = np.ascontiguousarray(rows).view(np.uint8).reshape(len(rows), -1)
+            stride = raw.shape[1] + (-raw.shape[1] % 4)
+            padded = np.zeros((len(rows), stride), np.uint8)
+            padded[:, :raw.shape[1]] = raw
+            data, view["byteStride"] = padded.tobytes(), stride
+            if "min" in a:
+                a["min"], a["max"] = rows.min(axis=0).tolist(), rows.max(axis=0).tolist()
+        view["byteOffset"], view["byteLength"] = pack.add(data)
+        doc["bufferViews"].append(view)
+        a["bufferView"], a["count"] = len(doc["bufferViews"]) - 1, len(rows)
+        a.pop("byteOffset", None)
+    doc["buffers"][0]["byteLength"] = len(pack.new)
+    write_glb(path, doc, pack.new)
+    return {"triangles": [tri_before, tri_after], "vertices": [v_before, v_after]}
+
+
+def _read_accessor_raw(doc: dict, blob: bytes, i: int):
+    """An accessor's elements as stored, shape (count, components), its own dtype (no normalisation)."""
+    import numpy as np
+    a = doc["accessors"][i]
+    dtype = {5121: np.uint8, 5123: np.uint16, 5125: np.uint32, 5126: np.float32}[a["componentType"]]
+    width = _WIDTH[a["type"]]
+    bv = doc["bufferViews"][a["bufferView"]]
+    item = np.dtype(dtype).itemsize * width
+    stride = bv.get("byteStride", item)
+    start = bv.get("byteOffset", 0) + a.get("byteOffset", 0)
+    raw = np.frombuffer(bytes(blob[start:start + stride * (a["count"] - 1) + item]), np.uint8)
+    rows = np.lib.stride_tricks.as_strided(raw, (a["count"], item), (stride, 1)).copy()
+    return rows.view(dtype).reshape(a["count"], width)
