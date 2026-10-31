@@ -28,8 +28,6 @@ jobs:
           - os: macos-15  # Apple Silicon; there is no Intel-mac bpy wheel (macos-14 images retire Nov 2026)
             artifact: moviva-fbx-to-vrm-macos-arm64.zip
     runs-on: ${{ matrix.os }}
-    env:  # GitHub's Windows runners have no GPU/OpenGL: Blender's render for MediaPipe crashes there, so CI skips it
-      MOVIVA_NO_FACE_RENDER: ${{ startsWith(matrix.os, 'windows') && '1' || '' }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
