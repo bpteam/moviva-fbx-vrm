@@ -34,6 +34,22 @@ def model_path() -> Path | None:
     return next((Path(c) for c in candidates if c and Path(c).is_file()), None)
 
 
+def _can_render() -> bool:
+    """Windows without a real GPU (only Microsoft's basic display driver, as on CI runners) crashes Blender's
+    render; skip it there. Other systems render in software when they must."""
+    if sys.platform != "win32":
+        return True
+    import subprocess
+    try:
+        names = subprocess.run(["powershell", "-NoProfile", "-Command",
+                                "(Get-CimInstance Win32_VideoController).Name"],
+                               capture_output=True, text=True, timeout=30).stdout
+    except (OSError, subprocess.SubprocessError):
+        return False
+    gpus = [n.strip() for n in names.splitlines() if n.strip()]
+    return any("basic" not in n.lower() for n in gpus)
+
+
 def _landmarker(path: Path):
     from mediapipe.tasks.python import BaseOptions, vision
     return vision.FaceLandmarker.create_from_options(vision.FaceLandmarkerOptions(
@@ -42,7 +58,7 @@ def _landmarker(path: Path):
 
 def detect(bpy: Any) -> dict[str, tuple[float, float, float]]:
     """{landmark name: world position} for the face found, or {}."""
-    if os.environ.get("MOVIVA_NO_FACE_RENDER"):  # a machine without OpenGL (CI's Windows runners) crashes rendering
+    if not _can_render():
         return {}
     path = model_path()
     if path is None:
