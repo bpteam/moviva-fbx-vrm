@@ -38,9 +38,11 @@ class StepSpec:
 
 
 STEPS: tuple[StepSpec, ...] = (
-    StepSpec("auto_rig", "Generate humanoid skeleton and skin weights", "Blender procedural auto-rig",
-             "Fits a minimal VRM humanoid skeleton to the body geometry and binds the meshes to it "
-             "(Blender bone heat, then deterministic distance weights; the better result is kept).",
+    StepSpec("auto_rig", "Generate humanoid skeleton and skin weights",
+             "Autorig Workbench + Mesh2Motion skeleton, Moviva arm tracer",
+             "Fits Mesh2Motion's human skeleton with fingers to the body (arms traced along the mesh) and skins it "
+             "two ways, the workbench's own and Blender bone heat; each is pose-tested and the better kept. "
+             "Falls back to the procedural fit when the workbench finds no body.",
              "CPU", "bundled Blender", "Needs recognizable humanoid geometry, preferably a T- or A-pose. "
              "Stylized or covered limbs reduce quality. Skeleton and skin weights are one step.", "standard",
              requires=("humanoid_geometry", "no_armature")),

@@ -51,6 +51,8 @@ jobs:
           python -m pip install --no-deps --force-reinstall wheels-12/*.whl
       - name: Fetch the VRM Add-on (pinned, checksum-verified)
         run: python packaging/fetch_addon.py
+      - name: Fetch Autorig Workbench and Mesh2Motion's human skeleton (pinned, checksum-verified)
+        run: python packaging/fetch_autorig.py
       - name: Tests
         shell: bash
         # character_vrm reads its sources without an encoding (cp1252 on Windows), and its launcher test expects
