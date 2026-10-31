@@ -32,6 +32,8 @@ class FakeBlenderBridge:
         self.export_args: tuple | None = None
         self.geometry_plan: GeometryOptimizationPlan | None = None
         self.authoring_plan: AutoAuthorPlan | None = None
+        self.rigged: CharacterInspection | None = None  # what the scene looks like after auto_rig()
+        self.rig_result = None
         self.fail_authoring: set[str] = set()  # shape-key names the "mutation" refuses to create
 
     def environment(self) -> EnvironmentFacts:
@@ -51,6 +53,13 @@ class FakeBlenderBridge:
         scene = copy.deepcopy(self.scene)
         scene.source_path, scene.source_format = source_path, fmt
         return scene
+
+    def auto_rig(self):
+        self.calls.append("auto_rig")
+        from character_vrm.core.autorig import AutoRigResult
+        assert self.rigged is not None, "test did not provide the post-rig scene"
+        self.scene = self.rigged
+        return self.rig_result or AutoRigResult("PASS", method="fake", confidence=0.9)
 
     def isolate_armature(self, armature: str) -> list[str]:
         self.calls.append("isolate_armature")
