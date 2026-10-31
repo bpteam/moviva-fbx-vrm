@@ -297,6 +297,7 @@ class Window(QWidget):
     def analyze(self, source: Path) -> None:
         """Import and inspect only; the configure screen follows."""
         self.source = source
+        self.output = None  # cancelling an analysis must never delete an earlier result
         self.step_list.reset([])
         self.step_list.setVisible(False)
         self.progress_stage.setText(t("stage.preflight"))
@@ -328,6 +329,9 @@ class Window(QWidget):
             self.process.finished.disconnect(self._finished)
             self.process.kill()
             self.process.waitForFinished(3000)
+            if self.output and self.pages.currentIndex() == 1:  # a killed export can leave a half-written file
+                for leftover in (self.output, self.output.with_name(self.output.name + ".report.json")):
+                    leftover.unlink(missing_ok=True)
         self.ticker.stop()
         self.pages.setCurrentIndex(0)
 

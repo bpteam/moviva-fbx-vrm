@@ -68,6 +68,10 @@ tar -xzf moviva-fbx-to-vrm-linux-x64.tar.gz
 ./moviva-fbx-to-vrm/moviva-fbx-to-vrm                # the window
 ./moviva-fbx-to-vrm/moviva-fbx-to-vrm doctor         # checks the built-in Blender and VRM Add-on
 ./moviva-fbx-to-vrm/moviva-fbx-to-vrm convert model.fbx model.vrm --auto-author --generate-face --geometry-profile video-call
+# a model without a skeleton: fit one from the geometry and skin it (pose-tested; never replaces an existing rig)
+./moviva-fbx-to-vrm/moviva-fbx-to-vrm convert statue.glb statue.vrm --auto-rig
+# inspect only, print the processing plan; --events adds '@event {json}' progress lines to convert
+./moviva-fbx-to-vrm/moviva-fbx-to-vrm preflight statue.glb
 
 # macOS
 moviva-fbx-to-vrm.app/Contents/MacOS/moviva-fbx-to-vrm doctor
