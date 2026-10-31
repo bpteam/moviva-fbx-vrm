@@ -119,6 +119,7 @@ def fit_skeleton(points: np.ndarray) -> RigFit:
     edges = np.linspace(0, H, SLICES + 1)
     idx = np.clip((u / H * SLICES).astype(int), 0, SLICES - 1)
     width = np.full(SLICES, np.nan)
+    extent = np.full(SLICES, np.nan)  # outermost |lateral| per slice: robust on sparse, hollow low-poly slices
     count = np.zeros(SLICES, int)
     split = np.zeros(SLICES, bool)
     gap = 0.015 * H
@@ -128,6 +129,7 @@ def fit_skeleton(points: np.ndarray) -> RigFit:
         if count[i] < max(6, 0.0005 * len(pts)):
             continue
         width[i] = _central_halfwidth(l[m], gap)
+        extent[i] = float(np.abs(l[m]).max())
         lm = l[m]
         g = max(gap, 4.0 * float(np.ptp(lm)) / len(lm))
         split[i] = (lm > g).sum() >= 3 and (lm < -g).sum() >= 3 and \
@@ -149,9 +151,9 @@ def fit_skeleton(points: np.ndarray) -> RigFit:
         crotch = 0.47 * H
         fit.warnings.append("legs do not separate (skirt, robe or one-piece?): hips placed at 47 % of height")
 
-    # Neck: narrowest central slice in the upper half, highest among near-ties.
-    lo, hi = int(0.55 * SLICES), int(0.95 * SLICES)
-    w = np.where(np.isnan(width[lo:hi]), np.inf, width[lo:hi])
+    # Neck: the narrowest outline between the legs and the top of a (possibly huge) head, highest among near-ties.
+    lo, hi = int(0.40 * SLICES), int(0.88 * SLICES)  # above that: a hair tip, not a neck
+    w = np.where(np.isnan(extent[lo:hi]), np.inf, extent[lo:hi])
     if np.isfinite(w).any():
         near = np.where(w <= w.min() * 1.08)[0]
         neck_u = float(edges[lo + near[-1]] + H / SLICES / 2)
@@ -165,11 +167,19 @@ def fit_skeleton(points: np.ndarray) -> RigFit:
     wb = [i for i in range(SLICES) if crotch + 0.2 * (sh_u - crotch) <= (edges[i] + edges[i + 1]) / 2
           <= sh_u - 0.1 * (sh_u - crotch) and not np.isnan(width[i])]
     waist_half = float(min((width[i] for i in wb), default=0.12 * H))
+    # A hollow low-poly slice has no vertices near the middle, so the central cluster reads far too thin;
+    # half the outline (arms included) is a floor for the torso half-width.
+    ext_w = [extent[i] for i in wb if not np.isnan(extent[i])]
+    if ext_w:
+        waist_half = max(waist_half, 0.5 * float(np.median(ext_w)))
     waist_u = (crotch + sh_u) / 2
     # Shoulder width: the widest torso-only slice between mid-torso and the neck (arms may be out, so cap it).
     band = [i for i in range(SLICES) if (waist_u + sh_u) / 2 <= (edges[i] + edges[i + 1]) / 2 <= sh_u
             and not np.isnan(width[i])]
     sh_half = float(np.clip(max((width[i] for i in band), default=waist_half), 0.8 * waist_half, 1.3 * waist_half))
+    ext_s = [extent[i] for i in band if not np.isnan(extent[i])]
+    if ext_s:
+        sh_half = max(sh_half, 0.5 * float(min(ext_s)))
 
     # Arms: vertices clearly outside the torso between the knees and the neck.
     # A skirt or wide hips must not pass for an arm: the outside test uses the widest of waist and hip band.
@@ -260,8 +270,9 @@ def distance_weights(points: np.ndarray, fit: RigFit, max_influences: int = 4) -
         if n.startswith(("Left", "Right")):
             sgn = 1.0 if n.startswith("Left") else -1.0
             D[sgn * lat < -0.03 * fit.height, j] = np.inf  # never reach across the body
-    W = 1.0 / (D + eps) ** 3
+    W = 1.0 / (D + eps) ** 5  # steep falloff: a torso vertex beside an arm must not follow it
     W[~np.isfinite(D)] = 0.0
+    W = np.where(W < 0.05 * W.max(axis=1, keepdims=True), 0.0, W)  # drop negligible influences
     if max_influences < len(names):
         cut = np.sort(W, axis=1)[:, -max_influences][:, None]
         W = np.where(W >= cut, W, 0.0)
