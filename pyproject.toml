@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "moviva-fbx-to-vrm"
-version = "0.1.0"
+version = "0.2.0"
 description = "Drop an FBX / GLB / glTF character, get a VRM 1.0 avatar. Blender is built in."
 license = "GPL-3.0-or-later"
 requires-python = "==3.13.*"  # the bpy wheel is built for exactly one Python

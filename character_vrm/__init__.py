@@ -4,4 +4,4 @@ Importing this package never requires Blender: ``bpy`` is only imported inside t
 ``character_vrm.blender`` and only when they run inside Blender.
 """
 
-__version__ = "0.1.0"
+__version__ = "0.2.0"
