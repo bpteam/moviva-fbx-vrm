@@ -85,8 +85,8 @@ def _load_config(args: argparse.Namespace) -> ConversionConfig:
     if getattr(args, "geometry_profile", None):
         config.geometry.profile = args.geometry_profile
     if getattr(args, "height_cm", None) is not None:
-        if args.height_cm <= 0:
-            raise ConfigError("--height-cm must be positive")
+        if not 0 < args.height_cm < float("inf"):  # also rejects nan
+            raise ConfigError("--height-cm must be a positive number")
         config.height_cm = args.height_cm
     author = config.auto_author
     if getattr(args, "auto_author", False):

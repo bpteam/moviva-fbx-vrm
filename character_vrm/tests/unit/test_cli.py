@@ -218,3 +218,7 @@ def test_height_cm_reaches_the_import():
     args = build_parser().parse_args(["convert", "a.glb", "b.vrm", "--height-cm", "165"])
     assert _load_config(args).height_cm == 165
     assert _load_config(build_parser().parse_args(["convert", "a.glb", "b.vrm"])).height_cm is None
+    from character_vrm.core.config import ConfigError
+    for bad in ("0", "-5", "nan", "inf"):
+        with pytest.raises(ConfigError):
+            _load_config(build_parser().parse_args(["convert", "a.glb", "b.vrm", "--height-cm", bad]))
