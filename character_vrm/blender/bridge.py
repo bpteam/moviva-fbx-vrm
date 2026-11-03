@@ -23,8 +23,8 @@ class BlenderBridge(Protocol):
     def reset_scene(self) -> None:
         """Stage 1: known-empty scene, independent of startup file, selection, UI context."""
 
-    def import_character(self, path: str, fmt: str) -> None:
-        """Stage 2: import ``glb`` / ``gltf`` / ``fbx`` through Blender's own importers."""
+    def import_character(self, path: str, fmt: str, height_cm: float | None = None) -> None:
+        """Stage 2: import ``glb`` / ``gltf`` / ``fbx`` through Blender's own importers; scale to ``height_cm``."""
 
     def inspect(self, source_path: str, fmt: str) -> CharacterInspection:
         """Stage 3: what actually survived the import, as a ``bpy``-free description."""
@@ -59,9 +59,9 @@ class RealBlenderBridge:
         from . import importer
         importer.reset_scene()
 
-    def import_character(self, path: str, fmt: str) -> None:
+    def import_character(self, path: str, fmt: str, height_cm: float | None = None) -> None:
         from . import importer
-        importer.import_character(path, fmt)
+        importer.import_character(path, fmt, height_cm)
 
     def inspect(self, source_path: str, fmt: str) -> CharacterInspection:
         from . import scene_inspector

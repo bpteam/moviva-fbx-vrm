@@ -9,6 +9,8 @@
  "drop.hint": "FBX, GLB, glTF o VRM · o haz clic para elegir",
  "drop.dialog": "Elige un personaje",
  "drop.filter": "Personajes",
+ "height": "Altura del avatar",
+ "height.keep": "como en el archivo",
  "autoface": "Crear parpadeo, sincronía labial y expresiones que falten si la cara lo permite",
  "footer": "v{version} · Blender y el VRM Add-on vienen incluidos · GPL-3.0",
  "progress.hint": "Los modelos grandes tardan unos minutos. Mientras tanto puedes seguir trabajando.",

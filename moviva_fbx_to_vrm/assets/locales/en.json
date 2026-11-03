@@ -9,6 +9,8 @@
  "drop.hint": "FBX, GLB, glTF or VRM · or click to choose",
  "drop.dialog": "Choose a character",
  "drop.filter": "Characters",
+ "height": "Avatar height",
+ "height.keep": "as in the file",
  "autoface": "Create missing blinking, lip sync and expressions when the face allows it",
  "footer": "v{version} · Blender and the VRM Add-on are built in · GPL-3.0",
  "progress.hint": "Big models take a few minutes. You can keep working meanwhile.",

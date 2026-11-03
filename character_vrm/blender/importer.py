@@ -40,7 +40,7 @@ def reset_scene(bpy: Any = None) -> None:
         raise ConversionError("scene-not-clean", f"Could not clear object '{block.name}' from the scene.")
 
 
-def import_character(path: str, fmt: str, bpy: Any = None) -> None:
+def import_character(path: str, fmt: str, height_cm: float | None = None, bpy: Any = None) -> None:
     if bpy is None:
         import bpy  # type: ignore[no-redef]
 
@@ -66,3 +66,31 @@ def import_character(path: str, fmt: str, bpy: Any = None) -> None:
 
     if result != {"FINISHED"}:
         raise ConversionError("import-failed", f"Blender import of {path} returned {sorted(result)}.")
+    if height_cm:
+        scale_to_height(height_cm, bpy)
+
+
+def scale_to_height(height_cm: float, bpy: Any) -> None:
+    """Scale the whole import so its meshes stand ``height_cm`` tall and bake the scale into the data:
+    a 3 m model otherwise fills a call frame with its chin. Runs before analysis, so every plan is in final units."""
+    from mathutils import Vector  # type: ignore[import-not-found]
+
+    objects = list(bpy.context.scene.objects)
+    bpy.context.view_layer.update()
+    meshes = [o for o in objects if o.type == "MESH"]
+    # props and floors in the same file must not count: measure the skinned body when there is one
+    skinned = [o for o in meshes if (o.parent and o.parent.type == "ARMATURE")
+               or any(m.type == "ARMATURE" for m in o.modifiers)]
+    zs = [(o.matrix_world @ Vector(c)).z for o in skinned or meshes for c in o.bound_box]
+    if not zs or max(zs) - min(zs) <= 0:
+        return
+    factor = height_cm / 100.0 / (max(zs) - min(zs))
+    for o in objects:
+        if o.parent is None:
+            o.location *= factor
+            o.scale *= factor
+    for o in objects:
+        o.hide_set(False)
+        o.select_set(True)
+    bpy.context.view_layer.objects.active = objects[0]
+    bpy.ops.object.transform_apply(location=False, rotation=False, scale=True, isolate_users=True)

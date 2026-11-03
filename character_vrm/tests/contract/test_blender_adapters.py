@@ -83,9 +83,9 @@ def test_no_custom_glb_or_vrm_serializer():
 def test_gltf_uses_the_gltf_importer():
     bpy = MagicMock()
     bpy.ops.import_scene.gltf.return_value = {"FINISHED"}
-    importer.import_character("/m/a.glb", "glb", bpy)
+    importer.import_character("/m/a.glb", "glb", bpy=bpy)
     bpy.ops.import_scene.gltf.assert_called_once_with(filepath="/m/a.glb")
-    importer.import_character("/m/a.gltf", "gltf", bpy)
+    importer.import_character("/m/a.gltf", "gltf", bpy=bpy)
     assert bpy.ops.import_scene.gltf.call_count == 2
     bpy.ops.wm.fbx_import.assert_not_called()
 
@@ -93,7 +93,7 @@ def test_gltf_uses_the_gltf_importer():
 def test_fbx_uses_the_current_fbx_importer_not_fbx2gltf_or_the_legacy_operator():
     bpy = MagicMock()
     bpy.ops.wm.fbx_import.return_value = {"FINISHED"}
-    importer.import_character("/m/a.fbx", "fbx", bpy)
+    importer.import_character("/m/a.fbx", "fbx", bpy=bpy)
     bpy.ops.wm.fbx_import.assert_called_once_with(filepath="/m/a.fbx")
     bpy.ops.import_scene.fbx.assert_not_called()
     assert "subprocess" not in (PACKAGE / "blender" / "importer.py").read_text()  # no external FBX converter
@@ -103,12 +103,12 @@ def test_import_failure_and_missing_operator():
     bpy = MagicMock()
     bpy.ops.import_scene.gltf.return_value = {"CANCELLED"}
     with pytest.raises(ConversionError) as exc:
-        importer.import_character("/m/a.glb", "glb", bpy)
+        importer.import_character("/m/a.glb", "glb", bpy=bpy)
     assert exc.value.code == "import-failed"
     bpy = MagicMock()
     bpy.ops.wm = MagicMock(spec=[])
     with pytest.raises(ConversionError) as exc:
-        importer.import_character("/m/a.fbx", "fbx", bpy)
+        importer.import_character("/m/a.fbx", "fbx", bpy=bpy)
     assert exc.value.code == "importer-missing"
 
 

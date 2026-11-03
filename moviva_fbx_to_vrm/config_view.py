@@ -6,7 +6,7 @@ import json
 from html import escape
 
 from PySide6.QtCore import QProcess, Qt, Signal
-from PySide6.QtWidgets import (QCheckBox, QComboBox, QFrame, QHBoxLayout, QLabel, QMessageBox, QProgressDialog,
+from PySide6.QtWidgets import (QCheckBox, QComboBox, QFrame, QHBoxLayout, QLabel, QMessageBox, QProgressDialog, QSpinBox,
                                QToolButton, QVBoxLayout, QWidget)
 
 from character_vrm.core import events
@@ -14,6 +14,7 @@ from character_vrm.core.steps import MANDATORY, Facts, PlannedStep, plan
 
 from .i18n import t
 
+REFERENCE_HEIGHT_CM = 156  # Mi (mia.vrm measures 155.8 cm), the reference avatar
 STATUS_COLOR = {"RECOMMENDED": "#57d797", "OPTIONAL": "#a9bac8", "NOT_NEEDED": "#a9bac8",
                 "UNAVAILABLE": "#ff6574", "EXPERIMENTAL": "#ffc053"}
 RUN_MARK = {"PENDING": ("○", "#a9bac8"), "RUNNING": ("▶", "#ff7546"), "SUCCESS": ("✓", "#57d797"),
@@ -87,6 +88,7 @@ class ConfigView(QWidget):
         self.selected: dict[str, bool] = {}
         self.steps: list[PlannedStep] = []
         self.profile = "video-call"  # what Moviva shows; kept across models in one session
+        self.height_cm = REFERENCE_HEIGHT_CM  # 0 keeps the source size; kept across models in one session
         self.compress = {"simplify-hair": False, "ktx2": False, "meshopt": False}  # off unless asked
 
     def load(self, document: dict) -> None:
@@ -113,6 +115,7 @@ class ConfigView(QWidget):
             note.setObjectName("muted")
             note.setWordWrap(True)
             self.layout_.addWidget(note)
+        self.layout_.addWidget(self._height_row())
         self.layout_.addWidget(self._profile_row())
         self.layout_.addWidget(self._compress_row())
         for step in self.steps:
@@ -120,6 +123,22 @@ class ConfigView(QWidget):
             card.toggled.connect(lambda c=card, sid=step.spec.id: self._changed(sid, c.box.isChecked()))
             self.layout_.addWidget(card)
         self.layout_.addStretch(1)
+
+    def _height_row(self) -> QFrame:
+        """Avatar height: the converter's --height-cm; a 3 m model otherwise shows only its chin in a call."""
+        row = QFrame()
+        row.setObjectName("card")
+        lay = QHBoxLayout(row)
+        lay.addWidget(QLabel(t("height")))
+        lay.addStretch(1)
+        spin = QSpinBox()
+        spin.setRange(0, 400)
+        spin.setSpecialValueText(t("height.keep"))
+        spin.setSuffix(" cm")
+        spin.setValue(self.height_cm)
+        spin.valueChanged.connect(lambda v: setattr(self, "height_cm", v))
+        lay.addWidget(spin)
+        return row
 
     def _profile_row(self) -> QFrame:
         """Visible part: the converter's --geometry-profile, with what it removes in the tooltip."""

@@ -40,6 +40,8 @@ def build_parser(prog: str = "character-vrm", with_blender: bool = True) -> argp
                        help="humanoid confidence gate (default 0.75)")
         p.add_argument("--geometry-profile", choices=sorted(GEOMETRY_PROFILES),
                        help="geometry profile (default: full)")
+        p.add_argument("--height-cm", type=float, metavar="CM",
+                       help="scale the model so it stands this tall (default: keep the source size)")
         p.add_argument("--auto-rig", action="store_true",
                        help="source without a skeleton: generate a humanoid skeleton and skin weights from the "
                             "geometry (validated by pose tests; never replaces an existing armature)")
@@ -107,6 +109,10 @@ def _load_config(args: argparse.Namespace) -> ConversionConfig:
         config.spring.enabled = False
     if getattr(args, "geometry_profile", None):
         config.geometry.profile = args.geometry_profile
+    if getattr(args, "height_cm", None) is not None:
+        if not 0 < args.height_cm < float("inf"):  # also rejects nan
+            raise ConfigError("--height-cm must be a positive number")
+        config.height_cm = args.height_cm
     if getattr(args, "auto_rig", False):
         config.auto_rig = True
     author = config.auto_author
