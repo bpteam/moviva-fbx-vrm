@@ -211,3 +211,14 @@ def test_cli_flags_override_the_map_file(tmp_path):
     assert code == 0
     code, text = run_cmd(["convert", str(model), str(tmp_path / "o.vrm"), "--min-confidence", "3"], FakeBlenderBridge(make_scene()))
     assert code == 1 and "min-confidence" in text
+
+
+def test_height_cm_reaches_the_import():
+    from character_vrm.commands import _load_config
+    args = build_parser().parse_args(["convert", "a.glb", "b.vrm", "--height-cm", "165"])
+    assert _load_config(args).height_cm == 165
+    assert _load_config(build_parser().parse_args(["convert", "a.glb", "b.vrm"])).height_cm is None
+    from character_vrm.core.config import ConfigError
+    for bad in ("0", "-5", "nan", "inf"):
+        with pytest.raises(ConfigError):
+            _load_config(build_parser().parse_args(["convert", "a.glb", "b.vrm", "--height-cm", bad]))

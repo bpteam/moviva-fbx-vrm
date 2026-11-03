@@ -43,9 +43,10 @@ class FakeBlenderBridge:
     def reset_scene(self) -> None:
         self.calls.append("reset_scene")
 
-    def import_character(self, path: str, fmt: str) -> None:
+    def import_character(self, path: str, fmt: str, height_cm: float | None = None) -> None:
         self.calls.append("import_character")
         self.imported = (path, fmt)
+        self.height_cm = height_cm
 
     def inspect(self, source_path: str, fmt: str) -> CharacterInspection:
         self.calls.append("inspect")

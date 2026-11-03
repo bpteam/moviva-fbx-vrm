@@ -35,9 +35,9 @@ def main(argv: list[str] | None = None) -> int:
     class ReportingBridge(RealBlenderBridge):
         """Prints a ``@stage`` line before each slow step; the window shows it as progress."""
 
-        def import_character(self, path, fmt):
+        def import_character(self, path, fmt, height_cm=None):
             print("@stage reading")
-            return super().import_character(path, fmt)
+            return super().import_character(path, fmt, height_cm)
 
         def inspect(self, source_path, fmt):
             print("@stage analysing")

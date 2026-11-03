@@ -322,6 +322,8 @@ class Window(QWidget):
         # the visible part and the step flags come from the configure screen the user confirmed
         args = ["convert", str(source), str(self.output), "--geometry-profile", self.config.profile, "--events",
                 *cli_flags(self.config.steps), *[f"--{k}" for k, on in self.config.compress.items() if on]]
+        if self.config.height_cm:
+            args += ["--height-cm", str(self.config.height_cm)]
         self.step_list.reset(self.config.steps)
         self.step_list.setVisible(True)
         self.progress_stage.setText(t("stage.starting"))

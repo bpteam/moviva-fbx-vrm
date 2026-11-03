@@ -252,13 +252,13 @@ class ConverterCore:
         self.events = events or (lambda event: None)  # structured progress: see core/events.py
         self.toolchain = toolchain or load_toolchain()
 
-    def load(self, source: str | Path) -> CharacterInspection:
+    def load(self, source: str | Path, height_cm: float | None = None) -> CharacterInspection:
         """Stage 1-3: clean scene, import, inspect."""
         fmt = source_format(source)
         if not Path(source).is_file():
             raise ConversionError("source-missing", f"{source}: no such file")
         self.bridge.reset_scene()
-        self.bridge.import_character(str(source), fmt)
+        self.bridge.import_character(str(source), fmt, height_cm)
         return self.bridge.inspect(str(source), fmt)
 
     def auto_rig(self, inspection: CharacterInspection, source: str | Path) -> tuple[CharacterInspection, AutoRigResult]:
@@ -271,7 +271,8 @@ class ConverterCore:
         return self.bridge.inspect(str(source), inspection.source_format), result
 
     def inspect(self, source: str | Path, config: ConversionConfig | None = None) -> Analysis:
-        return analyze(self.load(source), config or ConversionConfig())
+        config = config or ConversionConfig()
+        return analyze(self.load(source, config.height_cm), config)
 
     def _author(self, analysis: Analysis, plan: VrmPlan, authoring: AutoAuthorPlan) -> None:
         if authoring.needs_mutation:
@@ -292,7 +293,7 @@ class ConverterCore:
         ev = self.events
         try:
             with events.step(ev, "import", "Importing the model"):
-                inspection = self.load(source)
+                inspection = self.load(source, config.height_cm)
             rig: AutoRigResult | None = None
             if config.auto_rig and not inspection.armatures and not dry_run:
                 with events.step(ev, "auto_rig", "Generating skeleton and skin weights") as done:
