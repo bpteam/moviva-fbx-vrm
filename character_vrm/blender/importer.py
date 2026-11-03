@@ -71,7 +71,11 @@ def scale_to_height(height_cm: float, bpy: Any) -> None:
 
     objects = list(bpy.context.scene.objects)
     bpy.context.view_layer.update()
-    zs = [(o.matrix_world @ Vector(c)).z for o in objects if o.type == "MESH" for c in o.bound_box]
+    meshes = [o for o in objects if o.type == "MESH"]
+    # props and floors in the same file must not count: measure the skinned body when there is one
+    skinned = [o for o in meshes if (o.parent and o.parent.type == "ARMATURE")
+               or any(m.type == "ARMATURE" for m in o.modifiers)]
+    zs = [(o.matrix_world @ Vector(c)).z for o in skinned or meshes for c in o.bound_box]
     if not zs or max(zs) - min(zs) <= 0:
         return
     factor = height_cm / 100.0 / (max(zs) - min(zs))
