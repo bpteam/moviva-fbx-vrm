@@ -28,7 +28,7 @@ COLORS = {OK: "#57d797", WARN: "#ffc053", BAD: "#ff6574", READY: "#57d797", FAIL
 MARKS = {OK: "✓", WARN: "!", BAD: "✕"}
 MOVIVA_URL = "https://moviva.bpt22.tech/?utm_source=app_moviva_fbx_vrm"
 MOVIVA_LINK = f'<a href="{MOVIVA_URL}" style="color: #ff7546;">Moviva: AI Avatar for ChatGPT Voice</a>'
-REFERENCE_HEIGHT_CM = 160  # Mi, the reference avatar; placeholder until measured
+REFERENCE_HEIGHT_CM = 156  # Mi (mia.vrm measures 155.8 cm), the reference avatar
 
 STYLE = """
 QWidget { background: #0b1319; color: #eef3f7; font-size: 14px; }
