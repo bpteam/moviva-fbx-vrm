@@ -26,6 +26,9 @@ def main(argv: list[str] | None = None) -> int:
     except RuntimeError as exc:
         print(f"ERROR {exc}", file=sys.stderr)
         return 1
+    if argv[0] == "aw-rig":  # the auto-rig's child process (character_vrm.blender.workbench)
+        from character_vrm.blender.workbench import main as workbench_main
+        return workbench_main(argv[1:])
     from character_vrm.blender.bridge import RealBlenderBridge
     from character_vrm.commands import run
 

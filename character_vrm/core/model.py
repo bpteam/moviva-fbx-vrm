@@ -200,12 +200,15 @@ class ImageInfo:
 @dataclass
 class CharacterInspection:
     source_path: str
-    source_format: str  # "glb" | "gltf" | "fbx"
+    source_format: str  # "glb" | "gltf" | "fbx" | "vrm"
     armatures: list[ArmatureInfo] = field(default_factory=list)
     meshes: list[MeshInfo] = field(default_factory=list)
     materials: list[MaterialInfo] = field(default_factory=list)
     shape_keys: list[ShapeKeyInfo] = field(default_factory=list)
     images: list[ImageInfo] = field(default_factory=list)
+    face_points: dict[str, tuple[float, float, float]] = field(default_factory=dict)  # MediaPipe, world space
+    # a VRM source's own expressions: VRM 1.0 preset name -> {shape key: weight}, as its author bound them
+    source_expressions: dict[str, dict[str, float]] = field(default_factory=dict)
 
     @property
     def triangle_count(self) -> int:

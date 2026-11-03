@@ -227,3 +227,43 @@ def export_vrm(ops: Any, filepath: str, armature_object_name: str, all_influence
     result = ops.export_scene.vrm(**kwargs)
     if result != {"FINISHED"}:
         raise ConversionError("export-failed", f"bpy.ops.export_scene.vrm did not finish: {sorted(result)}")
+
+
+# VRM 0.x preset -> VRM 1.0 preset (the 0.x "unknown" groups are matched by name: VRoid's "Surprised")
+_VRM0 = {"a": "aa", "i": "ih", "u": "ou", "e": "ee", "o": "oh", "blink": "blink", "blink_l": "blinkLeft",
+         "blink_r": "blinkRight", "joy": "happy", "angry": "angry", "sorrow": "sad", "fun": "relaxed",
+         "lookup": "lookUp", "lookdown": "lookDown", "lookleft": "lookLeft", "lookright": "lookRight"}
+_VRM1 = ("happy", "angry", "sad", "relaxed", "surprised", "aa", "ih", "ou", "ee", "oh", "blink", "blinkLeft",
+         "blinkRight", "lookUp", "lookDown", "lookLeft", "lookRight")
+
+
+def source_expressions(data: Any) -> dict[str, dict[str, float]]:
+    """The expressions an imported VRM already binds (VRM Add-on data), so its author's choices are kept."""
+    out: dict[str, dict[str, float]] = {}
+    for arm in (o for o in data.objects if o.type == "ARMATURE"):
+        ext = getattr(arm.data, "vrm_addon_extension", None)
+        if ext is None:
+            continue
+        if str(ext.spec_version).startswith("0"):
+            for g in ext.vrm0.blend_shape_master.blend_shape_groups:
+                name = _VRM0.get(g.preset_name) or ("surprised" if g.name.lower() == "surprised" else None)
+                binds = {b.index: float(b.weight) for b in g.binds if b.index}
+                if name and binds:
+                    out[name] = binds
+        else:
+            preset = ext.vrm1.expressions.preset
+            for name in _VRM1:
+                e = getattr(preset, name, None)
+                binds = {b.index: float(b.weight) for b in (e.morph_target_binds if e else []) if b.index}
+                if binds:
+                    out[name] = binds
+        if out:
+            break
+    return out
+
+
+def humanoid_bone(armature: Any, vrm_bone: str) -> str | None:
+    """The armature bone the add-on maps to a VRM 1.0 human bone (``leftUpperArm``), or None."""
+    node = getattr(extension(armature).vrm1.humanoid.human_bones, snake(vrm_bone), None)
+    name = node.node.bone_name if node is not None else ""
+    return name or None

@@ -12,15 +12,18 @@ from pathlib import Path
 from PySide6.QtCore import QLocale, QProcess, Qt, QTimer, QUrl
 from PySide6.QtGui import QDesktopServices, QIcon, QPixmap
 from PySide6.QtWidgets import (
-    QApplication, QCheckBox, QFileDialog, QFrame, QHBoxLayout, QLabel, QProgressBar, QPushButton, QSpinBox,
+    QApplication, QCheckBox, QFileDialog, QFrame, QHBoxLayout, QLabel, QProgressBar, QPushButton,
     QScrollArea, QStackedWidget, QVBoxLayout, QWidget,
 )
 
+from character_vrm.core.steps import cli_flags
+
 from . import __version__
+from .config_view import ConfigView, StepList, parse_preflight
 from .i18n import language_for, set_language, t
 from .summary import BAD, FAILED, OK, READY, WARN, Summary, summarize
 
-SOURCES = (".fbx", ".glb", ".gltf")
+SOURCES = (".fbx", ".glb", ".gltf", ".vrm")  # a VRM is re-cut and slimmed
 ASSETS = Path(__file__).with_name("assets")
 INTRO_SIZE = (544, 200)  # shown size; assets/intro.png should be twice that (1088 x 400) for sharp HiDPI screens
 STAGES = ("reading", "analysing", "authoring", "writing")  # ``@stage <name>`` lines from the converter
@@ -28,12 +31,14 @@ COLORS = {OK: "#57d797", WARN: "#ffc053", BAD: "#ff6574", READY: "#57d797", FAIL
 MARKS = {OK: "✓", WARN: "!", BAD: "✕"}
 MOVIVA_URL = "https://moviva.bpt22.tech/?utm_source=app_moviva_fbx_vrm"
 MOVIVA_LINK = f'<a href="{MOVIVA_URL}" style="color: #ff7546;">Moviva: AI Avatar for ChatGPT Voice</a>'
-REFERENCE_HEIGHT_CM = 156  # Mi (mia.vrm measures 155.8 cm), the reference avatar
 
 STYLE = """
 QWidget { background: #0b1319; color: #eef3f7; font-size: 14px; }
 QLabel#title { font-size: 20px; font-weight: 700; }
 QLabel#muted, QCheckBox#muted { color: #a9bac8; }
+QCheckBox::indicator { width: 16px; height: 16px; border: 2px solid #a9bac8; border-radius: 4px; background: #0f1620; }
+QCheckBox::indicator:checked { background: #ff7546; border-color: #ff7546; }
+QCheckBox::indicator:disabled { border-color: #3a4652; background: #141c26; }
 QFrame#drop { border: 2px dashed #405461; border-radius: 14px; background: #0c141a; }
 QFrame#drop[hover="true"] { border-color: #ff5d2b; background: #21191a; }
 QFrame#card { background: #101b22; border-radius: 12px; }
@@ -58,7 +63,7 @@ def converter_command(args: list[str]) -> tuple[str, list[str]]:
 
 
 def free_output_path(source: Path) -> Path:
-    candidate = source.with_suffix(".vrm")
+    candidate = source.with_suffix(".vrm") if source.suffix.lower() != ".vrm" else source.with_name(source.stem + "-moviva.vrm")
     n = 2
     while candidate.exists():
         candidate = source.with_name(f"{source.stem}-{n}.vrm")
@@ -116,7 +121,7 @@ class DropZone(QFrame):
             self.on_file(path)
 
     def mousePressEvent(self, event) -> None:
-        name, _ = QFileDialog.getOpenFileName(self, t("drop.dialog"), "", f"{t('drop.filter')} (*.fbx *.glb *.gltf)")
+        name, _ = QFileDialog.getOpenFileName(self, t("drop.dialog"), "", f"{t('drop.filter')} (*.fbx *.glb *.gltf *.vrm)")
         if name:
             self.on_file(Path(name))
 
@@ -156,6 +161,7 @@ class Window(QWidget):
         self.pages.addWidget(self._start_page())
         self.pages.addWidget(self._progress_page())
         self.pages.addWidget(self._result_page())
+        self.pages.addWidget(self._config_page())
         root.addWidget(self.pages, 1)
 
         footer = QLabel(t("footer", version=__version__))
@@ -187,20 +193,28 @@ class Window(QWidget):
             row.addWidget(step, 1)
             layout.addLayout(row)
         layout.addSpacing(4)
-        layout.addWidget(DropZone(self.convert), 1)
-        height = QHBoxLayout()
-        height.addWidget(QLabel(t("height")))
-        self.height = QSpinBox()
-        self.height.setRange(0, 400)  # 0 keeps the source size
-        self.height.setSpecialValueText(t("height.keep"))
-        self.height.setSuffix(" cm")
-        self.height.setValue(REFERENCE_HEIGHT_CM)
-        height.addWidget(self.height)
-        height.addStretch(1)
-        layout.addLayout(height)
-        self.auto_face = QCheckBox(t("autoface"))
-        self.auto_face.setChecked(True)
-        layout.addWidget(self.auto_face)
+        layout.addWidget(DropZone(self.analyze), 1)
+        return page
+
+    def _config_page(self) -> QWidget:
+        page = QWidget()
+        layout = QVBoxLayout(page)
+        layout.setContentsMargins(0, 8, 0, 0)
+        self.config = ConfigView()
+        scroll = QScrollArea()
+        scroll.setWidgetResizable(True)
+        scroll.setWidget(self.config)
+        layout.addWidget(scroll, 1)
+        buttons = QHBoxLayout()
+        start = QPushButton(t("button.start"))
+        start.setObjectName("primary")
+        start.clicked.connect(self.convert)
+        back = QPushButton(t("button.again"))
+        back.clicked.connect(lambda: self.pages.setCurrentIndex(0))
+        buttons.addWidget(start)
+        buttons.addStretch(1)
+        buttons.addWidget(back)
+        layout.addLayout(buttons)
         return page
 
     @staticmethod
@@ -236,7 +250,8 @@ class Window(QWidget):
         hint.setObjectName("muted")
         cancel = QPushButton(t("button.cancel"))
         cancel.clicked.connect(self.cancel)
-        for w in (self.progress_name, self.progress_stage, bar, self.progress_time, hint):
+        self.step_list = StepList()
+        for w in (self.progress_name, self.progress_stage, bar, self.step_list, self.progress_time, hint):
             layout.addWidget(w)
         layout.addSpacing(8)
         layout.addWidget(cancel, 0, Qt.AlignmentFlag.AlignLeft)
@@ -267,22 +282,14 @@ class Window(QWidget):
 
     # ------------------------------------------------------------- conversion
 
-    def convert(self, source: Path) -> None:
-        self.output = free_output_path(source)
-        self.output.with_name(self.output.name + ".report.json").unlink(missing_ok=True)  # never read a stale one
-        args = ["convert", str(source), str(self.output), "--geometry-profile", "video-call"]  # waist up, as in calls
-        if self.height.value():
-            args += ["--height-cm", str(self.height.value())]
-        if self.auto_face.isChecked():
-            args += ["--auto-author", "--generate-face"]
+    def _launch(self, source: Path, args: list[str], on_finished) -> None:
         self.log = []
         self.process = QProcess(self)
         self.process.setProcessChannelMode(QProcess.ProcessChannelMode.MergedChannels)
         self.process.readyReadStandardOutput.connect(self._read)
-        self.process.finished.connect(self._finished)
+        self.process.finished.connect(on_finished)
         self.process.errorOccurred.connect(self._crashed)
         self.progress_name.setText(source.name)
-        self.progress_stage.setText(t("stage.starting"))
         self.progress_time.setText("0:00")
         self.pages.setCurrentIndex(1)
         self.started = time.monotonic()
@@ -290,11 +297,46 @@ class Window(QWidget):
         program, argv = converter_command(args)
         self.process.start(program, argv)
 
+    def analyze(self, source: Path) -> None:
+        """Import and inspect only; the configure screen follows."""
+        self.source = source
+        self.output = None  # cancelling an analysis must never delete an earlier result
+        self.step_list.reset([])
+        self.step_list.setVisible(False)
+        self.progress_stage.setText(t("stage.preflight"))
+        self._launch(source, ["preflight", str(source)], self._analyzed)
+
+    def _analyzed(self, *_) -> None:
+        self.ticker.stop()
+        document = parse_preflight("\n".join(self.log))
+        if document is None:
+            self._show(summarize(None, "\n".join(self.log)))
+            return
+        self.config.load(document)
+        self.pages.setCurrentIndex(3)
+
+    def convert(self) -> None:
+        source = self.source
+        self.output = free_output_path(source)
+        self.output.with_name(self.output.name + ".report.json").unlink(missing_ok=True)  # never read a stale one
+        # the visible part and the step flags come from the configure screen the user confirmed
+        args = ["convert", str(source), str(self.output), "--geometry-profile", self.config.profile, "--events",
+                *cli_flags(self.config.steps), *[f"--{k}" for k, on in self.config.compress.items() if on]]
+        if self.config.height_cm:
+            args += ["--height-cm", str(self.config.height_cm)]
+        self.step_list.reset(self.config.steps)
+        self.step_list.setVisible(True)
+        self.progress_stage.setText(t("stage.starting"))
+        self._launch(source, args, self._finished)
+
     def cancel(self) -> None:
         if self.process:
             self.process.finished.disconnect(self._finished)
             self.process.kill()
             self.process.waitForFinished(3000)
+            if self.output and self.pages.currentIndex() == 1:  # a killed export can leave a half-written file
+                for leftover in (self.output, self.output.with_name(self.output.name + ".report.json")):
+                    leftover.unlink(missing_ok=True)
         self.ticker.stop()
         self.pages.setCurrentIndex(0)
 
@@ -306,6 +348,7 @@ class Window(QWidget):
         text = bytes(self.process.readAllStandardOutput()).decode("utf-8", "replace")
         for line in text.splitlines():
             self.log.append(line)
+            self.step_list.feed(line)
             stage = line.strip().removeprefix("@stage ")
             if stage in STAGES and line.startswith("@stage "):
                 self.progress_stage.setText(t(f"stage.{stage}"))

@@ -55,6 +55,12 @@ def import_character(path: str, fmt: str, height_cm: float | None = None, bpy: A
         if operator is None:
             raise ConversionError("importer-missing", "bpy.ops.wm.fbx_import is unavailable in this Blender build.")
         result = operator(filepath=path)
+    elif fmt == "vrm":
+        # an existing avatar, to be cut and slimmed: the VRM Add-on brings its humanoid, expressions and springs
+        operator = getattr(bpy.ops.import_scene, "vrm", None)
+        if operator is None:
+            raise ConversionError("importer-missing", "bpy.ops.import_scene.vrm is unavailable (VRM Add-on disabled?).")
+        result = operator(filepath=path)
     else:  # pragma: no cover - source_format() rejects this earlier
         raise ConversionError("unsupported-format", f"Unsupported format {fmt!r}")
 

@@ -41,6 +41,8 @@ __all__ = ["CANONICAL_FACE", "FACE_LANDMARKS", "FaceAnalysis", "FaceGeometry", "
            "mesh_role", "step_split"]
 
 _MIN_FACE_POINTS = 150
+_MIN_DETECTED_FACE_POINTS = 30  # with MediaPipe's landmarks the geometry only has to carry the deformation
+DETECTED_CONFIDENCE = 0.8
 
 
 @dataclass
@@ -225,10 +227,13 @@ class _HeightField:
 
 def analyze_face(frame: AnatomicalFrame, geometry: FaceGeometry, head_base: Vec3, head_top: Vec3 | None,
                  eye_positions: dict[str, Vec3] | None = None, jaw_bone: bool = False,
-                 morphs: FaceMorphs | None = None) -> FaceAnalysis | None:
+                 morphs: FaceMorphs | None = None,
+                 detected: dict[str, Vec3] | None = None) -> FaceAnalysis | None:
+    """``detected``: landmarks found on a rendered view (MediaPipe), world space. They replace only what the
+    geometry gave weakly (a template guess, low confidence), and let a sparse low-poly face be analysed at all."""
     skin = geometry.skin()
     result = FaceAnalysis(geometry=geometry, jaw_bone=jaw_bone, eye_bones=bool(eye_positions))
-    if len(skin) < _MIN_FACE_POINTS:
+    if len(skin) < (_MIN_DETECTED_FACE_POINTS if detected else _MIN_FACE_POINTS):
         return None
     morphs = morphs or FaceMorphs()
     xs = [p.local[0] for p in skin]
@@ -420,6 +425,21 @@ def analyze_face(frame: AnatomicalFrame, geometry: FaceGeometry, head_base: Vec3
     result.evidence["mouth"] = {c.source: round(c.confidence, 3) for c in candidates}
     for name, lm in landmarks.items():
         result.landmarks[name] = Landmark(name, frame.to_world(lm.position), lm.confidence, lm.source, lm.method)
+    for name, pos in (detected or {}).items():
+        old = result.landmarks.get(name)
+        if old is None or "template" in old.method or old.confidence < DETECTED_CONFIDENCE:
+            result.landmarks[name] = Landmark(name, tuple(pos), DETECTED_CONFIDENCE, AnalysisSource.GEOMETRY,
+                                              "mediapipe")
+    if detected and {"mouth_left", "mouth_right"} <= set(detected):
+        ml, mr = frame.to_local(detected["mouth_left"]), frame.to_local(detected["mouth_right"])
+        result.mouth_width = max(result.mouth_width, abs(ml[0] - mr[0]))
+        if "mouth_center" not in detected and {"upper_lip", "lower_lip"} <= set(detected):
+            u, b = detected["upper_lip"], detected["lower_lip"]
+            result.landmarks["mouth_center"] = Landmark("mouth_center", tuple((u[i] + b[i]) / 2 for i in range(3)),
+                                                        DETECTED_CONFIDENCE, AnalysisSource.GEOMETRY, "mediapipe")
+    if detected:
+        core_conf = [result.landmarks[n].confidence for n in ("chin", "mouth_center", "nose_tip", "left_eye", "right_eye",
+                     "left_upper_eyelid", "right_upper_eyelid") if n in result.landmarks]
     result.quality = round(sum(core_conf) / len(core_conf), 4) if core_conf else 0.0
     if not ordered:
         result.warnings.append(AnalysisWarning("face-order", "chin / mouth / nose / eyes are not in anatomical order",

@@ -175,6 +175,7 @@ class ConversionConfig:
     geometry: GeometryConfig = field(default_factory=GeometryConfig)
     auto_author: AutoAuthorConfig = field(default_factory=AutoAuthorConfig)
     height_cm: float | None = None  # scale the model to this height on import; None keeps the source size
+    auto_rig: bool = False  # procedural skeleton + skin weights when the source has no armature (never replaces one)
 
 
 _TOP_KEYS = {"armature", "humanoid", "expressions", "lookAt", "springBones", "meta", "geometry", "autoAuthor"}

@@ -10,6 +10,7 @@ from __future__ import annotations
 
 from typing import Protocol
 
+from ..core.autorig import AutoRigResult
 from ..core.authoring.plan import AuthoringResult, AutoAuthorPlan
 from ..core.model import CharacterInspection, GeometryOptimizationPlan, VrmPlan
 from ..toolchain import EnvironmentFacts
@@ -27,6 +28,9 @@ class BlenderBridge(Protocol):
 
     def inspect(self, source_path: str, fmt: str) -> CharacterInspection:
         """Stage 3: what actually survived the import, as a ``bpy``-free description."""
+
+    def auto_rig(self) -> AutoRigResult:
+        """Procedural skeleton + skin weights for a scene without an armature (never replaces one)."""
 
     def isolate_armature(self, armature: str) -> list[str]:
         """Exclude every other armature and the meshes it deforms from the export."""
@@ -63,6 +67,10 @@ class RealBlenderBridge:
         from . import scene_inspector
         return scene_inspector.inspect_scene(source_path, fmt)
 
+    def auto_rig(self) -> AutoRigResult:
+        from . import autorig
+        return autorig.auto_rig()
+
     def isolate_armature(self, armature: str) -> list[str]:
         from . import scene_inspector
         return scene_inspector.isolate_armature(armature)
@@ -79,6 +87,12 @@ class RealBlenderBridge:
         from . import slim, vrm_addon
         vrm_addon.configure(plan)
         slim.slim(plan)
+
+    def surface_votes(self, armature: str, materials: set[str]) -> dict[str, str]:
+        """MediaPipe's class for each material whose name says nothing (``core.surface_labels``)."""
+        import bpy
+        from . import surface_vote
+        return surface_vote.vote(bpy, armature, materials)
 
     def export_vrm(self, armature: str, output_path: str, all_influences: bool = False) -> None:
         from . import vrm_addon
