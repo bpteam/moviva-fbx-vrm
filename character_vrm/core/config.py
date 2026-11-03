@@ -174,6 +174,7 @@ class ConversionConfig:
     all_bone_influences: bool = False  # reserved; the add-on default (<= 4 influences) is used
     geometry: GeometryConfig = field(default_factory=GeometryConfig)
     auto_author: AutoAuthorConfig = field(default_factory=AutoAuthorConfig)
+    height_cm: float | None = None  # scale the model to this height on import; None keeps the source size
 
 
 _TOP_KEYS = {"armature", "humanoid", "expressions", "lookAt", "springBones", "meta", "geometry", "autoAuthor"}

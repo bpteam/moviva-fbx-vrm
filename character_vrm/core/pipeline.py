@@ -242,17 +242,18 @@ class ConverterCore:
         self.bridge = bridge
         self.toolchain = toolchain or load_toolchain()
 
-    def load(self, source: str | Path) -> CharacterInspection:
+    def load(self, source: str | Path, height_cm: float | None = None) -> CharacterInspection:
         """Stage 1-3: clean scene, import, inspect."""
         fmt = source_format(source)
         if not Path(source).is_file():
             raise ConversionError("source-missing", f"{source}: no such file")
         self.bridge.reset_scene()
-        self.bridge.import_character(str(source), fmt)
+        self.bridge.import_character(str(source), fmt, height_cm)
         return self.bridge.inspect(str(source), fmt)
 
     def inspect(self, source: str | Path, config: ConversionConfig | None = None) -> Analysis:
-        return analyze(self.load(source), config or ConversionConfig())
+        config = config or ConversionConfig()
+        return analyze(self.load(source, config.height_cm), config)
 
     def convert(
         self, source: str | Path, output: str | Path, config: ConversionConfig | None = None, dry_run: bool = False,
@@ -260,7 +261,7 @@ class ConverterCore:
         config = config or ConversionConfig()
         analysis: Analysis | None = None
         try:
-            inspection = self.load(source)
+            inspection = self.load(source, config.height_cm)
             analysis = analyze(inspection, config)
             require_humanoid(analysis.humanoid, config.min_confidence)
             plan = build_plan(analysis, output)

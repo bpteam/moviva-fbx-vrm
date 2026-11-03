@@ -9,6 +9,8 @@
  "drop.hint": "带骨骼的 FBX、GLB 或 glTF · 或点击选择",
  "drop.dialog": "选择角色",
  "drop.filter": "角色",
+ "height": "头像身高",
+ "height.keep": "保持原样",
  "autoface": "在面部允许时，补全缺失的眨眼、口型同步和表情",
  "footer": "v{version} · 已内置 Blender 和 VRM Add-on · GPL-3.0",
  "progress.hint": "大型模型需要几分钟。期间你可以继续做别的事。",

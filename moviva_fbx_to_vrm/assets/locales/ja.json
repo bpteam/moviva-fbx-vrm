@@ -9,6 +9,8 @@
  "drop.hint": "ボーン付きの FBX・GLB・glTF · クリックして選択も可",
  "drop.dialog": "キャラクターを選択",
  "drop.filter": "キャラクター",
+ "height": "アバターの身長",
+ "height.keep": "ファイルのまま",
  "autoface": "顔の形状が許せば、足りないまばたき・リップシンク・表情を作成",
  "footer": "v{version} · Blender と VRM Add-on を内蔵 · GPL-3.0",
  "progress.hint": "大きなモデルは数分かかります。その間、ほかの作業を続けられます。",

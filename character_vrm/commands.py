@@ -36,6 +36,8 @@ def build_parser(prog: str = "character-vrm", with_blender: bool = True) -> argp
                        help="humanoid confidence gate (default 0.75)")
         p.add_argument("--geometry-profile", choices=sorted(GEOMETRY_PROFILES),
                        help="geometry profile (default: full)")
+        p.add_argument("--height-cm", type=float, metavar="CM",
+                       help="scale the model so it stands this tall (default: keep the source size)")
         p.add_argument("--auto-author", action="store_true",
                        help="rest-pose calibration, hair -> spring bones, anatomical colliders and generated "
                             "blink / visemes when confidence is high (conservative)")
@@ -82,6 +84,10 @@ def _load_config(args: argparse.Namespace) -> ConversionConfig:
         config.spring.enabled = False
     if getattr(args, "geometry_profile", None):
         config.geometry.profile = args.geometry_profile
+    if getattr(args, "height_cm", None) is not None:
+        if args.height_cm <= 0:
+            raise ConfigError("--height-cm must be positive")
+        config.height_cm = args.height_cm
     author = config.auto_author
     if getattr(args, "auto_author", False):
         author.enabled = True

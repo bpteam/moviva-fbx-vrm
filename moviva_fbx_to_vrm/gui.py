@@ -12,7 +12,7 @@ from pathlib import Path
 from PySide6.QtCore import QLocale, QProcess, Qt, QTimer, QUrl
 from PySide6.QtGui import QDesktopServices, QIcon, QPixmap
 from PySide6.QtWidgets import (
-    QApplication, QCheckBox, QFileDialog, QFrame, QHBoxLayout, QLabel, QProgressBar, QPushButton,
+    QApplication, QCheckBox, QFileDialog, QFrame, QHBoxLayout, QLabel, QProgressBar, QPushButton, QSpinBox,
     QScrollArea, QStackedWidget, QVBoxLayout, QWidget,
 )
 
@@ -28,6 +28,7 @@ COLORS = {OK: "#57d797", WARN: "#ffc053", BAD: "#ff6574", READY: "#57d797", FAIL
 MARKS = {OK: "✓", WARN: "!", BAD: "✕"}
 MOVIVA_URL = "https://moviva.bpt22.tech/?utm_source=app_moviva_fbx_vrm"
 MOVIVA_LINK = f'<a href="{MOVIVA_URL}" style="color: #ff7546;">Moviva: AI Avatar for ChatGPT Voice</a>'
+REFERENCE_HEIGHT_CM = 160  # Mi, the reference avatar; placeholder until measured
 
 STYLE = """
 QWidget { background: #0b1319; color: #eef3f7; font-size: 14px; }
@@ -187,6 +188,16 @@ class Window(QWidget):
             layout.addLayout(row)
         layout.addSpacing(4)
         layout.addWidget(DropZone(self.convert), 1)
+        height = QHBoxLayout()
+        height.addWidget(QLabel(t("height")))
+        self.height = QSpinBox()
+        self.height.setRange(0, 400)  # 0 keeps the source size
+        self.height.setSpecialValueText(t("height.keep"))
+        self.height.setSuffix(" cm")
+        self.height.setValue(REFERENCE_HEIGHT_CM)
+        height.addWidget(self.height)
+        height.addStretch(1)
+        layout.addLayout(height)
         self.auto_face = QCheckBox(t("autoface"))
         self.auto_face.setChecked(True)
         layout.addWidget(self.auto_face)
@@ -260,6 +271,8 @@ class Window(QWidget):
         self.output = free_output_path(source)
         self.output.with_name(self.output.name + ".report.json").unlink(missing_ok=True)  # never read a stale one
         args = ["convert", str(source), str(self.output), "--geometry-profile", "video-call"]  # waist up, as in calls
+        if self.height.value():
+            args += ["--height-cm", str(self.height.value())]
         if self.auto_face.isChecked():
             args += ["--auto-author", "--generate-face"]
         self.log = []
